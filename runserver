@@ -1,1 +1,0 @@
-FAS_OPENID_CONFIG=../fas-openid.cfg python runserver.py

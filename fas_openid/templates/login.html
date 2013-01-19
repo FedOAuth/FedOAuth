@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block body %}
+<form action="/login/" method="post">
+<input type="hidden" name="next" value="{{nextpage}}">
+Username: <input type="text" name="username"><br />
+Password: <input type="password" name="password"><br />
+<input type="submit" value="Log in">
+</form>
+{% endblock %}

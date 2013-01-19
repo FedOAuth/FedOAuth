@@ -9,7 +9,7 @@ import pkg_resources
 import flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
-from flask_fas import FAS, fas_login_required
+from flask_fas import FAS
 
 # Create the application
 app = flask.Flask(__name__)

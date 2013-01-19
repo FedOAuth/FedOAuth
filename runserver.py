@@ -4,6 +4,6 @@
 __requires__ = ['SQLAlchemy >= 0.7', 'jinja2 >= 2.4']
 import pkg_resources
 
-from fas_openid import APP
-APP.debug=True
-APP.run()
+from fas_openid import app
+app.debug=True
+app.run()

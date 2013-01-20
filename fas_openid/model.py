@@ -45,7 +45,7 @@ class FASOpenIDStore(OpenIDStore):
             assoc = Association.query.filter_by(server_url = lookup_server_url, handle = lookup_handle).order_by(Association.issued.desc()).first()
         if not assoc:
             return None
-        if (assoc.issued + assoc.lifetime) > time.time():
+        if (assoc.issued + assoc.lifetime) < time.time():
             db.session.delete(assoc)
             db.session.commit()
             return None
@@ -55,7 +55,7 @@ class FASOpenIDStore(OpenIDStore):
         return Association.query.filter_by(server_url = lookup_server_url, handle = lookup_handle).delete() > 0
 
     def useNonce(self, lookup_server_url, lookup_timestamp, lookup_salt):
-        if abs(timestamp - time.time()) > NonceSKEW:
+        if abs(lookup_timestamp - time.time()) > NonceSKEW:
             return False
         results = Nonce.query.filter_by(server_url = lookup_server_url, timestamp = lookup_timestamp, salt = lookup_salt).all()
         if results:

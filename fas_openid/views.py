@@ -22,7 +22,8 @@ def get_server():
 
 
 def complete_url_for(part):
-    return '%s%s' % (app.config['OPENID_ENDPOINT'], part)
+    from urlparse import urljoin
+    return urljoin(app.config['OPENID_ENDPOINT'], part)
 
 @app.route('/')
 def view_main():

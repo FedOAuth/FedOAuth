@@ -35,6 +35,7 @@ def view_main():
     if openid_request is None:
         return render_template('index.html', text='MAIN PAGE, no OpenID request', yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
+        print 'checkid. trust_root: %s, claimed_id: %s' % (openid_request.trust_root, openid_request.claimed_id)
         return 'TODO'
         pass    # TODO: CHECK THE REQUEST
     else:
@@ -42,7 +43,7 @@ def view_main():
 
 @app.route('/yadis.xrds')
 def view_yadis():
-    return Response(render_template('yadis.xrds'), mimetype='application/xrds+xml')
+    return Response(render_template('yadis.xrds', openid_endpoint=app.config['OPENID_ENDPOINT']), mimetype='application/xrds+xml')
 
 def openid_respond(response):
     try:

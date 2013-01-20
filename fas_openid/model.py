@@ -1,6 +1,7 @@
 from fas_openid import db
 from openid.store.nonce import SKEW as NonceSKEW
 from openid.store.interface import OpenIDStore
+import time
 
 class Association(db.Model):
     server_url  = db.Column(db.String(2048), nullable=False, primary_key=True)

@@ -40,12 +40,16 @@ def view_main():
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
         print 'checkid. mode: %s, trust_root: %s, claimed_id: %s' % (openid_request.mode, openid_request.trust_root, openid_request.claimed_id)
         if isAuthorized(openid_request):
+            print 'authorized'
             return openid_respond(openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username)))
         elif request.immediate:
+            print 'checkid_immediate -> reject'
             return openid_respond(openid_request.answer(False))
         if g.fas_user is None:
+            print 'login required'
             session['next'] = openid_request.encodeToURL(app.config['OPENID_ENDPOINT'])
             return redirect(url_for('auth_login'))
+        print 'no decision taken yet'
         return 'Welcome, user! We hope you will visit us soon! <br /> Your details: %s' % g.fas_user
         pass    # TODO: CHECK THE REQUEST
     else:
@@ -53,10 +57,13 @@ def view_main():
 
 def isAuthorized(openid_request):
     if g.fas_user is None:
+        print 'not logged in'
         return False
     elif openid_request.idSelect():
+        print 'idselect'
         return True     # Everyone is allowed to use the idSelect, since we return the correct computed endpoints
     else:
+        print 'request id: %s, username: %s' % (openid_request.identity, get_claimed_id(g.fas_user.username))
         return openid_request.identity == get_claimed_id(g.fas_user.username)
 
 @app.route('/id/<username>/')

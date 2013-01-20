@@ -28,10 +28,10 @@ def complete_url_for(func):
 def get_claimed_id(username):
     return app.config['OPENID_IDENTITY_URL'] % username
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def view_main():
     try:
-        openid_request = get_server().decodeRequest(request.args)
+        openid_request = get_server().decodeRequest(request.values)
     except server.ProtocolError, openid_error:
         return openid_respond(openid_error)
 

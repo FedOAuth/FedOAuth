@@ -43,6 +43,8 @@ class FASOpenIDStore(OpenIDStore):
             assoc = Association.query.filter_by(server_url = lookup_server_url).order_by(Association.issued.desc()).first()
         else:
             assoc = Association.query.filter_by(server_url = lookup_server_url, handle = lookup_handle).order_by(Association.issued.desc()).first()
+        if not assoc:
+            return None
         if (assoc.issued + assoc.lifetime) > time.time():
             db.session.delete(assoc)
             db.session.commit()

@@ -70,7 +70,7 @@ def view_yadis():
 def openid_respond(openid_response):
     try:
         webresponse = get_server().encodeResponse(openid_response)
-        return (webresponse.body, webresponse.status, webresponse.headers)
+        return (webresponse.body, webresponse.code, webresponse.headers)
     except server.EncodingError, why:
         headers = {'Content-type': 'text/plain; charset=UTF-8'} 
         return why.response.encodeToKVForm(), 400, headers

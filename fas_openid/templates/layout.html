@@ -1,4 +1,7 @@
 <!doctype html>
+<html>
+<head>
+<!-- YADIS META -->
 <title>My Application</title>
 {% with messages = get_flashed_messages() %}
   {% if messages %}
@@ -9,4 +12,8 @@
     </ul>
   {% endif %}
 {% endwith %}
+</head>
+<body>
 {% block body %}{% endblock %}
+</body>
+</html>

@@ -1,5 +1,5 @@
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash
+     abort, render_template, flash, Response
 
 from model import FASOpenIDStore
 
@@ -29,12 +29,16 @@ def view_main():
         return openid_respond(openid_error)
 
     if openid_request is None:
-        return render_template('index.html', text='MAIN PAGE, no OpenID request')
+        return render_template('index.html', text='MAIN PAGE, no OpenID request'), 200, {'X-XRDS-Location': url_for('yadis')}
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
         return 'TODO'
         pass    # TODO: CHECK THE REQUEST
     else:
         return openid_respond(get_server().handleRequest(openid_request))
+
+@app.route('/yadis/')
+def view_yadis():
+    return Response(render_template('yadis.xrds'), mimetype='application/xrds+xml')
 
 def openid_respond(response):
     try:

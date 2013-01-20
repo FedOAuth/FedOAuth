@@ -1,7 +1,9 @@
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 
-from fas_openid import app, FAS
+from model import FASOpenIDStore
+
+from fas_openid import APP as app, FAS
 
 from flask_fas import fas_login_required
 
@@ -29,7 +31,7 @@ def auth_login():
         password = request.form['password']
         result = FAS.login(username, password)
         if result:
-            return render_template('index.html', text='Welcome, %s. The groups you are a member of: %s' % (g.fas_user, g.fas_user.groups))
+            return redirect(nextpage)
         else:
             flash('Incorrect username or password')
     return render_template('login.html', nextpage=nextpage)
@@ -37,4 +39,4 @@ def auth_login():
 @app.route('/test/')
 @fas_login_required
 def view_test():
-    return render_template('index.html', text='TESTJE')
+    return render_template('index.html', text='TESTJE. User: %s' % g.fas_user)

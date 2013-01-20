@@ -12,15 +12,16 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask_fas import FAS
 
 # Create the application
-app = flask.Flask(__name__)
+APP = flask.Flask(__name__)
 # Set up FASS
-FAS = FAS(app)
-app.config.from_object('fas_openid.default_config')
-app.config.from_envvar('FAS_OPENID_CONFIG', silent=True)
+FAS = FAS(APP)
+APP.config.from_object('fas_openid.default_config')
+APP.config.from_envvar('FAS_OPENID_CONFIG', silent=True)
 
-db = SQLAlchemy(app)
+db = SQLAlchemy(APP)
 
+import model
 import views
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    APP.run(debug=True)

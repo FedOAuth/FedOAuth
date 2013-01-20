@@ -37,7 +37,7 @@ class FASOpenIDStore(OpenIDStore):
         db.session.commit()
 
     def getAssociation(self, lookup_server_url, lookup_handle=None):
-        if handle == None:
+        if lookup_handle == None:
             # Get assoc only by server_url, we need some filtering on this one
             assoc = Association.query.filter_by(server_url = lookup_server_url).order_by(Association.issued.desc()).first()
         else:

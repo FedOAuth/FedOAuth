@@ -21,9 +21,9 @@ def get_server():
     return g.openid_server
 
 
-def complete_url_for(part):
+def complete_url_for(func):
     from urlparse import urljoin
-    return urljoin(app.config['OPENID_ENDPOINT'], part)
+    return urljoin(app.config['OPENID_ENDPOINT'], url_for(func))
 
 @app.route('/')
 def view_main():

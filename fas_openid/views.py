@@ -38,7 +38,7 @@ def view_main():
     if openid_request is None:
         return render_template('index.html', text='MAIN PAGE, no OpenID request', yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
-        print 'checkid. mode: %s, trust_root: %s, claimed_id: %s' % (openid_request.mode, openid_request.trust_root, openid_request.claimed_id)
+        print 'checkid. mode: %s, trust_root: %s, claimed_id: %s, request: %s' % (openid_request.mode, openid_request.trust_root, openid_request.claimed_id, openid_request)
         if isAuthorized(openid_request):
             print 'authorized'
             return openid_respond(openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username)))

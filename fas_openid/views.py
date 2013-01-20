@@ -40,7 +40,7 @@ def view_main():
     else:
         return openid_respond(get_server().handleRequest(openid_request))
 
-@app.route('/yadis/')
+@app.route('/yadis.xrds')
 def view_yadis():
     return Response(render_template('yadis.xrds'), mimetype='application/xrds+xml')
 

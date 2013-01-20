@@ -42,7 +42,7 @@ def view_main():
         if isAuthorized(openid_request):
             print 'authorized'
             return openid_respond(openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username)))
-        elif request.immediate:
+        elif openid_request.immediate:
             print 'checkid_immediate -> reject'
             return openid_respond(openid_request.answer(False))
         if g.fas_user is None:

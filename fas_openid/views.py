@@ -67,7 +67,7 @@ def view_id(username):
 def view_yadis():
     return Response(render_template('yadis.xrds', openid_endpoint=app.config['OPENID_ENDPOINT']), mimetype='application/xrds+xml')
 
-def openid_respond(response):
+def openid_respond(openid_response):
     try:
         webresponse = get_server().encodeResponse(openid_response)
         return (webresponse.body, webresponse.status, webresponse.headers)

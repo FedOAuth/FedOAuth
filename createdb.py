@@ -7,5 +7,5 @@ import pkg_resources
 from fas_openid import APP
 from fas_openid import model
 
-model.create_tables(APP.config['DB_URL'],
+model.create_tables(APP.config['SQLALCHEMY_DATABASE_URI'],
     APP.config['PATH_ALEMBIC_INI'], True)

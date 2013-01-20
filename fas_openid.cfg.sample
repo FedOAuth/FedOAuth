@@ -1,5 +1,9 @@
 # Beware that the quotes around the values are mandatory
 
+### Wether or not the cookies are only valid for HTTPS requests
+### ADVISED: Set this to True in production systems, otherwise a MITM could steal the authentication cookie
+FAS_HTTPS_REQUIRED=True
+
 ### Secret key for the Flask application
 SECRET_KEY='<The web application secret key>'
 

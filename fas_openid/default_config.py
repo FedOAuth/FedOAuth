@@ -2,6 +2,8 @@
 
 import os
 
+FAS_HTTPS_REQUIRED = False
+
 SECRET_KEY = 'SECRET_KEY'
 # url to the database server:
 DB_URL = 'sqlite:////var/tmp/fas_openid_dev.sqlite'

@@ -25,6 +25,9 @@ def complete_url_for(func):
     from urlparse import urljoin
     return urljoin(app.config['OPENID_ENDPOINT'], url_for(func))
 
+def get_claimed_id(username):
+    return app.config['OPENID_IDENTITY_URL'] % username
+
 @app.route('/')
 def view_main():
     try:
@@ -40,6 +43,10 @@ def view_main():
         pass    # TODO: CHECK THE REQUEST
     else:
         return openid_respond(get_server().handleRequest(openid_request))
+
+@app.route('/id/<username>/')
+def view_id(username):
+    return Response(render_template('yadis_user.xrds', openid_endpoint=app.config['OPENID_ENDPOINT'], claimed_id=get_claimed_id(username)), mimetype='application/xrds+xml')
 
 @app.route('/yadis.xrds')
 def view_yadis():

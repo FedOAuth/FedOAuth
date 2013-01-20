@@ -21,6 +21,9 @@ def get_server():
     return g.openid_server
 
 
+def complete_url_for(part):
+    return '%s%s' % (app.config['OPENID_ENDPOINT'], part)
+
 @app.route('/')
 def view_main():
     try:
@@ -29,7 +32,7 @@ def view_main():
         return openid_respond(openid_error)
 
     if openid_request is None:
-        return render_template('index.html', text='MAIN PAGE, no OpenID request', yadis_url=url_for('view_yadis')), 200, {'X-XRDS-Location': url_for('view_yadis')}
+        return render_template('index.html', text='MAIN PAGE, no OpenID request', yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
         return 'TODO'
         pass    # TODO: CHECK THE REQUEST

@@ -38,11 +38,26 @@ def view_main():
     if openid_request is None:
         return render_template('index.html', text='MAIN PAGE, no OpenID request', yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
-        print 'checkid. trust_root: %s, claimed_id: %s' % (openid_request.trust_root, openid_request.claimed_id)
-        return 'TODO'
+        print 'checkid. mode: %s, trust_root: %s, claimed_id: %s' % (openid_request.mode, openid_request.trust_root, openid_request.claimed_id)
+        if isAuthorized(openid_request):
+            return openid_respond(openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username)))
+        elif request.immediate:
+            return openid_respond(openid_request.answer(False))
+        if g.fas_user is None:
+            session['next'] = openid_request.encodeToURL(app.config['OPENID_ENDPOINT'])
+            return redirect(url_for('auth_login'))
+        return 'Welcome, user! We hope you will visit us soon! <br /> Your details: %s' % g.fas_user
         pass    # TODO: CHECK THE REQUEST
     else:
         return openid_respond(get_server().handleRequest(openid_request))
+
+def isAuthorized(openid_request):
+    if g.fas_user is None:
+        return False
+    elif openid_request.idSelect():
+        return True     # Everyone is allowed to use the idSelect, since we return the correct computed endpoints
+    else:
+        return openid_request.identity == get_claimed_id(g.fas_user.username)
 
 @app.route('/id/<username>/')
 def view_id(username):

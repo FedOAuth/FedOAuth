@@ -49,7 +49,10 @@ def addSReg(request, response, user):
 def addTeams(request, response, groups):
     teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
 
-    response.addExtension(teams.TeamsResponse.extractResponse(teams_req, groups))
+    teams_resp = teams.TeamsResponse.extractResponse(teams_req, groups)
+    print 'TeamsResponse: %s' % teams_resp
+
+    response.addExtension(teams_resp)
 
 @app.route('/', methods=['GET', 'POST'])
 def view_main():

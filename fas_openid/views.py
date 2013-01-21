@@ -52,7 +52,7 @@ def view_main():
         return openid_respond(openid_error)
 
     if openid_request is None:
-        return render_template('index.html', text='MAIN PAGE, no OpenID request', yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
+        return render_template('index.html', text='MAIN PAGE, no OpenID request', openid_endpoint=app.config['OPENID_ENDPOINT'], yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
         print 'checkid. mode: %s, trust_root: %s, claimed_id: %s, request: %s' % (openid_request.mode, openid_request.trust_root, openid_request.claimed_id, openid_request)
         if isAuthorized(openid_request):

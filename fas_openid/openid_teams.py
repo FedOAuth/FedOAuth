@@ -236,7 +236,7 @@ class TeamsResponse(Extension):
     def __init__(self, teams=None):
         Extension.__init__(self)
         if teams is None:
-            self.teams = {}
+            self.teams = []
         else:
             self.teams = teams
 

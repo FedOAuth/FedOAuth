@@ -8,6 +8,8 @@ from fas_openid.model import FASOpenIDStore
 
 from flask_fas import fas_login_required
 
+from fas_openid import openid_teams as teams
+
 import openid
 from openid.extensions import sreg
 from openid.server.server import Server as openid_server
@@ -44,6 +46,11 @@ def addSReg(request, response, user):
 
     response.addExtension(sreg.SRegResponse.extractResponse(sreg_req, sreg_data))
 
+def addTeams(request, response, groups):
+    teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
+
+    response.addExtension(teams.TeamsResponse.extractResponse(teams_req, groups))
+
 @app.route('/', methods=['GET', 'POST'])
 def view_main():
     try:
@@ -57,6 +64,7 @@ def view_main():
         if isAuthorized(openid_request):
             openid_response = openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username))
             addSReg(openid_request, openid_response, g.fas_user)
+            addTeams(openid_request, openid_response, g.fas_user.groups)
             return openid_respond(openid_response)
         elif openid_request.immediate:
             return openid_respond(openid_request.answer(False))

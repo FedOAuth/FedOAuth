@@ -1,8 +1,11 @@
 <!doctype html>
 <html>
 <head>
-<!-- YADIS META -->
 <meta http-equiv="X-XRDS-Location" content="{{yadis_url}}">
+<link rel="openid2.provider" href="{{openid_endpoint}}">
+{% if claimed_id is defined %}
+<link rel="openid2.local_id" href="{{claimed_id}}">
+{% endif %}
 <title>My Application</title>
 {% with messages = get_flashed_messages() %}
   {% if messages %}

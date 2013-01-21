@@ -6,6 +6,7 @@ AVAILABLE_TO = []
 
 # A list of trust roots for which the user will not need to confirm again
 TRUSTED_ROOTS = []
+NON_TRUSTED_ROOTS = []
 
 LOGIN_URL = 'http://localhost:5000/login/'
 

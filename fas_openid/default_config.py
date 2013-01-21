@@ -6,6 +6,7 @@ AVAILABLE_FILTER = False
 AVAILABLE_TO = []
 
 TRUSTED_ROOTS = []
+NON_TRUSTED_ROOTS = []
 
 LOGIN_URL = 'http://localhost:5000/login/'
 

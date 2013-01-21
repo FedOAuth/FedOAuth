@@ -36,11 +36,6 @@ def addSReg(request, response, user):
     sreg_data = { 'nickname'    : user.username
                 , 'email'       : user.email
                 , 'fullname'    : user.human_name
-                , 'dob'         : None
-                , 'gender'      : None
-                , 'postcode'    : None
-                , 'country'     : None
-                , 'language'    : None
                 , 'timezone'    : user.timezone
                 }
 
@@ -50,6 +45,38 @@ def addTeams(request, response, groups):
     teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
     teams_resp = teams.TeamsResponse.extractResponse(teams_req, groups)
     response.addExtension(teams_resp)
+
+def addToSessionArray(array, value):
+    if array in session:
+        session[array].append(value)
+    else:
+        session[array] = [value]
+
+def user_ask_trust_root(openid_request):
+    if request.method == 'POST':
+        decided = request.form['decided']
+        if decided == 'Yes':
+            addToSessionArray('TRUSTED_ROOTS', openid_request.trust_root)
+        else:
+            addToSessionArray('NON_TRUSTED_ROOTS', openid_request.trust_root)
+        return redirect(request.url)
+    # Get which stuff we will send
+    sreg_req = sreg.SRegRequest.fromOpenIDRequest(request)
+    teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
+    teams_resp = teams.TeamsResponse.extractResponse(teams_req, groups)
+    # Show form
+    return render_template('user_ask_trust_root.html'
+                          , action              = request.url
+                          , trust_root          = openid_request.trust_root
+                          , sreg_required       = sreg_req.required
+                          , sreg_optional       = sreg_req.optional
+                          , sreg_policy_url     = sreg_req.policy_url
+                          , sreg_value_nickname = g.fas_user.username
+                          , sreg_value_email    = g.fas_user.email
+                          , sreg_value_fullname = g.fas_user.human_name
+                          , sreg_value_timezone = g.fas_user.timezone
+                          , teams_provided      = teams_resp.teams
+                          )
 
 @app.route('/', methods=['GET', 'POST'])
 def view_main():
@@ -61,12 +88,16 @@ def view_main():
     if openid_request is None:
         return render_template('index.html', title='Home', text='MAIN PAGE, no OpenID request', openid_endpoint=app.config['OPENID_ENDPOINT'], yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
-        if isAuthorized(openid_request):
+        authed = isAuthorized(openid_request)
+        if authed == 2:
             openid_response = openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username))
             addSReg(openid_request, openid_response, g.fas_user)
             addTeams(openid_request, openid_response, g.fas_user.groups)
             return openid_respond(openid_response)
-        elif openid_request.immediate:
+        elif authed == 1:
+            # User needs to confirm trust root
+            return user_ask_trust_root(openid_request)
+        elif openid_request.immediate or authed == -1:
             return openid_respond(openid_request.answer(False))
         if g.fas_user is None:
             session['next'] = request.url
@@ -78,17 +109,21 @@ def view_main():
 
 def isAuthorized(openid_request):
     if g.fas_user is None:
-        print 'not logged in'
-        return False
-    elif openid_request.idSelect():
-        print 'idselect'
-        return True     # Everyone is allowed to use the idSelect, since we return the correct computed endpoints
-    elif openid_request.identity != get_claimed_id(g.fas_user.username):
+        return 0
+    elif (not openid_request.idSelect()) and (openid_request.identity != get_claimed_id(g.fas_user.username)):
         print 'Incorrect claimed id. Claimed: %s, correct: %s' % (openid_request.identity, get_claimed_id(g.fas_user.username))
-        return False
+        return 0
+    elif openid_request.trust_root in app.config['TRUSTED_ROOTS']:
+        return 2
+    elif openid_request.trust_root in app.config['NON_TRUSTED_ROOTS']:
+        return -1
+    elif openid_request.trust_root in session['TRUSTED_ROOTS']:
+        return 2
+    elif openid_request.trust_root in session['NON_TRUSTED_ROOTS']:
+        return -1
     else:
-        print 'Check here for user allowance...'
-        return True
+        # The user still needs to determine if he/she allows this trust root
+        return 1
 
 @app.route('/id/<username>/')
 def view_id(username):

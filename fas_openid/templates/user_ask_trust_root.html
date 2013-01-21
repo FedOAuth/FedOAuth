@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block body %}
+<form action="{{action}}" method="post">
+<table>
+<tr><th>Trust root:</th><td>{{trust_root}}</td></tr>
+
+<tr><td><input type="submit" name="decided" value="No"></td><td><input type="submit" name="decided" value="Yes"></td></tr>
+</table>
+</form>
+{% endblock %}

@@ -1,7 +1,11 @@
 # Beware that the quotes around the values are mandatory
 
+# Enable a filter to make the OpenID Provider only available to a specific list of users
 AVAILABLE_FILTER = False
 AVAILABLE_TO = []
+
+# A list of trust roots for which the user will not need to confirm again
+TRUSTED_ROOTS = []
 
 ### Wether or not the cookies are only valid for HTTPS requests
 ### ADVISED: Set this to True in production systems, otherwise a MITM could steal the authentication cookie

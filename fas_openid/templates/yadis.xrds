@@ -3,6 +3,7 @@
 <XRD>
 <Service>
 <Type>http://specs.openid.net/auth/2.0/server</Type>
+<Type>http://openid.net/server/1.0</Type>
 <URI>{{openid_endpoint}}</URI>
 </Service>
 </XRD>

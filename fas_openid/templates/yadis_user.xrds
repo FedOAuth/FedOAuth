@@ -3,6 +3,7 @@
 <XRD>
 <Service>
 <Type>http://specs.openid.net/auth/2.0/signon</Type>
+<Type>http://openid.net/signon/1.0</Type>
 <URI>{{openid_endpoint}}</URI>
 <LocalID>{{claimed_id}}</LocalID>
 </Service>

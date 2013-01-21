@@ -158,6 +158,7 @@ def auth_logout():
     if not g.fas_user:
         return redirect(url_for('view_main'))
     FAS.logout()
+    session.clear()
     flash('You have been logged out')
     return redirect(url_for('view_main'))
 

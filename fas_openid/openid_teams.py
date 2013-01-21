@@ -67,7 +67,7 @@ class TeamsRequest(Extension):
         self.requested = []
         self.ns_uri = sreg_ns_uri
 
-        if required:
+        if requested:
             self.requestTeams(requested)
 
     def requestedTeams(self):
@@ -125,7 +125,7 @@ class TeamsRequest(Extension):
 
         @returns: None; updates this object
         """
-        requested = args.get('query_membership')
+        items = args.get('query_membership')
         if items:
             for team_name in items.split(','):
                 try:
@@ -145,7 +145,7 @@ class TeamsRequest(Extension):
         """Was this field in the request?"""
         return team_name in self.requested
 
-    def requestTeam(self, field_name, strict=False):
+    def requestTeam(self, team_name, strict=False):
         """Request the specified field from the OpenID user
 
         @param field_name: the unqualified simple registration field name
@@ -232,7 +232,7 @@ class TeamsResponse(Extension):
 
     def __init__(self, teams=None):
         Extension.__init__(self)
-        if data is None:
+        if teams is None:
             self.teams = {}
         else:
             self.teams = teams
@@ -259,6 +259,7 @@ class TeamsResponse(Extension):
         for team in request.requestedTeams():
             if team in teams:
                 self.teams.append(team)
+        return self
 
     extractResponse = classmethod(extractResponse)
 
@@ -301,3 +302,21 @@ class TeamsResponse(Extension):
         @see: openid.extension
         """
         return {'is_member': self.teams}
+
+    # Read-only dictionary interface
+    def get(self, field_name, default=None):
+        if field_name != 'is_member':
+            raise ValueError('teams invalid')
+        return ','.join(self.teams)
+
+    def items(self):
+        return [','.join(self.teams)]
+
+    def keys(self):
+        return ['is_member']
+
+    def has_key(self, key):
+        return key == 'is_member'
+
+    def __contains__(self, key):
+        return key == 'is_member'

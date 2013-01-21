@@ -69,7 +69,7 @@ def user_ask_trust_root(openid_request):
     # Get which stuff we will send
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
     teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
-    teams_resp = teams.TeamsResponse.extractResponse(teams_req, groups)
+    teams_resp = teams.TeamsResponse.extractResponse(teams_req, g.fas_user.groups)
     # Show form
     return render_template('user_ask_trust_root.html'
                           , action              = request.url

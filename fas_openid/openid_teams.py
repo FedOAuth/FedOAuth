@@ -301,7 +301,7 @@ class TeamsResponse(Extension):
 
         @see: openid.extension
         """
-        return {'is_member': self.teams}
+        return {'is_member': ','.join(self.teams)}
 
     # Read-only dictionary interface
     def get(self, field_name, default=None):

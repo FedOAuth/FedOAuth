@@ -9,7 +9,7 @@
 <link rel="openid.delegate" href="{{claimed_id}}">
 <link rel="openid2.local_id" href="{{claimed_id}}">
 {% endif %}
-<title>My Application</title>
+<title>FAS-OpenID{% if title %} - {{title}}{% endif %}</title>
 {% with messages = get_flashed_messages() %}
   {% if messages %}
     <ul class=flashes>

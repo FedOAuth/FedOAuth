@@ -59,7 +59,7 @@ def view_main():
         return openid_respond(openid_error)
 
     if openid_request is None:
-        return render_template('index.html', text='MAIN PAGE, no OpenID request', openid_endpoint=app.config['OPENID_ENDPOINT'], yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
+        return render_template('index.html', title='Home', text='MAIN PAGE, no OpenID request', openid_endpoint=app.config['OPENID_ENDPOINT'], yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
         if isAuthorized(openid_request):
             openid_response = openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username))
@@ -92,7 +92,7 @@ def isAuthorized(openid_request):
 
 @app.route('/id/<username>/')
 def view_id(username):
-    return render_template('user.html', username=username, openid_endpoint=app.config['OPENID_ENDPOINT'], claimed_id=get_claimed_id(username), yadis_url=complete_url_for('view_yadis_id', username=username)), 200, {'X-XRDS-Location': complete_url_for('view_yadis_id', username=username)}
+    return render_template('user.html', title='User page', username=username, openid_endpoint=app.config['OPENID_ENDPOINT'], claimed_id=get_claimed_id(username), yadis_url=complete_url_for('view_yadis_id', username=username)), 200, {'X-XRDS-Location': complete_url_for('view_yadis_id', username=username)}
 
 
 @app.route('/yadis/<username>.xrds')
@@ -138,9 +138,9 @@ def auth_login():
                 flash('Incorrect username or password')
         else:
             flash('This service is limited to the following users: %s' % (', '.join(app.config['AVAILABLE_TO'])))
-    return render_template('login.html')
+    return render_template('login.html', title='Login')
 
 @app.route('/test/')
 @fas_login_required
 def view_test():
-    return render_template('index.html', text='TESTJE. User: %s' % g.fas_user)
+    return render_template('index.html', title='Testing', text='TESTJE. User: %s' % g.fas_user)

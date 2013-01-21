@@ -1,5 +1,8 @@
 # Beware that the quotes around the values are mandatory
 
+AVAILABLE_FILTER = False
+AVAILABLE_TO = []
+
 ### Wether or not the cookies are only valid for HTTPS requests
 ### ADVISED: Set this to True in production systems, otherwise a MITM could steal the authentication cookie
 FAS_HTTPS_REQUIRED=True

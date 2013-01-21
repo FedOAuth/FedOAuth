@@ -1,0 +1,3 @@
+#!/bin/bash
+export FAS_OPENID_CONFIG=../fas_openid.cfg
+python runserver.py

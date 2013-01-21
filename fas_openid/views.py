@@ -67,8 +67,8 @@ def user_ask_trust_root(openid_request):
             addToSessionArray('NON_TRUSTED_ROOTS', openid_request.trust_root)
         return redirect(request.url)
     # Get which stuff we will send
-    sreg_req = sreg.SRegRequest.fromOpenIDRequest(request)
-    teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
+    sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
+    teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
     teams_resp = teams.TeamsResponse.extractResponse(teams_req, groups)
     # Show form
     return render_template('user_ask_trust_root.html'

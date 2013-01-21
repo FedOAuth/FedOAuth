@@ -27,7 +27,6 @@ def complete_url_for(func, **values):
 
 def get_claimed_id(username):
     return app.config['OPENID_IDENTITY_URL'] % username
-addSReg(openid_request, openid_response, g.fas_user)
 
 def addSReg(request, response, user):
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(request)
@@ -127,13 +126,12 @@ def auth_login():
         username = request.form['username']
         password = request.form['password']
         if (not app.config['AVAILABLE_FILTER']) or (username in app.config['AVAILABLE_TO']):
-            if result = FAS.login(username, password):
+            if FAS.login(username, password):
                 return redirect(session['next'])
             else:
                 flash('Incorrect username or password')
         else:
-            flash('This service is limited to the following users: %s' % (', '.join(app.config['AVAILABLE_TO']))
-            result = False
+            flash('This service is limited to the following users: %s' % (', '.join(app.config['AVAILABLE_TO'])))
     return render_template('login.html')
 
 @app.route('/test/')

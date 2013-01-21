@@ -1,0 +1,11 @@
+ProxyPass       /       http://localhost:5000/
+
+
+
+
+RewriteEngine on
+RewriteMap lowercase int:tolower
+RewriteCond ${lowercase:%{SERVER_NAME}} ^[a-z0-9-]+\.openid\.stg\.fedoraproject\.org$
+RewriteRule ^(.+) ${lowercase:%{SERVER_NAME}}$1 [C]
+RewriteRule ^([a-z0-9-]+)\.openid\.stg\.fedoraproject\.org/.* http://localhost:5000/id/$1/ [P]
+RewriteRule ^(.+) - [PT]

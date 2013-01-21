@@ -306,6 +306,9 @@ class TeamsResponse(Extension):
         """
         return {'is_member': ','.join(self.teams)}
 
+    def __repr__(self):
+        return 'TeamsResponse. Teams: %s' % self.teams
+
     # Read-only dictionary interface
     def get(self, field_name, default=None):
         if field_name != 'is_member':

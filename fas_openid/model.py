@@ -1,4 +1,5 @@
 from fas_openid import db
+from openid.association import Association as openid_assoc
 from openid.store.nonce import SKEW as NonceSKEW
 from openid.store.interface import OpenIDStore
 import time
@@ -49,7 +50,7 @@ class FASOpenIDStore(OpenIDStore):
             db.session.delete(assoc)
             db.session.commit()
             return None
-        return assoc
+        return openid_assoc(assoc.handle, assoc.secret, assoc.issued, assoc.lifetime, assoc.assoc_type)
 
     def removeAssociation(self, lookup_server_url, lookup_handle):
         return Association.query.filter_by(server_url = lookup_server_url, handle = lookup_handle).delete() > 0

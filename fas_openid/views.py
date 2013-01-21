@@ -27,6 +27,23 @@ def complete_url_for(func, **values):
 
 def get_claimed_id(username):
     return app.config['OPENID_IDENTITY_URL'] % username
+addSReg(openid_request, openid_response, g.fas_user)
+
+def addSReg(request, response, user):
+    sreg_req = sreg.SRegRequest.fromOpenIDRequest(request)
+    
+    sreg_data = { 'nickname'    : user.username
+                , 'email'       : user.email
+                , 'fullname'    : user.human_name
+                , 'dob'         : None
+                , 'gender'      : None
+                , 'postcode'    : None
+                , 'country'     : None
+                , 'language'    : None
+                , 'timezone'    : user.timezone
+                }
+
+    response.addExtension(sreg.SRegResponse.extractResponse(sreg_req, sreg_data))
 
 @app.route('/', methods=['GET', 'POST'])
 def view_main():
@@ -41,7 +58,9 @@ def view_main():
         print 'checkid. mode: %s, trust_root: %s, claimed_id: %s, request: %s' % (openid_request.mode, openid_request.trust_root, openid_request.claimed_id, openid_request)
         if isAuthorized(openid_request):
             print 'authorized'
-            return openid_respond(openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username)))
+            openid_response = openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username))
+            addSReg(openid_request, openid_response, g.fas_user)
+            return openid_respond(openid_response)
         elif openid_request.immediate:
             print 'checkid_immediate -> reject'
             return openid_respond(openid_request.answer(False))
@@ -107,11 +126,14 @@ def auth_login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        result = FAS.login(username, password)
-        if result:
-            return redirect(session['next'])
+        if (not app.config['AVAILABLE_FILTER']) or (username in app.config['AVAILABLE_TO']):
+            if result = FAS.login(username, password):
+                return redirect(session['next'])
+            else:
+                flash('Incorrect username or password')
         else:
-            flash('Incorrect username or password')
+            flash('This service is limited to the following users: %s' % (', '.join(app.config['AVAILABLE_TO']))
+            result = False
     return render_template('login.html')
 
 @app.route('/test/')

@@ -52,6 +52,12 @@ def addToSessionArray(array, value):
     else:
         session[array] = [value]
 
+def getSessionValue(key, default_value=None):
+    if key in session:
+        return session[key]
+    else:
+        return default_value
+
 def user_ask_trust_root(openid_request):
     if request.method == 'POST':
         decided = request.form['decided']
@@ -117,9 +123,9 @@ def isAuthorized(openid_request):
         return 2
     elif openid_request.trust_root in app.config['NON_TRUSTED_ROOTS']:
         return -1
-    elif openid_request.trust_root in session['TRUSTED_ROOTS']:
+    elif openid_request.trust_root in getSessionValue('TRUSTED_ROOTS', []):
         return 2
-    elif openid_request.trust_root in session['NON_TRUSTED_ROOTS']:
+    elif openid_request.trust_root in getSessionValue('NON_TRUSTED_ROOTS', []):
         return -1
     else:
         # The user still needs to determine if he/she allows this trust root

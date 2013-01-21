@@ -207,6 +207,9 @@ class TeamsRequest(Extension):
 
         return args
 
+    def __repr__(self):
+        return 'TeamsRequest. requestedTeams: %s' % self.requested
+
 class TeamsResponse(Extension):
     """Represents the data returned in a simple registration response
     inside of an OpenID C{id_res} response. This object will be

@@ -74,6 +74,7 @@ def user_ask_trust_root(openid_request):
     return render_template('user_ask_trust_root.html'
                           , action              = request.url
                           , trust_root          = openid_request.trust_root
+                          , sreg_fields         = sreg_req.allRequestedFields()
                           , sreg_required       = sreg_req.required
                           , sreg_optional       = sreg_req.optional
                           , sreg_policy_url     = sreg_req.policy_url

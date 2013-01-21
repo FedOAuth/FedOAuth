@@ -68,7 +68,7 @@ def isAuthorized(openid_request):
 
 @app.route('/id/<username>/')
 def view_id(username):
-    return render_template('user.html', username=username, openid_endpoint=app.config['OPENID_ENDPOINT'], claimed_id=get_claimed_id(username), yadis_url=complete_url_for('view_yadis_id', username=username), username=username), 200, {'X-XRDS-Location': complete_url_for('view_yadis_id', username=username)}
+    return render_template('user.html', username=username, openid_endpoint=app.config['OPENID_ENDPOINT'], claimed_id=get_claimed_id(username), yadis_url=complete_url_for('view_yadis_id', username=username)), 200, {'X-XRDS-Location': complete_url_for('view_yadis_id', username=username)}
 
 
 @app.route('/yadis/<username>.xrds')

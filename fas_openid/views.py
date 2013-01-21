@@ -101,7 +101,7 @@ def view_main():
             return openid_respond(openid_request.answer(False))
         if g.fas_user is None:
             session['next'] = request.url
-            return redirect(url_for('auth_login'))
+            return redirect(app.config['LOGIN_URL'])
         return 'Welcome, user! We hope you will visit us soon! <br /> Your details: %s' % g.fas_user
         pass    # TODO: CHECK THE REQUEST
     else:

@@ -7,6 +7,8 @@ AVAILABLE_TO = []
 
 TRUSTED_ROOTS = []
 
+LOGIN_URL = 'http://localhost:5000/login/'
+
 FAS_HTTPS_REQUIRED = False
 OPENID_ENDPOINT = 'http://localhost:5000'
 OPENID_IDENTITY_URL = 'http://localhost:5000/id/%s'

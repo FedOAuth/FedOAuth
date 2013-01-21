@@ -7,6 +7,8 @@ AVAILABLE_TO = []
 # A list of trust roots for which the user will not need to confirm again
 TRUSTED_ROOTS = []
 
+LOGIN_URL = 'http://localhost:5000/login/'
+
 ### Wether or not the cookies are only valid for HTTPS requests
 ### ADVISED: Set this to True in production systems, otherwise a MITM could steal the authentication cookie
 FAS_HTTPS_REQUIRED=True

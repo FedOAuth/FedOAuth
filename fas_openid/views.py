@@ -54,20 +54,15 @@ def view_main():
     if openid_request is None:
         return render_template('index.html', text='MAIN PAGE, no OpenID request', openid_endpoint=app.config['OPENID_ENDPOINT'], yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
-        print 'checkid. mode: %s, trust_root: %s, claimed_id: %s, request: %s' % (openid_request.mode, openid_request.trust_root, openid_request.claimed_id, openid_request)
         if isAuthorized(openid_request):
-            print 'authorized'
             openid_response = openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username))
             addSReg(openid_request, openid_response, g.fas_user)
             return openid_respond(openid_response)
         elif openid_request.immediate:
-            print 'checkid_immediate -> reject'
             return openid_respond(openid_request.answer(False))
         if g.fas_user is None:
-            print 'login required'
             session['next'] = openid_request.encodeToURL(app.config['OPENID_ENDPOINT'])
             return redirect(url_for('auth_login'))
-        print 'no decision taken yet'
         return 'Welcome, user! We hope you will visit us soon! <br /> Your details: %s' % g.fas_user
         pass    # TODO: CHECK THE REQUEST
     else:
@@ -80,9 +75,12 @@ def isAuthorized(openid_request):
     elif openid_request.idSelect():
         print 'idselect'
         return True     # Everyone is allowed to use the idSelect, since we return the correct computed endpoints
+    elif openid_request.identity != get_claimed_id(g.fas_user.username):
+        print 'Incorrect claimed id. Claimed: %s, correct: %s' % (openid_request.identity, get_claimed_id(g.fas_user.username))
+        return False
     else:
-        print 'request id: %s, username: %s' % (openid_request.identity, get_claimed_id(g.fas_user.username))
-        return openid_request.identity == get_claimed_id(g.fas_user.username)
+        print 'Check here for user allowance...'
+        return True
 
 @app.route('/id/<username>/')
 def view_id(username):

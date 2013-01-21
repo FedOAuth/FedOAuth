@@ -21,9 +21,9 @@ def get_server():
     return g.openid_server
 
 
-def complete_url_for(func):
+def complete_url_for(func, **values):
     from urlparse import urljoin
-    return urljoin(app.config['OPENID_ENDPOINT'], url_for(func))
+    return urljoin(app.config['OPENID_ENDPOINT'], url_for(func, **values))
 
 def get_claimed_id(username):
     return app.config['OPENID_IDENTITY_URL'] % username

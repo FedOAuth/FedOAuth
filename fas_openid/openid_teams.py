@@ -1,5 +1,32 @@
-"""
+"""Teams extension request and response parsing and object representation
 
+This module contains objects representing team extension requests 
+and responses that can be used with both OpenID relying parties and
+OpenID providers.
+
+    1. The relying party creates a request object and adds it to the
+       C{L{AuthRequest<openid.consumer.consumer.AuthRequest>}} object
+       before making the C{checkid_} request to the OpenID provider::
+
+        auth_request.addExtension(TeamsRequest(requested=['team']))
+
+    2. The OpenID provider extracts the teams extension request from
+       the OpenID request using C{L{TeamsRequest.fromOpenIDRequest}},
+       gets the user's approval and team membership, creates a C{L{TeamsResponse}}
+       object and adds it to the C{id_res} response::
+
+        teams_req = TeamsRequest.fromOpenIDRequest(checkid_request)
+        # [ get the user's approval and team membership, informing the user that
+        #   the groups in teams_response were requested and accepted ]
+        teams_resp = TeamsResponse.extractResponse(teams_req, group_memberships)
+        teams_resp.toMessage(openid_response.fields)
+
+    3. The relying party uses C{L{TeamsResponse.fromSuccessResponse}} to
+       exxtract the data from the OpenID response::
+
+        teams_resp = TeamsResponse.fromSuccessResponse(success_response)
+
+@var teams_uri: The URI used for the teams extension namespace and XRD Type Value
 """
 
 from openid.message import registerNamespaceAlias, \
@@ -16,43 +43,35 @@ except NameError:
 __all__ = [
     'TeamsRequest',
     'TeamsResponse',
-    'ns_uri',
+    'teams_uri',
     'supportsTeams',
     ]
 
 # The namespace for this extension
-ns_uri = 'http://ns.launchpad.net/2007/openid-teams'
+teams_uri = 'http://ns.launchpad.net/2007/openid-teams'
 
 try:
-    registerNamespaceAlias(ns_uri, 'lp')
+    registerNamespaceAlias(teams_uri, 'lp')
 except NamespaceAliasRegistrationError, e:
-    logging.exception('registerNamespaceAlias(%r, %r) failed: %s' % (ns_uri,
+    logging.exception('registerNamespaceAlias(%r, %r) failed: %s' % (teams_uri,
                                                                'teams', str(e),))
 
 def supportsTeams(endpoint):
-    """Does the given endpoint advertise support for team extension.
+    """Does the given endpoint advertise support for team extension?
 
     @param endpoint: The endpoint object as returned by OpenID discovery
     @type endpoint: openid.consumer.discover.OpenIDEndpoint
 
-    @returns: Whether an sreg type was advertised by the endpoint
+    @returns: Whether an teams extension type was advertised by the endpoint
     @rtype: bool
     """
-    return endpoint.usesExtension(ns_uri)
+    return endpoint.usesExtension(teams_uri)
 
 class TeamsRequest(Extension):
-    """An object to hold the state of a simple registration request.
+    """An object to hold the state of a teams extension request.
 
-    @ivar required: A list of the required fields in this simple
-        registration request
+    @ivar requested: A list of team names in this teams extension request
     @type required: [str]
-
-    @ivar optional: A list of the optional fields in this simple
-        registration request
-    @type optional: [str]
-
-    @ivar policy_url: The policy URL that was provided with the request
-    @type policy_url: str or NoneType
 
     @group Consumer: requestField, requestFields, getExtensionArgs, addToOpenIDRequest
     @group Server: fromOpenIDRequest, parseExtensionArgs
@@ -61,11 +80,10 @@ class TeamsRequest(Extension):
     ns_alias = 'lp'
 
     def __init__(self, requested=None,
-                 sreg_ns_uri=ns_uri):
-        """Initialize an empty simple registration request"""
+                 sreg_ns_uri=self.ns_uri):
+        """Initialize an empty teams extension request"""
         Extension.__init__(self)
         self.requested = []
-        self.ns_uri = sreg_ns_uri
 
         if requested:
             self.requestTeams(requested)
@@ -74,15 +92,15 @@ class TeamsRequest(Extension):
         return self.requested
 
     def fromOpenIDRequest(cls, request):
-        """Create a simple registration request that contains the
-        fields that were requested in the OpenID request with the
+        """Create a simple teams extension request that contains the
+        team names that were requested in the OpenID request with the
         given arguments
 
         @param request: The OpenID request
         @type request: openid.server.CheckIDRequest
 
-        @returns: The newly created simple registration request
-        @rtype: C{L{SRegRequest}}
+        @returns: The newly created teams extension request
+        @rtype: C{L{TeamsRequest}}
         """
         self = cls()
 
@@ -97,118 +115,83 @@ class TeamsRequest(Extension):
 
     fromOpenIDRequest = classmethod(fromOpenIDRequest)
 
-    def parseExtensionArgs(self, args, strict=False):
-        """Parse the unqualified simple registration request
+    def parseExtensionArgs(self, args):
+        """Parse the unqualified teams extension request
         parameters and add them to this object.
 
         This method is essentially the inverse of
-        C{L{getExtensionArgs}}. This method restores the serialized simple
-        registration request fields.
+        C{L{getExtensionArgs}}. This method restores the serialized teams
+        extension team names.
 
         If you are extracting arguments from a standard OpenID
         checkid_* request, you probably want to use C{L{fromOpenIDRequest}},
-        which will extract the sreg namespace and arguments from the
+        which will extract the teams extension namespace and arguments from the
         OpenID request. This method is intended for cases where the
         OpenID server needs more control over how the arguments are
         parsed than that method provides.
 
-        >>> args = message.getArgs(ns_uri)
+        >>> args = message.getArgs(teams_uri)
         >>> request.parseExtensionArgs(args)
 
-        @param args: The unqualified simple registration arguments
+        @param args: The unqualified teams extension arguments
         @type args: {str:str}
-
-        @param strict: Whether requests with fields that are not
-            defined in the simple registration specification should be
-            tolerated (and ignored)
-        @type strict: bool
 
         @returns: None; updates this object
         """
         items = args.get('query_membership')
         if items:
             for team_name in items.split(','):
-                try:
-                    self.requestTeam(team_name)
-                except ValueError:
-                    if strict:
-                        raise
+                self.requestTeam(team_name)
 
     def wereTeamsRequested(self):
-        """Have any simple registration fields been requested?
+        """Have any teams been requested?
 
         @rtype: bool
         """
         return bool(self.requested)
 
     def __requests__(self, team_name):
-        """Was this field in the request?"""
+        """Was this team in the request team names?"""
         return team_name in self.requested
 
-    def requestTeam(self, team_name, strict=False):
-        """Request the specified field from the OpenID user
+    def requestTeam(self, team_name):
+        """Request the specified team membership from the OpenID user
 
-        @param field_name: the unqualified simple registration field name
-        @type field_name: str
-
-        @param required: whether the given field should be presented
-            to the user as being a required to successfully complete
-            the request
-
-        @param strict: whether to raise an exception when a field is
-            added to a request more than once
-
-        @raise ValueError: when the field requested is not a simple
-            registration field or strict is set and the field was
-            requested more than once
+        @param team_name: the unqualified team name
+        @type team_name: str
         """
-        if strict:
-            if team_name in self.requested:
-                raise ValueError('That team has already been requested')
-        self.requested.append(team_name)
+        if not team_name in self.requested:
+            self.requested.append(team_name)
 
-    def requestTeams(self, field_names, strict=False):
-        """Add the given list of fields to the request
+    def requestTeams(self, team_names):
+        """Add the given list of team names to the request.
 
-        @param field_names: The simple registration data fields to request
-        @type field_names: [str]
-
-        @param required: Whether these values should be presented to
-            the user as required
-
-        @param strict: whether to raise an exception when a field is
-            added to a request more than once
-
-        @raise ValueError: when a field requested is not a simple
-            registration field or strict is set and a field was
-            requested more than once
+        @param team_names: The team names to request
+        @type team_names: [str]
         """
         if isinstance(team_names, basestring):
             raise TypeError('Teams should be passed as a list of '
                             'strings (not %r)' % (type(field_names),))
 
-        for team_name in team__names:
-            self.requestTeam(team_name, strict=strict)
+        for team_name in team_names:
+            self.requestTeam(team_name)
 
     def getExtensionArgs(self):
-        """Get a dictionary of unqualified simple registration
+        """Get a dictionary of unqualified team extension
         arguments representing this request.
 
         This method is essentially the inverse of
-        C{L{parseExtensionArgs}}. This method serializes the simple
-        registration request fields.
+        C{L{parseExtensionArgs}}. This method serializes the team
+        extension request fields.
 
         @rtype: {str:str}
         """
         args = {}
 
         if self.requested:
-            args['requested'] = ','.join(self.requested)
+            args['query_membership'] = ','.join(self.requested)
 
         return args
-
-    def __repr__(self):
-        return 'TeamsRequest. requestedTeams: %s' % self.requested
 
 class TeamsResponse(Extension):
     """Represents the data returned in a simple registration response
@@ -241,22 +224,19 @@ class TeamsResponse(Extension):
             self.teams = teams
 
     def extractResponse(cls, request, teams):
-        """Take a C{L{SRegRequest}} and a dictionary of simple
-        registration values and create a C{L{SRegResponse}}
-        object containing that data.
+        """Take a C{L{TeamsRequest}} and a list of groups
+        the user is member of and create a C{L{TeamsResponse}}
+        object containing the list of team names that are both
+        requested and in the membership list of the user.
 
-        @param request: The simple registration request object
-        @type request: SRegRequest
+        @param request: The teams extension request object
+        @type request: TeamsRequest
 
-        @param data: The simple registration data for this
-            response, as a dictionary from unqualified simple
-            registration field name to string (unicode) value. For
-            instance, the nickname should be stored under the key
-            'nickname'.
-        @type data: {str:str}
+        @param teams: The list of teams the user is a member of
+        @type teams: [str]
 
-        @returns: a simple registration response object
-        @rtype: SRegResponse
+        @returns: a teams extension response object
+        @rtype: TeamsResponse
         """
         self = cls()
         for team in request.requestedTeams():
@@ -267,7 +247,7 @@ class TeamsResponse(Extension):
     extractResponse = classmethod(extractResponse)
 
     def fromSuccessResponse(cls, success_response, signed_only=True):
-        """Create a C{L{SRegResponse}} object from a successful OpenID
+        """Create a C{L{TeamsResponse}} object from a successful OpenID
         library response
         (C{L{openid.consumer.consumer.SuccessResponse}}) response
         message
@@ -279,9 +259,9 @@ class TeamsResponse(Extension):
             signed in the id_res message from the server.
         @type signed_only: bool
 
-        @rtype: SRegResponse
-        @returns: A simple registration response containing the data
-            that was supplied with the C{id_res} response.
+        @rtype: TeamsResponse
+        @returns: A teams extension response with the teams the OpenID
+            provider provided.
         """
         self = cls()
         if signed_only:
@@ -299,30 +279,9 @@ class TeamsResponse(Extension):
     fromSuccessResponse = classmethod(fromSuccessResponse)
 
     def getExtensionArgs(self):
-        """Get the fields to put in the simple registration namespace
+        """Get the fields to put in the teams extension namespace
         when adding them to an id_res message.
 
         @see: openid.extension
         """
         return {'is_member': ','.join(self.teams)}
-
-    def __repr__(self):
-        return 'TeamsResponse. Teams: %s' % self.teams
-
-    # Read-only dictionary interface
-    def get(self, field_name, default=None):
-        if field_name != 'is_member':
-            raise ValueError('teams invalid')
-        return ','.join(self.teams)
-
-    def items(self):
-        return [','.join(self.teams)]
-
-    def keys(self):
-        return ['is_member']
-
-    def has_key(self, key):
-        return key == 'is_member'
-
-    def __contains__(self, key):
-        return key == 'is_member'

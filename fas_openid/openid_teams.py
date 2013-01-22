@@ -284,4 +284,7 @@ class TeamsResponse(Extension):
 
         @see: openid.extension
         """
-        return {'is_member': ','.join(self.teams)}
+        if self.teams != []:
+            return {'is_member': ','.join(self.teams)}
+        else:
+            return {}

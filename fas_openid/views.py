@@ -16,6 +16,8 @@ from openid.server.server import Server as openid_server
 from openid.server import server
 from openid.consumer import discover
 
+from urlparse import urljoin
+
 
 def get_server():
     if not hasattr(g, 'openid_server'):
@@ -24,11 +26,11 @@ def get_server():
 
 
 def complete_url_for(func, **values):
-    from urlparse import urljoin
     return urljoin(app.config['OPENID_ENDPOINT'], url_for(func, **values))
 
 def get_claimed_id(username):
-    return app.config['OPENID_IDENTITY_URL'] % username
+    # The urljoin is so that we alway get <id>/ instead of both <id> and <id>/
+    return urljoin(app.config['OPENID_IDENTITY_URL'] % username, '/')
 
 def addSReg(request, response, user):
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(request)

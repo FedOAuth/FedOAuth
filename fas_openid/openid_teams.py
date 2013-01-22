@@ -79,8 +79,7 @@ class TeamsRequest(Extension):
     ns_uri = 'http://ns.launchpad.net/2007/openid-teams'
     ns_alias = 'lp'
 
-    def __init__(self, requested=None,
-                 sreg_ns_uri=self.ns_uri):
+    def __init__(self, requested=None):
         """Initialize an empty teams extension request"""
         Extension.__init__(self)
         self.requested = []

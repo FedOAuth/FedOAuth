@@ -49,6 +49,7 @@ def addTeams(request, response, groups):
 def addToSessionArray(array, value):
     if array in session:
         session[array].append(value)
+        session.modified = true
     else:
         session[array] = [value]
 

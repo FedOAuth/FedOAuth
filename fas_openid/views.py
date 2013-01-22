@@ -61,7 +61,7 @@ def getSessionValue(key, default_value=None):
 def user_ask_trust_root(openid_request):
     if request.method == 'POST':
         decided = request.form['decided']
-        if decided == 'Yes':
+        if decided == 'Allow':
             addToSessionArray('TRUSTED_ROOTS', openid_request.trust_root)
         else:
             addToSessionArray('NON_TRUSTED_ROOTS', openid_request.trust_root)

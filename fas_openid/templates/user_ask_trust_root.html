@@ -1,8 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
 <form action="{{action}}" method="post">
-<table>
-<tr><th>Trust root:</th><td>{{trust_root}}</td></tr>
+<table border="1">
+<tr><th>Trust root</th><td>{{trust_root}}</td></tr>
+
+{% for field_name in sreg_data %}
+<tr><th>{{field_name}}</th><td>{{sreg_data[field_name]}}</td></tr>
+{% endfor %}
+
+{% for team in teams_provided %}
+<tr><th>Team</th><td>{{team}}</td></tr>
+{% endfor %}
 
 <tr><td><input type="submit" name="decided" value="No"></td><td><input type="submit" name="decided" value="Yes"></td></tr>
 </table>

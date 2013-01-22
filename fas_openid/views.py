@@ -67,21 +67,21 @@ def user_ask_trust_root(openid_request):
             addToSessionArray('NON_TRUSTED_ROOTS', openid_request.trust_root)
         return redirect(request.url)
     # Get which stuff we will send
+    sreg_data = { 'nickname'    : g.fas_user.username
+                , 'email'       : g.fas_user.email
+                , 'fullname'    : g.fas_user.human_name
+                , 'timezone'    : g.fas_user.timezone
+                }
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
+    sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
     teams_resp = teams.TeamsResponse.extractResponse(teams_req, g.fas_user.groups)
     # Show form
     return render_template('user_ask_trust_root.html'
                           , action              = request.url
                           , trust_root          = openid_request.trust_root
-                          , sreg_fields         = sreg_req.allRequestedFields()
-                          , sreg_required       = sreg_req.required
-                          , sreg_optional       = sreg_req.optional
                           , sreg_policy_url     = sreg_req.policy_url
-                          , sreg_value_nickname = g.fas_user.username
-                          , sreg_value_email    = g.fas_user.email
-                          , sreg_value_fullname = g.fas_user.human_name
-                          , sreg_value_timezone = g.fas_user.timezone
+                          , sreg_data           = sreg_resp.data
                           , teams_provided      = teams_resp.teams
                           )
 

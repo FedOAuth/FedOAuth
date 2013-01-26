@@ -10,10 +10,19 @@ import flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flaskext.babel import Babel
 
+from uuid import uuid4 as uuid
+
 import logging
 import logging.handlers
 
 from flask_fas import FAS
+
+class RequestFilter(logging.Filter):
+    """This filter generates a new UUID per request, and embeds it"""
+    def filter(self, record):
+        if not hasattr(flask.g, 'request_uuid'):
+            flask.g.request_uuid = uuid()
+        record.uuid = flask.g.request_uuid
 
 # Create the application
 APP = flask.Flask(__name__)
@@ -22,6 +31,7 @@ logger = logging.getLogger('openid')
 logger.setLevel(logging.DEBUG)
 handler = logging.handlers.SysLogHandler(address='/dev/log', facility=logging.handlers.SysLogHandler.LOG_LOCAL4)
 logger.addHandler(handler)
+logger.addFilter(RequestFilter())
 # Set up FASS
 FAS = FAS(APP)
 APP.config.from_object('fas_openid.default_config')

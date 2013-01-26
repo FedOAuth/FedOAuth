@@ -10,10 +10,18 @@ import flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flaskext.babel import Babel
 
+import logging
+import logging.handlers
+
 from flask_fas import FAS
 
 # Create the application
 APP = flask.Flask(__name__)
+# Set up logging (https://fedoraproject.org/wiki/Infrastructure/AppBestPractices#Centralized_logging)
+logger = logging.getLogger('openid')
+logger.setLevel(logging.DEBUG)
+handler = logging.handlers.SysLogHandler(address='/dev/log', facility=logging.handlers.SysLogHandler.LOG_LOCAL4)
+logger.addHandler(handler)
 # Set up FASS
 FAS = FAS(APP)
 APP.config.from_object('fas_openid.default_config')

@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+pybabel extract --mapping=babel.cfg --output=fas_openid/translations/en.pot --msgid-bugs-address="puiterwijk@fedoraproject.org" --copyright-holder="Patrick Uiterwijk" --project="FAS-OpenID" --version="`cat VERSION`" fas_openid/

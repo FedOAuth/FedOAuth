@@ -18,6 +18,8 @@ from openid.consumer import discover
 
 from urlparse import urljoin
 
+from flaskext.babel import gettext as _
+
 
 def get_server():
     if not hasattr(g, 'openid_server'):
@@ -63,8 +65,7 @@ def getSessionValue(key, default_value=None):
 
 def user_ask_trust_root(openid_request):
     if request.method == 'POST':
-        decided = request.form['decided']
-        if decided == 'Allow':
+        if 'decided_allow' in request.form:
             addToSessionArray('TRUSTED_ROOTS', openid_request.trust_root)
         else:
             addToSessionArray('NON_TRUSTED_ROOTS', openid_request.trust_root)
@@ -163,7 +164,7 @@ def auth_logout():
         return redirect(url_for('view_main'))
     FAS.logout()
     session.clear()
-    flash('You have been logged out')
+    flash(_('You have been logged out'))
     return redirect(url_for('view_main'))
 
 @app.route('/login/', methods=['GET','POST'])
@@ -181,9 +182,9 @@ def auth_login():
             if FAS.login(username, password):
                 return redirect(session['next'])
             else:
-                flash('Incorrect username or password')
+                flash(_('Incorrect username or password'))
         else:
-            flash('This service is limited to the following users: %s' % (', '.join(app.config['AVAILABLE_TO'])))
+            flash(_('This service is limited to the following users: %(users)s', users=', '.join(app.config['AVAILABLE_TO'])))
     return render_template('login.html', title='Login')
 
 @app.route('/test/')

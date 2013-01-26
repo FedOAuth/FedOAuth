@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block body %}
-This is the ID page for {{username}}.
+{% trans %}This is the ID page for {{username}}.{% endtrans %}
 <br />
 YADIS Url: {{yadis_url}}.
 <br />
 Endpoint url: {{openid_endpoint}}
 <br />
-claimeD_id: {{claimed_id}}
+claimed_id: {{claimed_id}}
 {% endblock %}

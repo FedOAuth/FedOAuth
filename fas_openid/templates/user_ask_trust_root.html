@@ -2,17 +2,18 @@
 {% block body %}
 <form action="{{action}}" method="post">
 <table border="1">
-<tr><th>Trust root</th><td>{{trust_root}}</td></tr>
+<tr><th>{% trans %}Trust root{% endtrans %}</th><td>{{trust_root}}</td></tr>
+<tr><th>{% trans %}Trust root's privacy policy{% endtrans %}</th><td>{{privacy_policy}}</td></tr>
 
 {% for field_name in sreg_data %}
 <tr><th>{{field_name}}</th><td>{{sreg_data[field_name]}}</td></tr>
 {% endfor %}
 
 {% for team in teams_provided %}
-<tr><th>Team</th><td>{{team}}</td></tr>
+<tr><th>{% trans %}Group{% endtrans %}</th><td>{{team}}</td></tr>
 {% endfor %}
 
-<tr><td colspan="2"><input type="submit" name="decided" value="Deny"> <input type="submit" name="decided" value="Allow"></td></tr>
+<tr><td colspan="2"><input type="submit" name="decided_allow" value="{% trans %}Allow{% endtrans %}"> <input type="submit" name="decided_deny" value="{% trans %}Deny{% endtrans %}"></td></tr>
 </table>
 </form>
 {% endblock %}

@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 {% block body %}
 <form action="/login/" method="post">
-Username: <input type="text" name="username"><br />
-Password: <input type="password" name="password"><br />
-<input type="submit" value="Log in">
+{% trans %}Username{% endtrans %}: <input type="text" name="username"><br />
+{% trans %}Password{% endtrans %}: <input type="password" name="password"><br />
+<input type="submit" value="{% trans %}Log in{% endtrans %}">
 </form>
 {% endblock %}

@@ -20,6 +20,7 @@ from urlparse import urljoin
 
 from flaskext.babel import gettext as _
 
+from uuid import uuid4 as uuid
 
 def get_server():
     if not hasattr(g, 'openid_server'):

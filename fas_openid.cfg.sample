@@ -28,9 +28,3 @@ SECRET_KEY='<The web application secret key>'
 #DB_URL=mysql://user:pass@host/db_name
 #DB_URL=postgres://user:pass@host/db_name
 DB_URL='sqlite:////var/tmp/fas_openid_dev.sqlite'
-
-### Path to the alembic configuration file
-### When creating the database, we need to tell the database which
-### revision of alembic we are at and to do this we need access to the
-### alembic.ini file.
-PATH_ALEMBIC_INI='/path/to/alembic.ini'

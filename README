@@ -1,5 +1,7 @@
-ProxyPass       /       http://localhost:5000/
+FAS-OpenID
+==========
 
+    https://github.com/fedora-infra/fas-openid
 
 
 

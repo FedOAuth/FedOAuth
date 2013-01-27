@@ -16,15 +16,18 @@ BuildRequires:  python-devel
 BuildRequires:  python-flask
 BuildRequires:  python-fedora
 BuildRequires:  python-fedora-flask
+BuildRequires:  python-flask-babel
 BuildRequires:  python-flask-sqlalchemy
 BuildRequires:  python-openid
 Requires:       python-flask
 Requires:       python-fedora
 Requires:       python-fedora-flask
+Requires:       python-flask-babel
 Requires:       python-flask-sqlalchemy
 Requires:       python-openid
 Requires:       mod_wsgi
 Requires:       httpd
+Requires(pre):  shadow-utils
 
 %description
 FAS-OpenID is an OpenID provider which gets it's information from Fedora Account System (FAS).
@@ -49,6 +52,13 @@ FAS-OpenID is an OpenID provider which gets it's information from Fedora Account
 %{__install} -d -m 644 fas_openid/translations/ %{buildroot}%{_datadir}/%{name}/translations
 %{__install} -m 644 %{name}.cfg.sample %{buildroot}%{_sysconfdir}/%{name}/%{name}.cfg
 %{__install} -m 644 %{name}.wsgi %{buildroot}%{_datadir}/%{name}/%{name}.wsgi
+
+%pre
+getent group fas-openid >/dev/null || groupadd -r fas-openid
+getent passwd fas-openid >/dev/null || \
+    useradd -r -g fas-openid -d %{_datadir}/%{name} -s /sbin/nologin \
+    -c "Account used for FAS-OpenID serving" fas-openid
+exit 0
 
 %files
 %doc

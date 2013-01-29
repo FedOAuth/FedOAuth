@@ -4,7 +4,8 @@ FAS-OpenID
     https://github.com/fedora-infra/fas-openid
 
 
-
+Rewriting rules to get *.id.fp.o pointing to id.fp.o/id/*
+=========================================================
 RewriteEngine on
 RewriteMap lowercase int:tolower
 RewriteCond ${lowercase:%{SERVER_NAME}} ^[a-z0-9-]+\.openid\.stg\.fedoraproject\.org$

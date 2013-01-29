@@ -1,5 +1,5 @@
 Name:           fas-openid
-Version:        0.1.1
+Version:        0.1.2
 Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
@@ -68,6 +68,9 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Tue Jan 29 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.1.2-1
+- Fixed the SQLAlchemy import for flask-sqlalchemy
+
 * Tue Jan 29 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.1.1-1
 - Added account creation in the RPM
 - Fixed the SQLAlchemy imports to be >= 0.7

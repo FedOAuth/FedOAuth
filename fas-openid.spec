@@ -1,6 +1,6 @@
 Name:           fas-openid
 Version:        0.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
 License:        GPLv2+
@@ -68,3 +68,6 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Tue Jan 29 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.1.1-1
+- Added account creation in the RPM
+- Fixed the SQLAlchemy imports to be >= 0.7

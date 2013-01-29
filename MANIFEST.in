@@ -1,3 +1,2 @@
 recursive-include fas_openid/templates *
-recursive-include fas_openid/templates *
 recursive-include fas_openid/translations *

@@ -17,8 +17,10 @@ BuildRequires:  python-flask
 BuildRequires:  python-fedora
 BuildRequires:  python-fedora-flask
 BuildRequires:  python-flask-babel
+BuildRequires:  python-sqlalchemy0.7
 BuildRequires:  python-flask-sqlalchemy
 BuildRequires:  python-openid
+Requires:       python-sqlalchemy0.7
 Requires:       python-flask
 Requires:       python-fedora
 Requires:       python-fedora-flask
@@ -47,9 +49,7 @@ FAS-OpenID is an OpenID provider which gets it's information from Fedora Account
 %{__mkdir_p} %{buildroot}%{_datadir}/%{name}
 
 %{__install} -m 644 fas_openid.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/fas_openid.conf
-%{__install} -d -m 644 fas_openid/templates/ %{buildroot}%{_datadir}/%{name}/templates
 %{__install} -d -m 644 fas_openid/static/ %{buildroot}%{_datadir}/%{name}/static
-%{__install} -d -m 644 fas_openid/translations/ %{buildroot}%{_datadir}/%{name}/translations
 %{__install} -m 644 %{name}.cfg.sample %{buildroot}%{_sysconfdir}/%{name}/%{name}.cfg
 %{__install} -m 644 %{name}.wsgi %{buildroot}%{_datadir}/%{name}/%{name}.wsgi
 

@@ -1,11 +1,11 @@
 Name:           fas-openid
-Version:        0.1.0
-Release:        2%{?dist}
+Version:        0.1.1
+Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
 License:        GPLv2+
 URL:            https://github.com/fedora-infra/%{name}
-Source0:        https://github.com/fedora-infra/%{name}/archive/v%{version}.tar.gz
+Source0:        https://fedorahosted.org/releases/f/a/%{name}/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
 

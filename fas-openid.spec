@@ -62,8 +62,9 @@ exit 0
 
 %files
 %doc
-%{_sysconfdir}/%{name}
-%{_sysconfdir}/httpd/conf.d/fas_openid.conf
+%dir %{_sysconfdir}/%{name}
+%config %{_sysconfdir}/%{name}/%{name}.cfg
+%config %{_sysconfdir}/httpd/conf.d/fas_openid.conf
 %{_datadir}/%{name}
 %{python_sitelib}/*
 

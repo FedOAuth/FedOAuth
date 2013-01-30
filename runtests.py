@@ -13,7 +13,7 @@ class FasOpenIDStoreTest(unittest.TestCase):
         self.db_fd, self.filename = tempfile.mkstemp()
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///%s' % self.filename
         app.config['TESTING'] = True
-        model.create_tables(app.config['SQLALCHEMY_DATABASE_URI'], None, True)
+        model.create_tables(app.config['SQLALCHEMY_DATABASE_URI'], True)
         self.store = FASOpenIDStore()
 
 #    def tearDown(self):

@@ -1,6 +1,6 @@
 Name:           fas-openid
 Version:        0.1.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
 License:        GPLv2+
@@ -63,12 +63,15 @@ exit 0
 %files
 %doc
 %dir %{_sysconfdir}/%{name}
-%config %{_sysconfdir}/%{name}/%{name}.cfg
-%config %{_sysconfdir}/httpd/conf.d/fas_openid.conf
+%config(noreplace) %{_sysconfdir}/%{name}/%{name}.cfg
+%config(noreplace) %{_sysconfdir}/httpd/conf.d/fas_openid.conf
 %{_datadir}/%{name}
 %{python_sitelib}/*
 
 %changelog
+* Thu Jan 31 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.1.4-2
+- Marked config files as noreplace
+
 * Thu Jan 31 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.1.4-1
 - Removed the Login HTTPS requirement from the .conf
 

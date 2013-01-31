@@ -1,5 +1,5 @@
 Name:           fas-openid
-Version:        0.1.3
+Version:        0.1.4
 Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
@@ -69,6 +69,9 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Thu Jan 31 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.1.4-1
+- Removed the Login HTTPS requirement from the .conf
+
 * Wed Jan 30 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.1.3-1
 - Fixed key name in default configuration file
 - Mark fas-openid.cfg and fas_openid.conf as config files

@@ -106,7 +106,7 @@ def view_main():
             openid_response = openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username))
             sreg_info = addSReg(openid_request, openid_response, g.fas_user)
             teams_info = addTeams(openid_request, openid_response, g.fas_user.groups)
-            logger.info('Succesful OpenID claiming. Logged in username: %(username)s. Claimed id: %(claimed)s. SReg data: %(sreg)s. Teams data: %(teams)s. Security level: %(seclvl)s' % {'username': g.fas_user.username, 'claimed': get_claimed_id(g.fas_user.username), 'sreg': sreg_info, 'teams': teams_info, 'seclvl': '1'})
+            logger.info('Succesful OpenID claiming. Logged in username: %(username)s. Claimed id: %(claimed)s. Trust_root: %(trustroot)s. SReg data: %(sreg)s. Teams data: %(teams)s. Security level: %(seclvl)s' % {'username': g.fas_user.username, 'trustroot': openid_request.trust_root,  'claimed': get_claimed_id(g.fas_user.username), 'sreg': sreg_info, 'teams': teams_info, 'seclvl': '1'})
             return openid_respond(openid_response)
         elif authed == 1:
             # User needs to confirm trust root

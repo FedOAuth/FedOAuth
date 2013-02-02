@@ -1,6 +1,6 @@
 Name:           fas-openid
-Version:        0.1.4
-Release:        2%{?dist}
+Version:        0.1.5
+Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
 License:        GPLv2+
@@ -69,6 +69,9 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Sat Feb 02 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.1.5-1
+- We now also log the trust_root for succesful OpenID claimings
+
 * Thu Jan 31 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.1.4-2
 - Marked config files as noreplace
 

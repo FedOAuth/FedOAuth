@@ -1,5 +1,5 @@
 Name:           fas-openid
-Version:        0.1.5
+Version:        0.2.0
 Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
@@ -69,6 +69,9 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Fri Feb 08 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.2.0-1
+- Added a special team name to request all groups a user is a member of
+
 * Sat Feb 02 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.1.5-1
 - We now also log the trust_root for succesful OpenID claimings
 

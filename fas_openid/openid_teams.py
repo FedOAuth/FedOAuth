@@ -238,9 +238,13 @@ class TeamsResponse(Extension):
         @rtype: TeamsResponse
         """
         self = cls()
-        for team in request.requestedTeams():
-            if team in teams:
+        if '_FAS_ALL_GROUPS_' in request.requestedTeams():
+            for team in teams:
                 self.teams.append(team)
+        else:
+            for team in request.requestedTeams():
+                if team in teams:
+                    self.teams.append(team)
         return self
 
     extractResponse = classmethod(extractResponse)

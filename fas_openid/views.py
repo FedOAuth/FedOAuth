@@ -93,8 +93,18 @@ def user_ask_trust_root(openid_request):
 
 @app.route('/', methods=['GET', 'POST'])
 def view_main():
+    if 'openid.mode' in request.values:
+        values = request.values
+        session['values'] = request.values
+        session.modified = True
+    else:
+        if values in session:
+            values = session['values']
+        else:
+            values = {}
+
     try:
-        openid_request = get_server().decodeRequest(request.values)
+        openid_request = get_server().decodeRequest(values)
     except server.ProtocolError, openid_error:
         return openid_respond(openid_error)
 
@@ -159,6 +169,9 @@ def view_yadis():
     return Response(render_template('yadis.xrds', openid_endpoint=app.config['OPENID_ENDPOINT']), mimetype='application/xrds+xml')
 
 def openid_respond(openid_response):
+    if 'values' in session:
+        session['values'] = None
+        session.modified = True
     try:
         webresponse = get_server().encodeResponse(openid_response)
         return (webresponse.body, webresponse.code, webresponse.headers)

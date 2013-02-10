@@ -98,7 +98,7 @@ def view_main():
         session['values'] = request.values
         session.modified = True
     else:
-        if values in session:
+        if 'values' in session:
             values = session['values']
         else:
             values = {}

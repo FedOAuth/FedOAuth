@@ -8,6 +8,8 @@ AVAILABLE_TO = []
 TRUSTED_ROOTS = []
 NON_TRUSTED_ROOTS = []
 
+MAX_AUTH_TIME = 15
+
 LOGIN_URL = 'http://localhost:5000/login/'
 
 FAS_HTTPS_REQUIRED = True

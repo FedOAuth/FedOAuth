@@ -20,6 +20,8 @@ OPENID_ENDPOINT = 'http://localhost:5000'
 # This is the OpenID url provided to users. Add %s where the username should be entered
 OPENID_IDENTITY_URL = 'http://localhost:5000/id/%s'
 
+### The maximum time after which the user must re-authenticate in minutes (use 0 for no limit)
+MAX_AUTH_TIME = 15
 
 ### Secret key for the Flask application
 SECRET_KEY='<The web application secret key>'

@@ -10,8 +10,11 @@ from flask_fas import fas_login_required
 
 from fas_openid import openid_teams as teams
 
+from time import time
+
 import openid
 from openid.extensions import sreg
+from openid.extensions import pape
 from openid.server.server import Server as openid_server
 from openid.server import server
 from openid.consumer import discover
@@ -21,6 +24,15 @@ from urlparse import urljoin
 from flaskext.babel import gettext as _
 
 from uuid import uuid4 as uuid
+
+# Possible AUTH results
+AUTH_NOT_LOGGED_IN = 0
+AUTH_TIMEOUT = 1
+AUTH_INCORRECT_IDENTITY = 2
+AUTH_OK = 3
+AUTH_TRUST_ROOT_NOT_OK = 4
+AUTH_TRUST_ROOT_ASK = 5
+
 
 def get_server():
     if not hasattr(g, 'openid_server'):
@@ -35,6 +47,12 @@ def get_claimed_id(username):
     # The urljoin is so that we alway get <id>/ instead of both <id> and <id>/
     return urljoin(app.config['OPENID_IDENTITY_URL'] % username, '/')
 
+def getPapeRequestInfo(request):
+    pape_req = pape.Request.fromOpenIDRequest(request)
+    if pape_req is None:
+        return 0, [], []
+    return pape_req.max_auth_age, pape_req.preferred_auth_policies, pape_req.preferred_auth_level_types
+
 def addSReg(request, response, user):
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(request)
     sreg_data = { 'nickname'    : user.username
@@ -45,6 +63,9 @@ def addSReg(request, response, user):
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     response.addExtension(sreg_resp)
     return sreg_resp.data
+
+def addPape(request, response, auth_time=None, done_yubikey=False):
+    pass
 
 def addTeams(request, response, groups):
     teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
@@ -112,22 +133,26 @@ def view_main():
         return render_template('index.html', title='Home', text='MAIN PAGE, no OpenID request', openid_endpoint=app.config['OPENID_ENDPOINT'], yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
         authed = isAuthorized(openid_request)
-        if authed == 2:
+        if authed == AUTH_OK:
             openid_response = openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username))
             sreg_info = addSReg(openid_request, openid_response, g.fas_user)
             teams_info = addTeams(openid_request, openid_response, g.fas_user.groups)
             logger.info('Succesful OpenID claiming. Logged in username: %(username)s. Claimed id: %(claimed)s. Trust_root: %(trustroot)s. SReg data: %(sreg)s. Teams data: %(teams)s. Security level: %(seclvl)s' % {'username': g.fas_user.username, 'trustroot': openid_request.trust_root,  'claimed': get_claimed_id(g.fas_user.username), 'sreg': sreg_info, 'teams': teams_info, 'seclvl': '1'})
             return openid_respond(openid_response)
-        elif authed == 1:
+        elif authed == AUTH_TRUST_ROOT_ASK:
             # User needs to confirm trust root
             return user_ask_trust_root(openid_request)
-        elif authed == -1:
+        elif authed == -AUTH_TRUST_ROOT_NOT_OK:
             logger.info('Trust-root was denied: %(trust_root)s for user: %(username)s' % {'trust_root': openid_request.trust_root, 'username': g.fas_user.username})
             return openid_respond(openid_request.answer(False))
         elif openid_request.immediate:
             logger.info('Trust-root requested checkid_immediate: %(trust_root)s' % {'trust_root': openid_request.trust_root})
             return openid_respond(openid_request.answer(False))
-        if g.fas_user is None:
+        elif authed == AUTH_TIMEOUT:
+            session['timeout'] = True
+            session['next'] = request.url
+            return redirect(app.config['LOGIN_URL'])
+        elif g.fas_user is None:
             session['next'] = request.url
             return redirect(app.config['LOGIN_URL'])
         else:
@@ -138,22 +163,29 @@ def view_main():
         return openid_respond(get_server().handleRequest(openid_request))
 
 def isAuthorized(openid_request):
+    pape_req_time, pape_auth_policies, pape_auth_level_types = getPapeRequestInfo(openid_request)
+
     if g.fas_user is None:
-        return 0
+        return AUTH_NOT_LOGGED_IN
+    elif (pape_req_time) and (pape_req_time != 0) and (session['last_auth_time'] < (time() - pape_req_time)):
+        return AUTH_TIMEOUT
+    elif (app.config['MAX_AUTH_TIME'] != 0) and (session['last_auth_time'] < (time() - (app.config['MAX_AUTH_TIME'] * 60))):
+        return AUTH_TIMEOUT
+    # Add checks if yubikey is required by application
     elif (not openid_request.idSelect()) and (openid_request.identity != get_claimed_id(g.fas_user.username)):
         print 'Incorrect claimed id. Claimed: %s, correct: %s' % (openid_request.identity, get_claimed_id(g.fas_user.username))
-        return 0
+        return AUTH_INCORRECT_IDENTITY
     elif openid_request.trust_root in app.config['TRUSTED_ROOTS']:
-        return 2
+        return AUTH_OK
     elif openid_request.trust_root in app.config['NON_TRUSTED_ROOTS']:
-        return -1
+        return AUTH_TRUST_ROOT_NO_OK
     elif openid_request.trust_root in getSessionValue('TRUSTED_ROOTS', []):
-        return 2
+        return AUTH_OK
     elif openid_request.trust_root in getSessionValue('NON_TRUSTED_ROOTS', []):
-        return -1
+        return AUTH_TRUST_ROOT_NOT_OK
     else:
         # The user still needs to determine if he/she allows this trust root
-        return 1
+        return AUTH_TRUST_ROOT_ASK
 
 @app.route('/id/<username>/')
 def view_id(username):
@@ -195,13 +227,16 @@ def auth_login():
         return redirect(url_for('view_main'))
     if 'next' in request.args:
         session['next'] = request.args['next']
-    if g.fas_user:
+    if g.fas_user and not ('timeout' in session and session['timeout']): # We can also have "timeout" as of 0.4.0, indicating PAPE or application configuration requires a re-auth
         return redirect(session['next'])
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         if (not app.config['AVAILABLE_FILTER']) or (username in app.config['AVAILABLE_TO']):
             if FAS.login(username, password):
+                session['last_auth_time'] = time()
+                session['timeout'] = False
+                session.modified = True
                 return redirect(session['next'])
             else:
                 flash(_('Incorrect username or password'))

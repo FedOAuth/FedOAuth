@@ -11,6 +11,7 @@ from flask_fas import fas_login_required
 from fas_openid import openid_teams as teams
 
 from time import time
+from datetime import datetime
 
 import openid
 from openid.extensions import sreg
@@ -50,7 +51,7 @@ def get_claimed_id(username):
 def getPapeRequestInfo(request):
     pape_req = pape.Request.fromOpenIDRequest(request)
     if pape_req is None:
-        return 0, [], []
+        return 0, [], {}
     return pape_req.max_auth_age, pape_req.preferred_auth_policies, pape_req.preferred_auth_level_types
 
 def addSReg(request, response, user):
@@ -64,8 +65,22 @@ def addSReg(request, response, user):
     response.addExtension(sreg_resp)
     return sreg_resp.data
 
-def addPape(request, response, auth_time=None, done_yubikey=False):
-    pass
+def addPape(request, response):
+    done_yubikey = False
+
+    auth_time = datetime.utcfromtimestamp(session['last_auth_time']).strftime('%Y-%m-%dT%H:%M:%SZ')
+    auth_policies = []
+    auth_levels = {}
+    if done_yubikey:
+        auth_policies.append(pape.AUTH_MULTI_FACTOR)
+        auth_policies.append(pape.AUTH_MULTI_FACTOR_PHYSICAL)
+        auth_policies.append(pape.AUTH_PHISHING_RESISTANT)
+        auth_levels[pape.LEVELS_NIST] = 3
+    else:
+        auth_policies.append(pape.AUTH_NONE)
+        auth_levels[pape.LEVELS_NIST] = 2
+    pape_resp = pape.Response(auth_policies=auth_policies, auth_time=auth_time, auth_levels=auth_levels)
+    response.addExtension(pape_resp)
 
 def addTeams(request, response, groups):
     teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
@@ -137,6 +152,7 @@ def view_main():
             openid_response = openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username))
             sreg_info = addSReg(openid_request, openid_response, g.fas_user)
             teams_info = addTeams(openid_request, openid_response, g.fas_user.groups)
+            addPape(openid_request, openid_response)
             logger.info('Succesful OpenID claiming. Logged in username: %(username)s. Claimed id: %(claimed)s. Trust_root: %(trustroot)s. SReg data: %(sreg)s. Teams data: %(teams)s. Security level: %(seclvl)s' % {'username': g.fas_user.username, 'trustroot': openid_request.trust_root,  'claimed': get_claimed_id(g.fas_user.username), 'sreg': sreg_info, 'teams': teams_info, 'seclvl': '1'})
             return openid_respond(openid_response)
         elif authed == AUTH_TRUST_ROOT_ASK:

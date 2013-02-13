@@ -1,5 +1,5 @@
 Name:           fas-openid
-Version:        0.3.0
+Version:        0.4.0
 Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
@@ -69,6 +69,10 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Wed Feb 13 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.4.0-1
+- Imported new template
+- Primary PAPE implementation
+
 * Sun Feb 10 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.3.0-1
 - Now fully OpenID 2.0 compliant by saving POST values withing an session
 

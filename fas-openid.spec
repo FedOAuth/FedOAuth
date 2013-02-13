@@ -1,6 +1,6 @@
 Name:           fas-openid
 Version:        0.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
 License:        GPLv2+
@@ -47,9 +47,10 @@ FAS-OpenID is an OpenID provider which gets it's information from Fedora Account
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/%{name}
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/httpd/conf.d
 %{__mkdir_p} %{buildroot}%{_datadir}/%{name}
+%{__mkdir_p} %{buildroot}%{_datadir}/%{name}/static
 
 %{__install} -m 644 fas_openid.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/fas_openid.conf
-%{__install} -d -m 644 fas_openid/static/ %{buildroot}%{_datadir}/%{name}/static
+%{__install} -m 644 fas_openid/static/* %{buildroot}%{_datadir}/%{name}/static
 %{__install} -m 644 %{name}.cfg.sample %{buildroot}%{_sysconfdir}/%{name}/%{name}.cfg
 %{__install} -m 644 %{name}.wsgi %{buildroot}%{_datadir}/%{name}/%{name}.wsgi
 
@@ -69,6 +70,9 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Wed Feb 13 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.4.0-2
+- Updated spec file to include the static dir
+
 * Wed Feb 13 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.4.0-1
 - Imported new template
 - Primary PAPE implementation

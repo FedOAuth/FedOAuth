@@ -1,19 +1,57 @@
-{% extends "layout.html" %}
-{% block body %}
-<form action="{{action}}" method="post">
-<table border="1">
-<tr><th>{% trans %}Trust root{% endtrans %}</th><td>{{trust_root}}</td></tr>
-<tr><th>{% trans %}Trust root's privacy policy{% endtrans %}</th><td>{{privacy_policy}}</td></tr>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FAS-OpenID - Approval</title>
+        <link rel="stylesheet" href="/static/fedora.css">
+    </head>
+    <body>
+        <div class="header_bg">
+			<div class="body header">
+				<img id="logo" src="/static/fedora-openid_logo-white.png"/>		
+			</div>
+		</div>
+		<div class="body main">
+			<p id="toptext">
+					<span class="appname">{{trust_root}}</span> is asking to authenticate via OpenID using the Fedora Account System
+				<p>
+			<div class="middlebox final">
+			Review the Authentication details
+				<div>
+				<form method="post" action="{{action}}">
+					<p class="form_item">
+						<table class="details">
+							<tr>
+								<td>Trust Root</td>
+								<td>{{trust_root}}</td>
+							</tr>
+                            <tr>
+                                <td>Privacy Policy</td>
+                                <td>{{privacy_policy}}</td>
+                            </tr>
+                            {% for field_name in sreg_data %}
+							<tr>
+								<td>{{field_name}}</td>
+								<td>{{sreg_data[field_name]}}</td>
+							</tr>
+                            {% endfor %}
+                            {% for team in teams_provided %}
+							<tr>
+								<td>Group</td>
+								<td>{{team}}</td>
+							</tr>
+                            {% endfor %}
+						</table>
+					</p>
+					<p class="form_item">
+						<input type="submit" name="decided_allow" value="approve">
+					</p>
+                    <p class="form_item">
+                        <input type="submit" name="decided_deny" value="reject">
+                    </p>
+				</form>
+				</div>
+			</div>
+		</div>
+    </body>
+</html>
 
-{% for field_name in sreg_data %}
-<tr><th>{{field_name}}</th><td>{{sreg_data[field_name]}}</td></tr>
-{% endfor %}
-
-{% for team in teams_provided %}
-<tr><th>{% trans %}Group{% endtrans %}</th><td>{{team}}</td></tr>
-{% endfor %}
-
-<tr><td colspan="2"><input type="submit" name="decided_allow" value="{% trans %}Allow{% endtrans %}"> <input type="submit" name="decided_deny" value="{% trans %}Deny{% endtrans %}"></td></tr>
-</table>
-</form>
-{% endblock %}

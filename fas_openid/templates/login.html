@@ -1,8 +1,36 @@
-{% extends "layout.html" %}
-{% block body %}
-<form action="/login/" method="post">
-{% trans %}Username{% endtrans %}: <input type="text" name="username"><br />
-{% trans %}Password{% endtrans %}: <input type="password" name="password"><br />
-<input type="submit" value="{% trans %}Log in{% endtrans %}">
-</form>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FAS-OpenID - Login</title>
+        <link rel="stylesheet" href="/static/fedora.css">
+    </head>
+    <body>
+        <div class="header_bg">
+			<div class="body header">
+				<img id="logo" src="/static/fedora-openid_logo-white.png"/>		
+			</div>
+		</div>
+		<div class="body main">
+			<p id="toptext">
+					<span class="appname">{{trust_root}}</span> is asking to authenticate via OpenID using the Fedora Account System
+				<p>
+			<div class="middlebox">
+			Login with your FAS credentials
+				<div>
+				<form method="post" action="/login/">
+					<p class="form_item">
+						<input name="username" placeholder="FAS Username">
+					</p>
+					<p class="form_item">
+						<input name="password" type="password" placeholder="Password">
+					</p>
+					<p class="form_item">
+						<input type="submit" value="login">
+					<p>
+				</form>
+				</div>
+			</div>
+		</div>
+    </body>
+</html>
+

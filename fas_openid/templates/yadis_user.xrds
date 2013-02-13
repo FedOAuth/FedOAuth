@@ -7,6 +7,9 @@
 <Type>http://ns.launchpad.net/2007/openid-teams</Type>
 <Type>http://openid.net/extensions/sreg/1.1</Type>
 <Type>http://openid.net/sreg/1.0</Type>
+<Type>http://schemas.openid.net/pape/policies/2007/06/phishing-resistant</Type>
+<Type>http://schemas.openid.net/pape/policies/2007/06/multi-factor</Type>
+<Type>http://schemas.openid.net/pape/policies/2007/06/multi-factor-physical</Type>
 <URI>{{openid_endpoint}}</URI>
 <LocalID>{{claimed_id}}</LocalID>
 </Service>

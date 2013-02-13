@@ -81,6 +81,7 @@ def addPape(request, response):
         auth_levels[pape.LEVELS_NIST] = 2
     pape_resp = pape.Response(auth_policies=auth_policies, auth_time=auth_time, auth_levels=auth_levels)
     response.addExtension(pape_resp)
+    return auth_levels[pape.LEVELS_NIST]
 
 def addTeams(request, response, groups):
     teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
@@ -152,8 +153,8 @@ def view_main():
             openid_response = openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username))
             sreg_info = addSReg(openid_request, openid_response, g.fas_user)
             teams_info = addTeams(openid_request, openid_response, g.fas_user.groups)
-            addPape(openid_request, openid_response)
-            logger.info('Succesful OpenID claiming. Logged in username: %(username)s. Claimed id: %(claimed)s. Trust_root: %(trustroot)s. SReg data: %(sreg)s. Teams data: %(teams)s. Security level: %(seclvl)s' % {'username': g.fas_user.username, 'trustroot': openid_request.trust_root,  'claimed': get_claimed_id(g.fas_user.username), 'sreg': sreg_info, 'teams': teams_info, 'seclvl': '1'})
+            auth_level = addPape(openid_request, openid_response)
+            logger.info('Succesful OpenID claiming. Logged in username: %(username)s. Claimed id: %(claimed)s. Trust_root: %(trustroot)s. SReg data: %(sreg)s. Teams data: %(teams)s. Security level: %(seclvl)s' % {'username': g.fas_user.username, 'trustroot': openid_request.trust_root,  'claimed': get_claimed_id(g.fas_user.username), 'sreg': sreg_info, 'teams': teams_info, 'seclvl': auth_level})
             return openid_respond(openid_response)
         elif authed == AUTH_TRUST_ROOT_ASK:
             # User needs to confirm trust root

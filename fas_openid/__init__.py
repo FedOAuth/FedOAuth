@@ -27,7 +27,7 @@ logger.addHandler(handler)
 def log_create_message(message):
     if not 'log_id' in flask.session:
         flask.session['log_id'] = uuid().hex
-    return '[%(logid)s]%(message)s' % {'logid': session['log_id'], 'message': message}
+    return '[%(logid)s]%(message)s' % {'logid': flask.session['log_id'], 'message': message}
 
 def log_info(message):
     logger.info(log_create_message(message))

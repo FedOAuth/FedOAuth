@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)">
-<XRD>
-<Service>
-<Type>http://specs.openid.net/auth/2.0/server</Type>
-<Type>http://openid.net/server/1.0</Type>
-<Type>http://ns.launchpad.net/2007/openid-teams</Type>
-<Type>http://openid.net/extensions/sreg/1.1</Type>
-<Type>http://openid.net/sreg/1.0</Type>
-<Type>http://schemas.openid.net/pape/policies/2007/06/phishing-resistant</Type>
-<Type>http://schemas.openid.net/pape/policies/2007/06/multi-factor</Type>
-<Type>http://schemas.openid.net/pape/policies/2007/06/multi-factor-physical</Type>
-<URI>{{openid_endpoint}}</URI>
-</Service>
-</XRD>
+    <XRD>
+        <Service>
+            <Type>http://specs.openid.net/auth/2.0/server</Type>
+            <Type>http://openid.net/server/1.0</Type>
+            <Type>http://ns.launchpad.net/2007/openid-teams</Type>
+            <Type>http://openid.net/extensions/sreg/1.1</Type>
+            <Type>http://openid.net/sreg/1.0</Type>
+            <Type>http://schemas.openid.net/pape/policies/2007/06/phishing-resistant</Type>
+            <Type>http://schemas.openid.net/pape/policies/2007/06/multi-factor</Type>
+            <Type>http://schemas.openid.net/pape/policies/2007/06/multi-factor-physical</Type>
+            <URI>{{openid_endpoint}}</URI>
+        </Service>
+    </XRD>
 </xrds:XRDS>

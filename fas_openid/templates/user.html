@@ -1,10 +1,8 @@
 {% extends "layout.html" %}
+{% block title %}Userpage{% endblock %}
+{% block toptext %}
+{% trans %}This is the OpenID page for {{username}}.{% endtrans %}
+{% endblock %}
 {% block body %}
-{% trans %}This is the ID page for {{username}}.{% endtrans %}
-<br />
-YADIS Url: {{yadis_url}}.
-<br />
-Endpoint url: {{openid_endpoint}}
-<br />
-claimed_id: {{claimed_id}}
+This page is primarily used internally
 {% endblock %}

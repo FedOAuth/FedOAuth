@@ -1,26 +1,37 @@
 <!doctype html>
 <html>
-<head>
-<meta http-equiv="X-XRDS-Location" content="{{yadis_url}}">
+    <head>
+        <meta http-equiv="X-XRDS-Location" content="{{yadis_url}}">
 
-<link rel="openid.server" href="{{openid_endpoint}}">
-<link rel="openid2.provider" href="{{openid_endpoint}}">
-{% if claimed_id is defined %}
-<link rel="openid.delegate" href="{{claimed_id}}">
-<link rel="openid2.local_id" href="{{claimed_id}}">
-{% endif %}
-<title>FAS-OpenID{% if title %} - {{title}}{% endif %}</title>
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-</head>
-<body>
-{% block body %}{% endblock %}
-</body>
+        <link rel="openid.server" href="{{openid_endpoint}}">
+        <link rel="openid2.provider" href="{{openid_endpoint}}">
+        {% if claimed_id is defined %}
+            <link rel="openid.delegate" href="{{claimed_id}}">
+            <link rel="openid2.local_id" href="{{claimed_id}}">
+        {% endif %}
+        <title>FAS-OpenID - {% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="/static/fedora.css">
+    </head>
+    <body>
+        <div class="header_bg">
+            <div class="body header">
+                <img id="logo" src="/static/fedora-openid_logo-white.png"/>    
+            </div>
+        </div>
+        <div class="body main">
+            <p id="toptext">{% block toptext %}{% endblock %}</p>
+            <div class="middlebox {% block body-classes %}{% endblock %}">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+                {% block body %}{% endblock %}
+            </div>
+        </div>
+    </body>
 </html>

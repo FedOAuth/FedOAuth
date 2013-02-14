@@ -30,6 +30,12 @@
                             <td>{{team}}</td>
                         </tr>
                     {% endfor %}
+                    {% if cla_done %}
+                        <tr>
+                            <td>{% trans %}FPCA Completed{% endtrans %}</td>
+                            <td>{% trans %}True{% endtrans %}</td>
+                        </tr>
+                    {% endif %}
                 </table>
             </p>
             <p class="form_item">

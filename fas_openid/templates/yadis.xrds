@@ -4,6 +4,7 @@
         <Service>
             <Type>http://specs.openid.net/auth/2.0/server</Type>
             <Type>http://openid.net/server/1.0</Type>
+            <Type>http://fedoraproject.org/specs/open_id/cla</Type>
             <Type>http://ns.launchpad.net/2007/openid-teams</Type>
             <Type>http://openid.net/extensions/sreg/1.1</Type>
             <Type>http://openid.net/sreg/1.0</Type>

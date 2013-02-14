@@ -9,6 +9,7 @@ from fas_openid.model import FASOpenIDStore
 from flask_fas import fas_login_required
 
 from fas_openid import openid_teams as teams
+from fas_openid import openid_cla as cla
 
 from time import time
 from datetime import datetime
@@ -33,11 +34,28 @@ AUTH_TRUST_ROOT_NOT_OK = 4
 AUTH_TRUST_ROOT_ASK = 5
 
 
+CLA_GROUPS = { 'cla_click': cla.CLA_URI_FEDORA_CLICK
+             , 'cla_dell': cla.CLA_URI_FEDORA_DELL
+             , 'cla_done': cla.CLA_URI_FEDORA_DONE
+             , 'cla_fedora': cla.CLA_URI_FEDORA_FEDORA
+             , 'cla_fpca': cla.CLA_URI_FEDORA_FPCA
+             , 'cla_ibm': cla.CLA_URI_FEDORA_IBM
+             , 'cla_intel': cla.CLA_URI_FEDORA_INTEL
+             , 'cla_redhat': cla.CLA_URI_FEDORA_REDHAT
+             }
+
+
+def filter_cla_groups(groups):
+    return [group for group in groups if not group in CLA_GROUPS.keys()]
+
+def get_cla_uris(groups):
+    return [CLA_GROUPS[group] for group in groups if group in CLA_GROUPS.keys()]
+
+
 def get_server():
     if not hasattr(g, 'openid_server'):
         g.openid_server = openid_server(FASOpenIDStore(), op_endpoint=app.config['OPENID_ENDPOINT'])
     return g.openid_server
-
 
 def complete_url_for(func, **values):
     return urljoin(app.config['OPENID_ENDPOINT'], url_for(func, **values))
@@ -87,6 +105,12 @@ def addTeams(request, response, groups):
     response.addExtension(teams_resp)
     return teams_resp.teams
 
+def addCLAs(request, response, cla_uris):
+    cla_req = cla.CLARequest.fromOpenIDRequest(request)
+    cla_resp = cla.CLAResponse.extractResponse(cla_req, cla_uris)
+    response.addExtension(cla_resp)
+    return cla_resp.clas
+
 def addToSessionArray(array, value):
     if array in session:
         session[array].append(value)
@@ -116,7 +140,9 @@ def user_ask_trust_root(openid_request):
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
-    teams_resp = teams.TeamsResponse.extractResponse(teams_req, g.fas_user.groups)
+    teams_resp = teams.TeamsResponse.extractResponse(teams_req, filter_cla_groups(g.fas_user.groups))
+    clas_req = cla.CLARequest.fromOpenIDRequest(openid_request)
+    clas_resp = cla.CLAResponse.extractResponse(clas_req, get_cla_uris(g.fas_user.groups))
     # Show form
     return render_template('user_ask_trust_root.html'
                           , action              = request.url
@@ -124,6 +150,7 @@ def user_ask_trust_root(openid_request):
                           , sreg_policy_url     = sreg_req.policy_url
                           , sreg_data           = sreg_resp.data
                           , teams_provided      = teams_resp.teams
+                          , cla_done            = cla.CLA_URI_FEDORA_DONE in clas_resp.clas
                           )
 
 @app.route('/', methods=['GET', 'POST'])
@@ -150,9 +177,10 @@ def view_main():
         if authed == AUTH_OK:
             openid_response = openid_request.answer(True, identity=get_claimed_id(g.fas_user.username), claimed_id=get_claimed_id(g.fas_user.username))
             sreg_info = addSReg(openid_request, openid_response, g.fas_user)
-            teams_info = addTeams(openid_request, openid_response, g.fas_user.groups)
+            teams_info = addTeams(openid_request, openid_response, filter_cla_groups(g.fas_user.groups))
+            cla_info = addCLAs(openid_request, openid_response, get_cla_uris(g.fas_user.groups))
             auth_level = addPape(openid_request, openid_response)
-            log_info('Succesful OpenID claiming. Logged in username: %(username)s. Claimed id: %(claimed)s. Trust_root: %(trustroot)s. SReg data: %(sreg)s. Teams data: %(teams)s. Security level: %(seclvl)s' % {'username': g.fas_user.username, 'trustroot': openid_request.trust_root,  'claimed': get_claimed_id(g.fas_user.username), 'sreg': sreg_info, 'teams': teams_info, 'seclvl': auth_level})
+            log_info('Succesful OpenID claiming. Logged in username: %(username)s. Claimed id: %(claimed)s. Trust_root: %(trustroot)s. SReg data: %(sreg)s. Teams data: %(teams)s. CLA data: %(cla)s. Security level: %(seclvl)s' % {'username': g.fas_user.username, 'trustroot': openid_request.trust_root,  'claimed': get_claimed_id(g.fas_user.username), 'cla': cla_info, 'sreg': sreg_info, 'teams': teams_info, 'seclvl': auth_level})
             return openid_respond(openid_response)
         elif authed == AUTH_TRUST_ROOT_ASK:
             # User needs to confirm trust root

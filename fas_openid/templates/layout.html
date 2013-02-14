@@ -22,7 +22,7 @@
         </div>
         <div class="body main">
             <p id="toptext">{% block toptext %}{% endblock %}</p>
-            <div class="middlebox {% block body-classes %}{% endblock %}">
+            <div class="middlebox {% block body_classes %}{% endblock %}">
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         <ul class=flashes>

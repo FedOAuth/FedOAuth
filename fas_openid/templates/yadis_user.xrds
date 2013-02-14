@@ -10,7 +10,7 @@
             <Type>http://schemas.openid.net/pape/policies/2007/06/phishing-resistant</Type>
             <Type>http://schemas.openid.net/pape/policies/2007/06/multi-factor</Type>
             <Type>http://schemas.openid.net/pape/policies/2007/06/multi-factor-physical</Type>
-            <URI>{{openid_endpoint}}</URI>
+            <URI>{{config['OPENID_ENDPOINT']}}</URI>
             <LocalID>{{claimed_id}}</LocalID>
         </Service>
     </XRD>

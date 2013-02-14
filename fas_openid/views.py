@@ -144,7 +144,7 @@ def view_main():
         return openid_respond(openid_error)
 
     if openid_request is None:
-        return render_template('index.html', title='Home', text='MAIN PAGE, no OpenID request', openid_endpoint=app.config['OPENID_ENDPOINT'], yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
+        return render_template('index.html', yadis_url=complete_url_for('view_yadis')), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
         authed = isAuthorized(openid_request)
         if authed == AUTH_OK:
@@ -203,16 +203,16 @@ def isAuthorized(openid_request):
 
 @app.route('/id/<username>/')
 def view_id(username):
-    return render_template('user.html', title='User page', username=username, openid_endpoint=app.config['OPENID_ENDPOINT'], claimed_id=get_claimed_id(username), yadis_url=complete_url_for('view_yadis_id', username=username)), 200, {'X-XRDS-Location': complete_url_for('view_yadis_id', username=username)}
+    return render_template('user.html', username=username, claimed_id=get_claimed_id(username), yadis_url=complete_url_for('view_yadis_id', username=username)), 200, {'X-XRDS-Location': complete_url_for('view_yadis_id', username=username)}
 
 
 @app.route('/yadis/<username>.xrds')
 def view_yadis_id(username):
-    return Response(render_template('yadis_user.xrds', openid_endpoint=app.config['OPENID_ENDPOINT'], claimed_id=get_claimed_id(username)), mimetype='application/xrds+xml')
+    return Response(render_template('yadis_user.xrds', claimed_id=get_claimed_id(username)), mimetype='application/xrds+xml')
 
 @app.route('/yadis.xrds')
 def view_yadis():
-    return Response(render_template('yadis.xrds', openid_endpoint=app.config['OPENID_ENDPOINT']), mimetype='application/xrds+xml')
+    return Response(render_template('yadis.xrds', mimetype='application/xrds+xml')
 
 def openid_respond(openid_response):
     if 'values' in session:
@@ -260,9 +260,9 @@ def auth_login():
         else:
             log_warning('User: %(username)s  Tried to use non-allowed account for this service' % {'username': username})
             flash(_('This service is limited to the following users: %(users)s', users=', '.join(app.config['AVAILABLE_TO'])))
-    return render_template('login.html', title='Login')
+    return render_template('login.html')
 
 @app.route('/test/')
 @fas_login_required
 def view_test():
-    return render_template('index.html', title='Testing', text='TESTJE. User: %s' % g.fas_user)
+    return render_template('test.html', user='%s' % g.fas_user)

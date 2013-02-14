@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
-{% block title %}Approval{% endblock %}
+{% block title %}{% trans %}Approval{% endtrans %}{% endblock %}
 {% block toptext %}
-<span class="appname">{{trust_root}}</span> is asking to authenticate via OpenID using the Fedora Account System
+{% trans %}{{trust_root}} is asking to authenticate via OpenID using the Fedora Account System{% endtrans %}
 {% endblock %}
 {% block body_classes %}final{% endblock %}
 {% block body %}
-    Review the Authentication details
+    {% trans %}Review the authorization details{% endtrans %}
     <div>
         <form method="post" action="{{action}}">
             <p class="form_item">
@@ -15,7 +15,7 @@
                         <td>{{trust_root}}</td>
                     </tr>
                     <tr>
-                        <td>Privacy Policy</td>
+                        <td>{% trans %}Privacy Policy{% endtrans %}</td>
                         <td>{{privacy_policy}}</td>
                     </tr>
                     {% for field_name in sreg_data %}
@@ -26,17 +26,17 @@
                     {% endfor %}
                     {% for team in teams_provided %}
                         <tr>
-                            <td>Group</td>
+                            <td>{% trans %}Group{% endtrans %}</td>
                             <td>{{team}}</td>
                         </tr>
                     {% endfor %}
                 </table>
             </p>
             <p class="form_item">
-                <input type="submit" name="decided_allow" value="approve">
+                <input type="submit" name="decided_allow" value="{% trans %}Approve{% endtrans %}">
             </p>
             <p class="form_item">
-                <input type="submit" name="decided_deny" value="reject">
+                <input type="submit" name="decided_deny" value="{% trans %}Reject{% endtrans %}">
             </p>
         </form>
     </div>

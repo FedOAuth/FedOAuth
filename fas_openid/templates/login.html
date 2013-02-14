@@ -1,20 +1,20 @@
 {% extends "layout.html" %}
-{% block title %}Login{% endblock %}
+{% block title %}{% trans %}Login{% endtrans %}{% endblock %}
 {% block toptext %}
-<span class="appname">{{trust_root}}</span> is asking to authenticate via OpenID using the Fedora Account System
+{% trans %}{{trust_root}} is asking to authenticate via OpenID using the Fedora Account System{% endtrans %}
 {% endblock %}
 {% block body %}
-    Login with your FAS credentials
+    {% trans %}Login with your FAS credentials{% endtrans %}
     <div>
         <form method="post" action="/login/">
             <p class="form_item">
-                <input name="username" placeholder="FAS Username">
+                <input name="username" placeholder="{% trans %}FAS Username{% endtrans %}">
             </p>
             <p class="form_item">
-                <input name="password" type="password" placeholder="Password">
+                <input name="password" type="password" placeholder="{% trans %}Password{% endtrans %}">
             </p>
             <p class="form_item">
-                <input type="submit" value="login">
+                <input type="submit" value="{% trans %}login{% endtrans %}">
             </p>
         </form>
     </div>

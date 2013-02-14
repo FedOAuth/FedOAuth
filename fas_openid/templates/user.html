@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
-{% block title %}Userpage{% endblock %}
+{% block title %}{% trans %}Userpage{% endtrans %}{% endblock %}
 {% block toptext %}
 {% trans %}This is the OpenID page for {{username}}.{% endtrans %}
 {% endblock %}
 {% block body %}
-This page is primarily used internally
+{% trans %}This page is primarily used internally{% endtrans %}
 {% endblock %}

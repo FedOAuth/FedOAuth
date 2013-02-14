@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
-{% block title %}Home{% endblok %}
+{% block title %}{% trans %}Home{% endtrans %}{% endblok %}
 {% block toptext %}
-This is the FAS-OpenID homepage.
+{% trans %}This is the FAS-OpenID homepage.{% endtrans %}
 {% endblock %}
 {% block body %}
-You will be redirected to this application whenever another application requires you to authenticate.
+{% trans %}You will be redirected to this application whenever another application requires you to authenticate.{% endtrans %}
 {% endblock %}

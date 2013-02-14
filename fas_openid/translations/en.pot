@@ -1,14 +1,14 @@
 # Translations template for FAS-OpenID.
 # Copyright (C) 2013 Patrick Uiterwijk
 # This file is distributed under the same license as the FAS-OpenID project.
-# Patrick Uiterwijk <puiterwijk@fedoraproject.org>, 2013.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: FAS-OpenID 0.4.0\n"
 "Report-Msgid-Bugs-To: puiterwijk@fedoraproject.org\n"
-"POT-Creation-Date: 2013-02-14 09:43+0100\n"
+"POT-Creation-Date: 2013-02-14 16:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,6 +28,20 @@ msgstr ""
 #: fas_openid/views.py:262
 #, python-format
 msgid "This service is limited to the following users: %(users)s"
+msgstr ""
+
+#: fas_openid/templates/index.html:2
+msgid "Home"
+msgstr ""
+
+#: fas_openid/templates/index.html:4
+msgid "This is the FAS-OpenID homepage."
+msgstr ""
+
+#: fas_openid/templates/index.html:7
+msgid ""
+"You will be redirected to this application whenever another application "
+"requires you to authenticate with you Fedora OpenID."
 msgstr ""
 
 #: fas_openid/templates/login.html:2

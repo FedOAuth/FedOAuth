@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: FAS-OpenID 0.1.0\n"
+"Project-Id-Version: FAS-OpenID 0.4.0\n"
 "Report-Msgid-Bugs-To: puiterwijk@fedoraproject.org\n"
-"POT-Creation-Date: 2013-01-26 10:30+0100\n"
+"POT-Creation-Date: 2013-02-14 09:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,53 +17,81 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: fas_openid/views.py:167
+#: fas_openid/views.py:235
 msgid "You have been logged out"
 msgstr ""
 
-#: fas_openid/views.py:185
+#: fas_openid/views.py:259
 msgid "Incorrect username or password"
 msgstr ""
 
-#: fas_openid/views.py:187
+#: fas_openid/views.py:262
 #, python-format
 msgid "This service is limited to the following users: %(users)s"
 msgstr ""
 
-#: fas_openid/templates/login.html:4
-msgid "Username"
+#: fas_openid/templates/login.html:2
+msgid "Login"
 msgstr ""
 
-#: fas_openid/templates/login.html:5
+#: fas_openid/templates/login.html:4
+#: fas_openid/templates/user_ask_trust_root.html:4
+#, python-format
+msgid ""
+"%(trust_root)s is asking to authenticate via OpenID using the Fedora "
+"Account System"
+msgstr ""
+
+#: fas_openid/templates/login.html:7
+msgid "Login with your FAS credentials"
+msgstr ""
+
+#: fas_openid/templates/login.html:11
+msgid "FAS Username"
+msgstr ""
+
+#: fas_openid/templates/login.html:14
 msgid "Password"
 msgstr ""
 
-#: fas_openid/templates/login.html:6
-msgid "Log in"
+#: fas_openid/templates/login.html:17
+msgid "login"
 msgstr ""
 
-#: fas_openid/templates/user.html:3
+#: fas_openid/templates/user.html:2
+msgid "Userpage"
+msgstr ""
+
+#: fas_openid/templates/user.html:4
 #, python-format
-msgid "This is the ID page for %(username)s."
+msgid "This is the OpenID page for %(username)s."
 msgstr ""
 
-#: fas_openid/templates/user_ask_trust_root.html:5
-msgid "Trust root"
+#: fas_openid/templates/user.html:7
+msgid "This page is primarily used internally"
 msgstr ""
 
-#: fas_openid/templates/user_ask_trust_root.html:6
-msgid "Trust root's privacy policy"
+#: fas_openid/templates/user_ask_trust_root.html:2
+msgid "Approval"
 msgstr ""
 
-#: fas_openid/templates/user_ask_trust_root.html:13
+#: fas_openid/templates/user_ask_trust_root.html:8
+msgid "Review the authorization details"
+msgstr ""
+
+#: fas_openid/templates/user_ask_trust_root.html:18
+msgid "Privacy Policy"
+msgstr ""
+
+#: fas_openid/templates/user_ask_trust_root.html:29
 msgid "Group"
 msgstr ""
 
-#: fas_openid/templates/user_ask_trust_root.html:16
-msgid "Allow"
+#: fas_openid/templates/user_ask_trust_root.html:36
+msgid "Approve"
 msgstr ""
 
-#: fas_openid/templates/user_ask_trust_root.html:16
-msgid "Deny"
+#: fas_openid/templates/user_ask_trust_root.html:39
+msgid "Reject"
 msgstr ""
 

@@ -165,10 +165,10 @@ def view_main():
             return openid_respond(openid_request.answer(False))
         elif authed == AUTH_TIMEOUT:
             session['timeout'] = True
-            session['next'] = request.url
+            session['next'] = request.base_url
             return redirect(app.config['LOGIN_URL'])
         elif g.fas_user is None:
-            session['next'] = request.url
+            session['next'] = request.base_url
             return redirect(app.config['LOGIN_URL'])
         else:
             log_error('A user tried to claim an ID that is not his own!!! Username: %(username)s. Claimed id: %(claimed_id)s. trust_root: %(trust_root)s' % {'username': g.fas_user.username, 'claimed_id': openid_request.identity, 'trust_root': openid_request.trust_root})

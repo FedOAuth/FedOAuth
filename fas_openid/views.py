@@ -153,6 +153,9 @@ def user_ask_trust_root(openid_request):
                           , cla_done            = cla.CLA_URI_FEDORA_DONE in clas_resp.clas
                           )
 
+@app.route('/robots.txt'):
+    return 'User-Agent: *\nDisallow: /'
+
 @app.route('/', methods=['GET', 'POST'])
 def view_main():
     if 'openid.mode' in request.values:

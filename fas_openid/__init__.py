@@ -32,6 +32,9 @@ def log_create_message(message, info):
         other = '%(other)s, %(key)s=%(value)s' % {'other': other, 'key': key, 'value': value}
     return '%(message)s: sessionid=%(sessionid)s %(other)s' % {'message': message, 'sessionid': flask.session['log_id'], 'other': other}
 
+def log_debug(message, info={}):
+    logger.debug(log_create_message(message, info))
+
 def log_info(message, info={}):
     logger.info(log_create_message(message, info))
 

@@ -3,7 +3,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 
 from model import FASOpenIDStore
 
-from fas_openid import APP as app, FAS, log_info, log_warning, log_error
+from fas_openid import APP as app, FAS, log_debug, log_info, log_warning, log_error
 from fas_openid.model import FASOpenIDStore
 
 from flask_fas import fas_login_required

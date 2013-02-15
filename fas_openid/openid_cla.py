@@ -140,7 +140,4 @@ class CLAResponse(Extension):
     fromSuccessResponse = classmethod(fromSuccessResponse)
 
     def getExtensionArgs(self):
-        if self.clas != []:
-            return {'signed_cla': ','.join(self.clas)}
-        else:
-            return {}
+        return {'signed_cla': ','.join(self.clas)}

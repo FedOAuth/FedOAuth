@@ -1,6 +1,6 @@
 Name:           fas-openid
-Version:        0.4.0
-Release:        2%{?dist}
+Version:        0.5.0
+Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
 License:        GPLv2+
@@ -70,6 +70,11 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Fri Feb 15 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.5.0-1
+- CLA extension imported
+- Logging more parseable
+- Template now using global layout
+
 * Wed Feb 13 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.4.0-2
 - Updated spec file to include the static dir
 

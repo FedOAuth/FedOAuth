@@ -24,19 +24,22 @@ logger = logging.getLogger('openid')
 logger.setLevel(logging.DEBUG)
 handler = logging.handlers.SysLogHandler(address='/dev/log', facility=logging.handlers.SysLogHandler.LOG_LOCAL4)
 logger.addHandler(handler)
-def log_create_message(message):
+def log_create_message(message, info):
     if not 'log_id' in flask.session:
         flask.session['log_id'] = uuid().hex
-    return '[%(logid)s]%(message)s' % {'logid': flask.session['log_id'], 'message': message}
+    other = ''
+    for key, value in info.iteritems():
+        other = '%(other)s, %(key)s=%(value)s' % {'other': other, 'key': key, 'value': value}
+    return '%(message)s: sessionid=%(sessionid)s %(other)s' % {'message': message, 'sessionid': flask.session['log_id'], 'other': other}
 
-def log_info(message):
-    logger.info(log_create_message(message))
+def log_info(message, info={}):
+    logger.info(log_create_message(message, info))
 
-def log_warning(message):
-    logger.warning(log_create_message(message))
+def log_warning(message, info={}):
+    logger.warning(log_create_message(message, info))
 
-def log_error(message):
-    logger.error(log_create_message(message))
+def log_error(message, info={}):
+    logger.error(log_create_message(message, info))
 
 # Set up FASS
 FAS = FAS(APP)

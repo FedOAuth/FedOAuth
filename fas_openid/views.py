@@ -32,7 +32,7 @@ AUTH_INCORRECT_IDENTITY = 2
 AUTH_OK = 3
 AUTH_TRUST_ROOT_NOT_OK = 4
 AUTH_TRUST_ROOT_ASK = 5
-
+AUTH_TRUST_ROOT_CONFIG_NOT_OK = 6
 
 CLA_GROUPS = { 'cla_click': cla.CLA_URI_FEDORA_CLICK
              , 'cla_dell': cla.CLA_URI_FEDORA_DELL
@@ -180,16 +180,20 @@ def view_main():
             teams_info = addTeams(openid_request, openid_response, filter_cla_groups(g.fas_user.groups))
             cla_info = addCLAs(openid_request, openid_response, get_cla_uris(g.fas_user.groups))
             auth_level = addPape(openid_request, openid_response)
-            log_info('Succesful OpenID claiming. Logged in username: %(username)s. Claimed id: %(claimed)s. Trust_root: %(trustroot)s. SReg data: %(sreg)s. Teams data: %(teams)s. CLA data: %(cla)s. Security level: %(seclvl)s' % {'username': g.fas_user.username, 'trustroot': openid_request.trust_root,  'claimed': get_claimed_id(g.fas_user.username), 'cla': cla_info, 'sreg': sreg_info, 'teams': teams_info, 'seclvl': auth_level})
+            log_info('Success', {'claimed_id': get_claimed_id(g.fas_user.username), 'trust_root': openid_request.trust_root, 'security_level': auth_level})
+            log_debug('Info', {'teams': teams_info})
             return openid_respond(openid_response)
         elif authed == AUTH_TRUST_ROOT_ASK:
             # User needs to confirm trust root
             return user_ask_trust_root(openid_request)
-        elif authed == -AUTH_TRUST_ROOT_NOT_OK:
-            log_info('Trust-root was denied: %(trust_root)s for user: %(username)s' % {'trust_root': openid_request.trust_root, 'username': g.fas_user.username})
+        elif authed == AUTH_TRUST_ROOT_NOT_OK:
+            log_info('Info', {'trust_root': openid_request.trust_root, 'message': 'User chose not to trust trust_root'})
+            return openid_respond(openid_request.answer(False))
+        elif authed == AUTH_TRUST_ROOT_CONFIG_NOT_OK:
+            log_info('Info', {'trust_root': openid_request.trust_root, 'message': 'Configuration blacklisted this trust_root'})
             return openid_respond(openid_request.answer(False))
         elif openid_request.immediate:
-            log_info('Trust-root requested checkid_immediate: %(trust_root)s' % {'trust_root': openid_request.trust_root})
+            log_warning('Error', {'trust_root': openid_request.trust_root, 'message': 'Trust root demanded checkid_immediate'})
             return openid_respond(openid_request.answer(False))
         elif authed == AUTH_TIMEOUT:
             session['timeout'] = True
@@ -199,8 +203,8 @@ def view_main():
             session['next'] = request.base_url
             return redirect(app.config['LOGIN_URL'])
         else:
-            log_error('A user tried to claim an ID that is not his own!!! Username: %(username)s. Claimed id: %(claimed_id)s. trust_root: %(trust_root)s' % {'username': g.fas_user.username, 'claimed_id': openid_request.identity, 'trust_root': openid_request.trust_root})
-            return 'This is not your ID! If it is, please contact the administrators at admin@fedoraproject.org. Be sure to mention your logging ID: %(logid)s' % {'logid': session['log_id']}
+            log_error('Failure', {'username': g.fas_user.username, 'attempted_claimed_id': openid_request.identity, 'trust_root': openid_request.trust_root, 'message': 'The user tried to claim an ID that is not theirs'})
+            return 'This is not your ID! If it is, please contact the administrators at admin@fedoraproject.org. Be sure to mention your session ID: %(logid)s' % {'logid': session['log_id']}
     else:
         return openid_respond(get_server().handleRequest(openid_request))
 
@@ -220,7 +224,7 @@ def isAuthorized(openid_request):
     elif openid_request.trust_root in app.config['TRUSTED_ROOTS']:
         return AUTH_OK
     elif openid_request.trust_root in app.config['NON_TRUSTED_ROOTS']:
-        return AUTH_TRUST_ROOT_NO_OK
+        return AUTH_TRUST_ROOT_CONFIG_NOT_OK
     elif openid_request.trust_root in getSessionValue('TRUSTED_ROOTS', []):
         return AUTH_OK
     elif openid_request.trust_root in getSessionValue('NON_TRUSTED_ROOTS', []):
@@ -270,23 +274,23 @@ def auth_login():
     if 'next' in request.args:
         session['next'] = request.args['next']
     if g.fas_user and not ('timeout' in session and session['timeout']): # We can also have "timeout" as of 0.4.0, indicating PAPE or application configuration requires a re-auth
-        log_info('User tried to enter login, but was already logged in')
+        log_debug('Info', {'message': 'User tried to login but is already authenticated'})
         return redirect(session['next'])
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         if (not app.config['AVAILABLE_FILTER']) or (username in app.config['AVAILABLE_TO']):
             if FAS.login(username, password):
-                log_info('User: %(username)s  User authenticated' % {'username': username})
+                log_info('Success', {'username': username, 'message': 'User authenticated succesfully'})
                 session['last_auth_time'] = time()
                 session['timeout'] = False
                 session.modified = True
                 return redirect(session['next'])
             else:
-                log_warning('User: %(username)s  Incorrect password entered' % {'username': username})
+                log_warning('Failure', {'username': username, 'message': 'User entered incorrect username or password'})
                 flash(_('Incorrect username or password'))
         else:
-            log_warning('User: %(username)s  Tried to use non-allowed account for this service' % {'username': username})
+            log_warning('Failure', {'username': username, 'message': 'Tried to login with an account that is not allowed to use this service'})
             flash(_('This service is limited to the following users: %(users)s', users=', '.join(app.config['AVAILABLE_TO'])))
     return render_template('login.html')
 

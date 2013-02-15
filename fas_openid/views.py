@@ -72,6 +72,8 @@ def getPapeRequestInfo(request):
 
 def addSReg(request, response, user):
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(request)
+    if not sreg_req:
+        return {}
     sreg_data = { 'nickname'    : user.username
                 , 'email'       : user.email
                 , 'fullname'    : user.human_name
@@ -82,6 +84,9 @@ def addSReg(request, response, user):
     return sreg_resp.data
 
 def addPape(request, response):
+    pape_req = pape.Request.fromOpenIDRequest(request)
+    if not pape_req:
+        return 'no-pape'
     done_yubikey = False
 
     auth_time = datetime.utcfromtimestamp(session['last_auth_time']).strftime('%Y-%m-%dT%H:%M:%SZ')
@@ -101,12 +106,16 @@ def addPape(request, response):
 
 def addTeams(request, response, groups):
     teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
+    if not teams_req:
+        return []
     teams_resp = teams.TeamsResponse.extractResponse(teams_req, groups)
     response.addExtension(teams_resp)
     return teams_resp.teams
 
 def addCLAs(request, response, cla_uris):
     cla_req = cla.CLARequest.fromOpenIDRequest(request)
+    if not cla_req:
+        return []
     cla_resp = cla.CLAResponse.extractResponse(cla_req, cla_uris)
     response.addExtension(cla_resp)
     return cla_resp.clas

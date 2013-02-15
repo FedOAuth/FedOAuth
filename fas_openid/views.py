@@ -180,7 +180,7 @@ def view_main():
             teams_info = addTeams(openid_request, openid_response, filter_cla_groups(g.fas_user.groups))
             cla_info = addCLAs(openid_request, openid_response, get_cla_uris(g.fas_user.groups))
             auth_level = addPape(openid_request, openid_response)
-            log_info('Success', {'claimed_id': get_claimed_id(g.fas_user.username), 'trust_root': openid_request.trust_root, 'security_level': auth_level})
+            log_info('Success', {'claimed_id': get_claimed_id(g.fas_user.username), 'trust_root': openid_request.trust_root, 'security_level': auth_level, 'message': 'The user succesfully claimed the identity'})
             log_debug('Info', {'teams': teams_info})
             return openid_respond(openid_response)
         elif authed == AUTH_TRUST_ROOT_ASK:

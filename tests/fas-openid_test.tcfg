@@ -1,0 +1,32 @@
+# Beware that the quotes around the values are mandatory
+
+# Enable a filter to make the OpenID Provider only available to a specific list of users
+AVAILABLE_FILTER = False
+AVAILABLE_TO = []
+
+# A list of trust roots for which the user will not need to confirm again
+TRUSTED_ROOTS = []
+NON_TRUSTED_ROOTS = []
+
+LOGIN_URL = 'http://localhost:5000/login/'
+
+### Wether or not the cookies are only valid for HTTPS requests
+### ADVISED: Set this to True in production systems, otherwise a MITM could steal the authentication cookie
+FAS_HTTPS_REQUIRED=True
+
+# This is the OpenID endpoint url, at which the server is available
+OPENID_ENDPOINT = 'http://localhost:5000'
+
+# This is the OpenID url provided to users. Add %s where the username should be entered
+OPENID_IDENTITY_URL = 'http://localhost:5000/id/%s'
+
+### The maximum time after which the user must re-authenticate in minutes (use 0 for no limit)
+MAX_AUTH_TIME = 15
+
+### Secret key for the Flask application
+SECRET_KEY='<The web application secret key>'
+
+### url to the database server:
+#DB_URL=mysql://user:pass@host/db_name
+#DB_URL=postgres://user:pass@host/db_name
+SQLALCHEMY_DATABASE_URI='sqlite:////var/tmp/fas_openid_dev.sqlite'

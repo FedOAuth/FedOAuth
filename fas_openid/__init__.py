@@ -20,6 +20,8 @@ from flask_fas import FAS
 # Create the application
 APP = flask.Flask(__name__)
 # Set up logging (https://fedoraproject.org/wiki/Infrastructure/AppBestPractices#Centralized_logging)
+FORMAT = '%(asctime)-15s OpenID[%(process)d] %(message)s'
+logging.basicConfig(format=FORMAT)
 logger = logging.getLogger('openid')
 logger.setLevel(logging.DEBUG)
 handler = logging.handlers.SysLogHandler(address='/dev/log', facility=logging.handlers.SysLogHandler.LOG_LOCAL4)

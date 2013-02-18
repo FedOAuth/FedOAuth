@@ -25,6 +25,8 @@ from urlparse import urljoin
 
 from flaskext.babel import gettext as _
 
+from uuid import uuid4 as uuid
+
 # Possible AUTH results
 AUTH_NOT_LOGGED_IN = 0
 AUTH_TIMEOUT = 1
@@ -126,11 +128,14 @@ def getSessionValue(key, default_value=None):
 
 def user_ask_trust_root(openid_request):
     if request.method == 'POST':
+        if not 'csrf_id' in session or not 'csrf_value' in request.form or request.form['csrf_value'] != session['csrf_id']:
+            return 'CSRF Protection value invalid'
         if 'decided_allow' in request.form:
             addToSessionArray('TRUSTED_ROOTS', openid_request.trust_root)
         else:
             addToSessionArray('NON_TRUSTED_ROOTS', openid_request.trust_root)
         return redirect(request.url)
+    session['csrf_id'] = uuid().hex
     # Get which stuff we will send
     sreg_data = { 'nickname'    : g.fas_user.username
                 , 'email'       : g.fas_user.email
@@ -151,6 +156,7 @@ def user_ask_trust_root(openid_request):
                           , sreg_data           = sreg_resp.data
                           , teams_provided      = teams_resp.teams
                           , cla_done            = cla.CLA_URI_FEDORA_DONE in clas_resp.clas
+                          , csrf                = session['csrf_id']
                           )
 
 @app.route('/robots.txt'):

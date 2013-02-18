@@ -127,7 +127,7 @@ def getSessionValue(key, default_value=None):
         return default_value
 
 def user_ask_trust_root(openid_request):
-    if request.method == 'POST':
+    if request.method == 'POST' and 'form_filled' in request.form:
         if not 'csrf_id' in session or not 'csrf_value' in request.form or request.form['csrf_value'] != session['csrf_id']:
             return 'CSRF Protection value invalid'
         if 'decided_allow' in request.form:

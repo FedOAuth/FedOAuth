@@ -8,6 +8,7 @@
     {% trans %}Review the authorization details{% endtrans %}
     <div>
         <form method="post" action="{{action}}">
+            <input type="hidden" name="form_filled" value="true" />
             <input type="hidden" name="csrf_value" value="{{csrf}}" />
             <p class="form_item">
                 <table class="details">

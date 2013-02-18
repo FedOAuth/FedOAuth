@@ -7,7 +7,7 @@ import time
 class Association(db.Model):
     server_url  = db.Column(db.String(2048), nullable=False, primary_key=True)
     handle      = db.Column(db.String(128), nullable=False, primary_key=True)
-    secret      = db.Column(db.Binary(128), nullable=False)
+    secret      = db.Column(db.LargeBinary(128), nullable=False)
     issued      = db.Column(db.Integer, nullable=False)
     lifetime    = db.Column(db.Integer, nullable=False)
     assoc_type  = db.Column(db.String(64), nullable=False)

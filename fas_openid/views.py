@@ -159,7 +159,8 @@ def user_ask_trust_root(openid_request):
                           , csrf                = session['csrf_id']
                           )
 
-@app.route('/robots.txt'):
+@app.route('/robots.txt')
+def view_robots();
     return 'User-Agent: *\nDisallow: /'
 
 @app.route('/', methods=['GET', 'POST'])

@@ -160,7 +160,7 @@ def user_ask_trust_root(openid_request):
                           )
 
 @app.route('/robots.txt')
-def view_robots();
+def view_robots():
     return 'User-Agent: *\nDisallow: /'
 
 @app.route('/', methods=['GET', 'POST'])

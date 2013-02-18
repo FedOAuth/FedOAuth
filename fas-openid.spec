@@ -1,5 +1,5 @@
 Name:           fas-openid
-Version:        0.5.0
+Version:        0.5.1
 Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
@@ -70,6 +70,9 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Mon Feb 18 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.5.1-1
+- Added CSRF protection
+
 * Fri Feb 15 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.5.0-1
 - CLA extension imported
 - Logging more parseable

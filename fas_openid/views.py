@@ -210,6 +210,7 @@ def view_main():
             return redirect(app.config['LOGIN_URL'])
         elif g.fas_user is None:
             session['next'] = request.base_url
+            session['trust_root'] = openid_request.trust_root
             return redirect(app.config['LOGIN_URL'])
         else:
             log_error('Failure', {'username': g.fas_user.username, 'attempted_claimed_id': openid_request.identity, 'trust_root': openid_request.trust_root, 'message': 'The user tried to claim an ID that is not theirs'})
@@ -293,6 +294,7 @@ def auth_login():
                 log_info('Success', {'username': username, 'message': 'User authenticated succesfully'})
                 session['last_auth_time'] = time()
                 session['timeout'] = False
+                session['trust_root'] = ''
                 session.modified = True
                 return redirect(session['next'])
             else:
@@ -301,7 +303,7 @@ def auth_login():
         else:
             log_warning('Failure', {'username': username, 'message': 'Tried to login with an account that is not allowed to use this service'})
             flash(_('This service is limited to the following users: %(users)s', users=', '.join(app.config['AVAILABLE_TO'])))
-    return render_template('login.html')
+    return render_template('login.html', trust_root=session['trust_root'])
 
 @app.route('/test/')
 @fas_login_required

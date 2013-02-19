@@ -6,6 +6,8 @@ from model import FASOpenIDStore
 from fas_openid import APP as app, log_debug, log_info, log_warning, log_error
 from fas_openid.model import FASOpenIDStore
 
+from fedora.client import AuthError
+
 from flask_fas import fas_login_required
 
 from fas_openid import openid_teams as teams

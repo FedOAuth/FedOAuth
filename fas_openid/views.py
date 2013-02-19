@@ -333,7 +333,7 @@ def auth_login():
             if user:
                 log_info('Success', {'username': username, 'message': 'User authenticated succesfully'})
                 user = user.toDict()        # A bunch is not serializable...
-                user['groups'] = [x.name for x in user['approved_memberships']]
+                user['groups'] = [x['name'] for x in user['approved_memberships']]
                 for key in user.keys():
                     if not key in USEFUL_FIELDS:
                         del user[key]

@@ -60,7 +60,7 @@ def get_fasclient():
     if not hasattr(ctx, 'fasclient'):
         ctx.fasclient = FasProxyClient(
                                 base_url = app.config['FAS_BASE_URL'], 
-                                user_agent = app.config['FAS_USER_AGENT'],
+                                useragent = app.config['FAS_USER_AGENT'],
                                 insecure = not app.config['FAS_CHECK_CERT']
                                 )
     return ctx.fasclient

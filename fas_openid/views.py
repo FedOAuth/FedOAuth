@@ -295,7 +295,7 @@ def openid_respond(openid_response):
 def auth_logout():
     if not get_user():
         return redirect(url_for('view_main'))
-    get_user() = None
+    session['user'] = None
     session.clear()
     session.modified = True
     flash(_('You have been logged out'))
@@ -324,7 +324,7 @@ def auth_login():
             user = check_login(username, password)
             if user:
                 log_info('Success', {'username': username, 'message': 'User authenticated succesfully'})
-                get_user() = user
+                session['user'] = user
                 session['last_auth_time'] = time()
                 session['timeout'] = False
                 session['trust_root'] = ''

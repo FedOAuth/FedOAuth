@@ -78,7 +78,7 @@ def get_server():
 def get_user():
     if not 'user' in session:
         return None
-    return session
+    return session['user']
 
 def filter_cla_groups(groups):
     return [group for group in groups if not group in CLA_GROUPS.keys()]

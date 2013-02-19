@@ -101,10 +101,10 @@ def getPapeRequestInfo(request):
 
 def addSReg(request, response, user):
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(request)
-    sreg_data = { 'nickname'    : user.username
-                , 'email'       : user.email
-                , 'fullname'    : user.human_name
-                , 'timezone'    : user.timezone
+    sreg_data = { 'nickname'    : user['username']
+                , 'email'       : user['email']
+                , 'fullname'    : user['human_name']
+                , 'timezone'    : user['timezone']
                 }
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     response.addExtension(sreg_resp)

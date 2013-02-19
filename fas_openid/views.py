@@ -56,6 +56,7 @@ CLA_GROUPS = { 'cla_click': cla.CLA_URI_FEDORA_CLICK
              , 'cla_redhat': cla.CLA_URI_FEDORA_REDHAT
              }
 
+USEFUL_FIELDS = ['human_name', 'email', 'groups', 'id', 'timezone', 'username']
 
 def get_fasclient():
     ctx = stack.top
@@ -333,16 +334,9 @@ def auth_login():
                 log_info('Success', {'username': username, 'message': 'User authenticated succesfully'})
                 user = user.toDict()        # A bunch is not serializable...
                 user.groups = [x.name for x in user.approved_memberships]
-                del user['approved_memberships']
-                del user['creation']
-                del user['unapproved_memberships']
-                del user['security_question']
-                del user['security_answer']
-                del user['memberships']
-                del user['old_password']
-                del user['unverified_email']
-                del user['facsimile']
-                del user['roles']
+                for key in user.keys():
+                    if not key in USEFUL_FIELDS:
+                        del user[key]
                 session['user'] = user
                 session['last_auth_time'] = time()
                 session['timeout'] = False

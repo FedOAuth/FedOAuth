@@ -25,6 +25,8 @@ from urlparse import urljoin
 
 from flaskext.babel import gettext as _
 
+from fedora.client.fasproxy import FasProxyClient
+
 from uuid import uuid4 as uuid
 
 try:

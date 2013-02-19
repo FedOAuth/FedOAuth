@@ -10,9 +10,10 @@ NON_TRUSTED_ROOTS = []
 
 LOGIN_URL = 'http://localhost:5000/login/'
 
-### Wether or not the cookies are only valid for HTTPS requests
-### ADVISED: Set this to True in production systems, otherwise a MITM could steal the authentication cookie
-FAS_HTTPS_REQUIRED=True
+# The FAS configuration
+FAS_BASE_URL = 'https://admin.fedoraproject.org/accounts/'
+FAS_USER_AGENT = 'FAS-OpenID'
+FAS_CHECK_CERT = True
 
 # This is the OpenID endpoint url, at which the server is available
 OPENID_ENDPOINT = 'http://localhost:5000'

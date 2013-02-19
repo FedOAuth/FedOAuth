@@ -1,5 +1,5 @@
 Name:           fas-openid
-Version:        0.5.2
+Version:        0.6.0
 Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
@@ -70,6 +70,9 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Tue Feb 19 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.6.0-1
+- Moved from flask_fas to FasProxyClient
+
 * Mon Feb 18 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.5.2-1
 - Fixed a re-post bug
 

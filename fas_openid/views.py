@@ -66,7 +66,7 @@ def get_fasclient():
 def get_server():
     ctx = stack.top
     if not hasattr(ctx, 'openid_server'):
-        ctx.openid_server = openid_server(FASOpenIDStore(), op_endpoint=app.confog['OPENID_ENDPOINT'])
+        ctx.openid_server = openid_server(FASOpenIDStore(), op_endpoint=app.config['OPENID_ENDPOINT'])
     return ctx.openid_server
 
 

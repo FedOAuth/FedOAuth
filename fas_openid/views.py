@@ -329,6 +329,7 @@ def auth_login():
             user = check_login(username, password)
             if user:
                 log_info('Success', {'username': username, 'message': 'User authenticated succesfully'})
+                user = user.toDict()        # A bunch is not serializable...
                 session['user'] = user
                 session['last_auth_time'] = time()
                 session['timeout'] = False

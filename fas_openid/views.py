@@ -307,7 +307,10 @@ def check_login(username, password):
     try:
         session_id, data = get_fasclient().login(username, password)
         return data.user
-    except Exception:
+    except AuthError:
+        return False
+    except Exception, ex:
+        log_warning('Error', {'message': 'An error occured while checking username/password: %s' % ex})
         return False
 
 @app.route('/login/', methods=['GET','POST'])

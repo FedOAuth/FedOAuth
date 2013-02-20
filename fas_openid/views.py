@@ -136,7 +136,7 @@ def addTeams(request, response, groups):
 
 def addCLAs(request, response, cla_uris):
     cla_req = cla.CLARequest.fromOpenIDRequest(request)
-    if not cla_req:
+    if not cla_req.wereCLAsRequested:
         return
     cla_resp = cla.CLAResponse.extractResponse(cla_req, cla_uris)
     response.addExtension(cla_resp)

@@ -47,7 +47,7 @@ def log_error(message, info={}):
     logger.error(log_create_message(message, info))
 
 def get_session():
-    return request.environ['beaker.session']
+    return flask.request.environ['beaker.session']
 
 APP.config.from_object('fas_openid.default_config')
 APP.config.from_envvar('FAS_OPENID_CONFIG', silent=True)

@@ -59,7 +59,7 @@ babel = Babel(APP)
 session_opts = {
     'session.lock_dir': '/tmp/beaker',
     'session.type': 'ext:database',
-    'session.urk': APP.config['SQLALCHEMY_DATABASE_URI'],
+    'session.url': APP.config['SQLALCHEMY_DATABASE_URI'],
     'session.auto': False,
     'session.cookie_expires': True,
     'session.key': 'FAS_OPENID',

@@ -70,8 +70,7 @@ session_opts = {
     'session.cookie_expires': True,
     'session.key': 'FAS_OPENID',
     'session.secret': APP.config['SECRET_KEY'],
-    'session.secure': False,
-    'session.table_name': 'session'
+    'session.secure': False
 }
 APP.wsgi_app = SessionMiddleware(APP.wsgi_app, session_opts)
 

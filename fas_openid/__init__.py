@@ -57,6 +57,7 @@ db = SQLAlchemy(APP)
 babel = Babel(APP)
 # Set up sessions
 session_opts = {
+    'session.lock_dir': '/tmp/beaker',
     'session.type': 'ext:database',
     'session.urk': APP.config['SQLALCHEMY_DATABASE_URI'],
     'session.auto': False,

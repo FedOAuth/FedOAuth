@@ -278,7 +278,7 @@ def view_id(username):
 
 @app.route('/yadis/<username>.xrds')
 def view_yadis_id(username):
-    return Response(render_template('yadis_user.xrds'), claimed_id=get_claimed_id(username), mimetype='application/xrds+xml')
+    return Response(render_template('yadis_user.xrds', claimed_id=get_claimed_id(username)), mimetype='application/xrds+xml')
 
 @app.route('/yadis.xrds')
 def view_yadis():

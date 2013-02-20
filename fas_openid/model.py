@@ -4,7 +4,7 @@ from openid.store.nonce import SKEW as NonceSKEW
 from openid.store.interface import OpenIDStore
 import time
 
-class Session(db.model):
+class Session(db.Model):
     id          = db.Column(db.Integer, primary_key=True)
     namespace   = db.Column(db.String(255), nullable=False)
     accessed    = db.Column(db.DateTime, nullable=False)

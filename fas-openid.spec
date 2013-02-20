@@ -20,12 +20,14 @@ BuildRequires:  python-flask-babel
 BuildRequires:  python-sqlalchemy0.7
 BuildRequires:  python-flask-sqlalchemy
 BuildRequires:  python-openid
+BuildRequires:  python-beaker
 Requires:       python-sqlalchemy0.7
 Requires:       python-flask
 Requires:       python-fedora
 Requires:       python-fedora-flask
 Requires:       python-flask-babel
 Requires:       python-flask-sqlalchemy
+Requires:       python-beaker
 Requires:       python-openid
 Requires:       mod_wsgi
 Requires:       httpd

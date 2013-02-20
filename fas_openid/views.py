@@ -145,9 +145,10 @@ def addCLAs(request, response, cla_uris):
 def addToSessionArray(array, value):
     if array in get_session():
         get_session()[array].append(value)
-        get_session().modified = True
+        get_session().save()
     else:
         get_session()[array] = [value]
+        get_session().save()
 
 def getSessionValue(key, default_value=None):
     if key in get_session():
@@ -165,6 +166,7 @@ def user_ask_trust_root(openid_request):
             addToSessionArray('NON_TRUSTED_ROOTS', openid_request.trust_root)
         return redirect(request.url)
     get_session()['csrf_id'] = uuid().hex
+    get_session().save()
     # Get which stuff we will send
     sreg_data = { 'nickname'    : get_user()['username']
                 , 'email'       : get_user()['email']
@@ -197,7 +199,7 @@ def view_main():
     if 'openid.mode' in request.values:
         values = request.values
         get_session()['values'] = request.values
-        get_session().modified = True
+        get_session().save()
     else:
         if 'values' in get_session():
             values = get_session()['values']
@@ -237,10 +239,12 @@ def view_main():
         elif authed == AUTH_TIMEOUT:
             get_session()['timeout'] = True
             get_session()['next'] = request.base_url
+            get_session().save()
             return redirect(app.config['LOGIN_URL'])
         elif authed == AUTH_NOT_LOGGED_IN:
             get_session()['next'] = request.base_url
             get_session()['trust_root'] = openid_request.trust_root
+            get_session().save()
             return redirect(app.config['LOGIN_URL'])
         else:
             log_error('Failure', {'username': get_user()['username'], 'attempted_claimed_id': openid_request.identity, 'trust_root': openid_request.trust_root, 'message': 'The user tried to claim an ID that is not theirs'})
@@ -289,7 +293,7 @@ def view_yadis():
 def openid_respond(openid_response):
     if 'values' in get_session():
         get_session()['values'] = None
-        get_session().modified = True
+        get_session().save()
     try:
         webresponse = get_server().encodeResponse(openid_response)
         return (webresponse.body, webresponse.code, webresponse.headers)
@@ -302,9 +306,7 @@ def openid_respond(openid_response):
 def auth_logout():
     if not get_user():
         return redirect(url_for('view_main'))
-    get_session()['user'] = None
-    get_session().clear()
-    get_session().modified = True
+    get_session().delete()
     flash(_('You have been logged out'))
     return redirect(url_for('view_main'))
 
@@ -324,6 +326,7 @@ def auth_login():
         return redirect(url_for('view_main'))
     if 'next' in request.args:
         get_session()['next'] = request.args['next']
+        get_session().save()
     if get_user() and not ('timeout' in get_session() and get_session()['timeout']): # We can also have "timeout" as of 0.4.0, indicating PAPE or application configuration requires a re-auth
         log_debug('Info', {'message': 'User tried to login but is already authenticated'})
         return redirect(get_session()['next'])
@@ -343,7 +346,7 @@ def auth_login():
                 get_session()['last_auth_time'] = time()
                 get_session()['timeout'] = False
                 get_session()['trust_root'] = ''
-                get_session().modified = True
+                get_session().save()
                 return redirect(get_session()['next'])
             else:
                 log_warning('Failure', {'username': username, 'message': 'User entered incorrect username or password'})

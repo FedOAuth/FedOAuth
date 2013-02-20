@@ -7,6 +7,7 @@ import pkg_resources
 
 # Imports
 import flask
+from beaker.middleware import SessionMiddleware
 from flask.ext.sqlalchemy import SQLAlchemy
 from flaskext.babel import Babel
 
@@ -25,12 +26,13 @@ logger.setLevel(logging.DEBUG)
 handler = logging.handlers.SysLogHandler(address='/dev/log', facility=logging.handlers.SysLogHandler.LOG_LOCAL4)
 logger.addHandler(handler)
 def log_create_message(message, info):
-    if not 'log_id' in flask.session:
-        flask.session['log_id'] = uuid().hex
+    if not 'log_id' in get_session():
+        get_session()['log_id'] = uuid().hex
+        get_session().save()
     other = ''
     for key, value in info.iteritems():
         other = '%(other)s, %(key)s=%(value)s' % {'other': other, 'key': key, 'value': value}
-    return '%(message)s: sessionid=%(sessionid)s%(other)s' % {'message': message, 'sessionid': flask.session['log_id'], 'other': other}
+    return '%(message)s: sessionid=%(sessionid)s%(other)s' % {'message': message, 'sessionid': get_session()['log_id'], 'other': other}
 
 def log_debug(message, info={}):
     logger.debug(log_create_message(message, info))
@@ -45,7 +47,7 @@ def log_error(message, info={}):
     logger.error(log_create_message(message, info))
 
 def get_session():
-    return flask.session
+    return request.environ['beaker.session']
 
 APP.config.from_object('fas_openid.default_config')
 APP.config.from_envvar('FAS_OPENID_CONFIG', silent=True)
@@ -53,6 +55,17 @@ APP.config.from_envvar('FAS_OPENID_CONFIG', silent=True)
 db = SQLAlchemy(APP)
 # Set up Babel
 babel = Babel(APP)
+# Set up sessions
+session_opts = {
+    'session.type': 'ext:database',
+    'session.urk': APP.config['SQLALCHEMY_DATABASE_URI'],
+    'session.auto': False,
+    'session.cookie_expires': True,
+    'session.key': 'FAS_OPENID',
+    'session.secret': APP.config['SECRET_KEY'],
+    'session.secure': False
+}
+APP.wsgi_app = SessionMiddleware(APP.wsgi_app, session_opts)
 
 # Import the other stuff
 import model

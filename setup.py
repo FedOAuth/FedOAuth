@@ -6,7 +6,7 @@ import pkg_resources
 from setuptools import setup, find_packages
 
 setup( name                 = 'FAS-OpenID'
-     , version              = file('VERSION').read()
+     , version              = 'VERSION'
      , author               = 'Patrick Uiterwijk'
      , author_email         = 'puiterwijk@fedoraproject.org'
      , packages             = find_packages()

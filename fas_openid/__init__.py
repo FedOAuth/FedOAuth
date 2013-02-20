@@ -53,8 +53,18 @@ def get_session():
 APP.config.from_object('fas_openid.default_config')
 APP.config.from_envvar('FAS_OPENID_CONFIG', silent=True)
 
-if not APP.config['SQLALCHEMY_DATABASE_URI'] or APP.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite'):
-    print 'Error: FAS-OpenID cannot work with sqlite, please configure a real database'
+# Make sure the configuration is sane
+if not APP.config['SQLALCHEMY_DATABASE_URI']:
+    print 'Error: Please make sure to configure SQLALCHEMY_DATABASE_URI'
+    sys.exit(1)
+if APP.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite'):
+    print 'Error: FAS-OpenID does not support sqlite at this moment'
+    sys.exit(1)
+if APP.config['SQLALCHEMY_DATABASE_URI'].startswith('postgres:'):
+    print 'Error: Please use the postgresql dialect (postgresql: instead of postgres: in the database URI)'
+    sys.exit(1)
+if not APP.config['SECRET_KEY'] or APP.config['SECRET_KEY'] == 'Secret Key':
+    print 'Error: Please make sure to configure SECRET_KEY'
     sys.exit(1)
 
 # Set up SQLAlchemy

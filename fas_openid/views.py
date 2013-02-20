@@ -1,9 +1,9 @@
-from flask import Flask, request, session, g, redirect, url_for, \
+from flask import Flask, request, g, redirect, url_for, \
      abort, render_template, flash, Response
 
 from model import FASOpenIDStore
 
-from fas_openid import APP as app, log_debug, log_info, log_warning, log_error
+from fas_openid import APP as app, get_session, log_debug, log_info, log_warning, log_error
 from fas_openid.model import FASOpenIDStore
 
 from fedora.client import AuthError
@@ -76,9 +76,9 @@ def get_server():
 
 
 def get_user():
-    if not 'user' in session:
+    if not 'user' in get_session():
         return None
-    return session['user']
+    return get_session()['user']
 
 def filter_cla_groups(groups):
     return [group for group in groups if not group in CLA_GROUPS.keys()]
@@ -113,7 +113,7 @@ def addSReg(request, response, user):
 def addPape(request, response):
     done_yubikey = False
 
-    auth_time = datetime.utcfromtimestamp(session['last_auth_time']).strftime('%Y-%m-%dT%H:%M:%SZ')
+    auth_time = datetime.utcfromtimestamp(get_session()['last_auth_time']).strftime('%Y-%m-%dT%H:%M:%SZ')
     auth_policies = []
     auth_levels = {}
     if done_yubikey:
@@ -143,28 +143,28 @@ def addCLAs(request, response, cla_uris):
     return cla_resp.clas
 
 def addToSessionArray(array, value):
-    if array in session:
-        session[array].append(value)
-        session.modified = True
+    if array in get_session():
+        get_session()[array].append(value)
+        get_session().modified = True
     else:
-        session[array] = [value]
+        get_session()[array] = [value]
 
 def getSessionValue(key, default_value=None):
-    if key in session:
-        return session[key]
+    if key in get_session():
+        return get_session()[key]
     else:
         return default_value
 
 def user_ask_trust_root(openid_request):
     if request.method == 'POST' and 'form_filled' in request.form:
-        if not 'csrf_id' in session or not 'csrf_value' in request.form or request.form['csrf_value'] != session['csrf_id']:
+        if not 'csrf_id' in get_session() or not 'csrf_value' in request.form or request.form['csrf_value'] != get_session()['csrf_id']:
             return 'CSRF Protection value invalid'
         if 'decided_allow' in request.form:
             addToSessionArray('TRUSTED_ROOTS', openid_request.trust_root)
         else:
             addToSessionArray('NON_TRUSTED_ROOTS', openid_request.trust_root)
         return redirect(request.url)
-    session['csrf_id'] = uuid().hex
+    get_session()['csrf_id'] = uuid().hex
     # Get which stuff we will send
     sreg_data = { 'nickname'    : get_user()['username']
                 , 'email'       : get_user()['email']
@@ -185,7 +185,7 @@ def user_ask_trust_root(openid_request):
                           , sreg_data           = sreg_resp.data
                           , teams_provided      = teams_resp.teams
                           , cla_done            = cla.CLA_URI_FEDORA_DONE in clas_resp.clas
-                          , csrf                = session['csrf_id']
+                          , csrf                = get_session()['csrf_id']
                           )
 
 @app.route('/robots.txt')
@@ -196,11 +196,11 @@ def view_robots():
 def view_main():
     if 'openid.mode' in request.values:
         values = request.values
-        session['values'] = request.values
-        session.modified = True
+        get_session()['values'] = request.values
+        get_session().modified = True
     else:
-        if 'values' in session:
-            values = session['values']
+        if 'values' in get_session():
+            values = get_session()['values']
         else:
             values = {}
 
@@ -235,16 +235,16 @@ def view_main():
             log_warning('Error', {'trust_root': openid_request.trust_root, 'message': 'Trust root demanded checkid_immediate'})
             return openid_respond(openid_request.answer(False))
         elif authed == AUTH_TIMEOUT:
-            session['timeout'] = True
-            session['next'] = request.base_url
+            get_session()['timeout'] = True
+            get_session()['next'] = request.base_url
             return redirect(app.config['LOGIN_URL'])
         elif authed == AUTH_NOT_LOGGED_IN:
-            session['next'] = request.base_url
-            session['trust_root'] = openid_request.trust_root
+            get_session()['next'] = request.base_url
+            get_session()['trust_root'] = openid_request.trust_root
             return redirect(app.config['LOGIN_URL'])
         else:
             log_error('Failure', {'username': get_user()['username'], 'attempted_claimed_id': openid_request.identity, 'trust_root': openid_request.trust_root, 'message': 'The user tried to claim an ID that is not theirs'})
-            return 'This is not your ID! If it is, please contact the administrators at admin@fedoraproject.org. Be sure to mention your session ID: %(logid)s' % {'logid': session['log_id']}
+            return 'This is not your ID! If it is, please contact the administrators at admin@fedoraproject.org. Be sure to mention your session ID: %(logid)s' % {'logid': get_session()['log_id']}
     else:
         return openid_respond(get_server().handleRequest(openid_request))
 
@@ -253,9 +253,9 @@ def isAuthorized(openid_request):
 
     if get_user() is None:
         return AUTH_NOT_LOGGED_IN
-    elif (pape_req_time) and (pape_req_time != 0) and (session['last_auth_time'] < (time() - pape_req_time)):
+    elif (pape_req_time) and (pape_req_time != 0) and (get_session()['last_auth_time'] < (time() - pape_req_time)):
         return AUTH_TIMEOUT
-    elif (app.config['MAX_AUTH_TIME'] != 0) and (session['last_auth_time'] < (time() - (app.config['MAX_AUTH_TIME'] * 60))):
+    elif (app.config['MAX_AUTH_TIME'] != 0) and (get_session()['last_auth_time'] < (time() - (app.config['MAX_AUTH_TIME'] * 60))):
         return AUTH_TIMEOUT
     # Add checks if yubikey is required by application
     elif (not openid_request.idSelect()) and (openid_request.identity != get_claimed_id(get_user()['username'])):
@@ -287,9 +287,9 @@ def view_yadis():
     return Response(render_template('yadis.xrds'), mimetype='application/xrds+xml')
 
 def openid_respond(openid_response):
-    if 'values' in session:
-        session['values'] = None
-        session.modified = True
+    if 'values' in get_session():
+        get_session()['values'] = None
+        get_session().modified = True
     try:
         webresponse = get_server().encodeResponse(openid_response)
         return (webresponse.body, webresponse.code, webresponse.headers)
@@ -302,9 +302,9 @@ def openid_respond(openid_response):
 def auth_logout():
     if not get_user():
         return redirect(url_for('view_main'))
-    session['user'] = None
-    session.clear()
-    session.modified = True
+    get_session()['user'] = None
+    get_session().clear()
+    get_session().modified = True
     flash(_('You have been logged out'))
     return redirect(url_for('view_main'))
 
@@ -320,13 +320,13 @@ def check_login(username, password):
 
 @app.route('/login/', methods=['GET','POST'])
 def auth_login():
-    if not 'next' in request.args and not 'next' in session:
+    if not 'next' in request.args and not 'next' in get_session():
         return redirect(url_for('view_main'))
     if 'next' in request.args:
-        session['next'] = request.args['next']
-    if get_user() and not ('timeout' in session and session['timeout']): # We can also have "timeout" as of 0.4.0, indicating PAPE or application configuration requires a re-auth
+        get_session()['next'] = request.args['next']
+    if get_user() and not ('timeout' in get_session() and get_session()['timeout']): # We can also have "timeout" as of 0.4.0, indicating PAPE or application configuration requires a re-auth
         log_debug('Info', {'message': 'User tried to login but is already authenticated'})
-        return redirect(session['next'])
+        return redirect(get_session()['next'])
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -339,19 +339,19 @@ def auth_login():
                 for key in user.keys():
                     if not key in USEFUL_FIELDS:
                         del user[key]
-                session['user'] = user
-                session['last_auth_time'] = time()
-                session['timeout'] = False
-                session['trust_root'] = ''
-                session.modified = True
-                return redirect(session['next'])
+                get_session()['user'] = user
+                get_session()['last_auth_time'] = time()
+                get_session()['timeout'] = False
+                get_session()['trust_root'] = ''
+                get_session().modified = True
+                return redirect(get_session()['next'])
             else:
                 log_warning('Failure', {'username': username, 'message': 'User entered incorrect username or password'})
                 flash(_('Incorrect username or password'))
         else:
             log_warning('Failure', {'username': username, 'message': 'Tried to login with an account that is not allowed to use this service'})
             flash(_('This service is limited to the following users: %(users)s', users=', '.join(app.config['AVAILABLE_TO'])))
-    return render_template('login.html', trust_root=session['trust_root'])
+    return render_template('login.html', trust_root=get_session()['trust_root'])
 
 @app.route('/test/')
 def view_test():

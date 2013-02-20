@@ -44,6 +44,9 @@ def log_warning(message, info={}):
 def log_error(message, info={}):
     logger.error(log_create_message(message, info))
 
+def get_session():
+    return flask.session
+
 APP.config.from_object('fas_openid.default_config')
 APP.config.from_envvar('FAS_OPENID_CONFIG', silent=True)
 # Set up SQLAlchemy

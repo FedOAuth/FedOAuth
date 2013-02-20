@@ -15,6 +15,7 @@ import logging
 import logging.handlers
 
 from uuid import uuid4 as uuid
+import sys
 
 # Create the application
 APP = flask.Flask(__name__)
@@ -51,6 +52,11 @@ def get_session():
 
 APP.config.from_object('fas_openid.default_config')
 APP.config.from_envvar('FAS_OPENID_CONFIG', silent=True)
+
+if APP.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite'):
+    print 'Error: FAS-OpenID cannot work with sqlite, please configure a real database'
+    sys.exit(1)
+
 # Set up SQLAlchemy
 db = SQLAlchemy(APP)
 # Set up Babel

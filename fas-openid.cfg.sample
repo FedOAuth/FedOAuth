@@ -28,6 +28,6 @@ MAX_AUTH_TIME = 15
 SECRET_KEY='<The web application secret key>'
 
 ### url to the database server:
-#DB_URL=mysql://user:pass@host/db_name
-#DB_URL=postgres://user:pass@host/db_name
-SQLALCHEMY_DATABASE_URI='sqlite:////var/tmp/fas_openid_dev.sqlite'
+# Note: as of 0.6.2, sqlite is no longer supported
+#SQLALCHEMY_DATABASE_URI=mysql://user:pass@host/db_name
+#SQLALCHEMY_DATABASE_URI=postgres://user:pass@host/db_name

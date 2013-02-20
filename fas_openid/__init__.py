@@ -53,7 +53,7 @@ def get_session():
 APP.config.from_object('fas_openid.default_config')
 APP.config.from_envvar('FAS_OPENID_CONFIG', silent=True)
 
-if APP.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite'):
+if not APP.config['SQLALCHEMY_DATABASE_URI'] or APP.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite'):
     print 'Error: FAS-OpenID cannot work with sqlite, please configure a real database'
     sys.exit(1)
 

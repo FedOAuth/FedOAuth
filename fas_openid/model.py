@@ -4,6 +4,13 @@ from openid.store.nonce import SKEW as NonceSKEW
 from openid.store.interface import OpenIDStore
 import time
 
+class Session(db.model):
+    id          = db.Column(db.Integer, primary_key=True)
+    namespace   = db.Column(db.String(255), nullable=False)
+    accessed    = db.Column(db.DateTime, nullable=False)
+    created     = db.Column(db.DateTime, nullable=False)
+    data        = db.Column(db.LargeBinary, nullable=False)
+
 class Association(db.Model):
     server_url  = db.Column(db.String(2048), nullable=False, primary_key=True)
     handle      = db.Column(db.String(128), nullable=False, primary_key=True)

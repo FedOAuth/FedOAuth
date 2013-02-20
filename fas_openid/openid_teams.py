@@ -249,7 +249,7 @@ class TeamsResponse(Extension):
 
     extractResponse = classmethod(extractResponse)
 
-    def fromSuccessResponse(cls, success_response, signed_only=True):
+    def fromSuccessResponse(cls, success_response):
         """Create a C{L{TeamsResponse}} object from a successful OpenID
         library response
         (C{L{openid.consumer.consumer.SuccessResponse}}) response
@@ -258,19 +258,12 @@ class TeamsResponse(Extension):
         @param success_response: A SuccessResponse from consumer.complete()
         @type success_response: C{L{openid.consumer.consumer.SuccessResponse}}
 
-        @param signed_only: Whether to process only data that was
-            signed in the id_res message from the server.
-        @type signed_only: bool
-
         @rtype: TeamsResponse
         @returns: A teams extension response with the teams the OpenID
             provider provided.
         """
         self = cls()
-        if signed_only:
-            args = success_response.getSignedNS(self.ns_uri)
-        else:
-            args = success_response.message.getArgs(self.ns_uri)
+        args = success_response.getSignedNS(self.ns_uri)
 
         if not args:
             return None

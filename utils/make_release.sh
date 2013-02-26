@@ -43,7 +43,7 @@ git archive --format=tar --prefix=fas-openid-$version/ HEAD | gzip > release/fas
 )
 (
     cd ~/rpmbuild/SPECS
-    rpmbuild -ba fas-openid.spec
+    rpmbuild -ba fas-openid.spec >/dev/null
 )
 cp ~/rpmbuild/SRPMS/fas-openid-$version*.src.rpm release/
 ls -l release/fas-openid-$version*

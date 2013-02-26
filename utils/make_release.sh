@@ -37,7 +37,7 @@ git archive --format=tar --prefix=fas-openid-$version/ HEAD | gzip > release/fas
     cd ..
     tar zcf fas-openid-$version.tar.gz fas-openid-$version
     gpg --detach --armor --sign fas-openid-$version.tar.gz
-    scp fas-openid-$version.tar.gz{,.asc} fedorahosted.org:/srv/releases/f/a/fas-openid/
+    scp fas-openid-$version.tar.gz{,.asc} fedorahosted.org:/srv/web/releases/f/a/fas-openid/
     cp fas-openid-$version.tar.gz ~/rpmbuild/SOURCES
     rm -rf fas-openid-$version
 )

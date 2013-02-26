@@ -1,5 +1,5 @@
 Name:           fas-openid
-Version:        0.6.3
+Version:        0.6.4
 Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
@@ -54,6 +54,7 @@ FAS-OpenID is an OpenID provider which gets it's information from Fedora Account
 %{__install} -m 644 fas_openid.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/fas_openid.conf
 %{__install} -m 644 fas_openid/static/* %{buildroot}%{_datadir}/%{name}/static
 %{__install} -m 644 %{name}.cfg.sample %{buildroot}%{_sysconfdir}/%{name}/%{name}.cfg
+%{__install} -m 644 createdb.py %{buildroot}%{_datadir}/%{name}/createdb.py
 %{__install} -m 644 %{name}.wsgi %{buildroot}%{_datadir}/%{name}/%{name}.wsgi
 
 %pre
@@ -72,6 +73,9 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Tue Feb 26 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.6.4-1
+- Also install createdb.py
+
 * Tue Feb 26 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.6.3-1
 - Added some config file sanity checks
 

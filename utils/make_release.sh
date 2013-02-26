@@ -27,7 +27,7 @@ then
 else
     mkdir -p release
 fi
-git tag -s v$version
+git tag -s v$version -m "Release v$version"
 git push origin v$version
 git archive --format=tar --prefix=fas-openid-$version/ HEAD | gzip > release/fas-openid-$version.tar.gz
 (

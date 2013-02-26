@@ -1,5 +1,5 @@
 Name:           fas-openid
-Version:        0.6.2
+Version:        0.6.3
 Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
@@ -72,10 +72,13 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Tue Feb 26 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.6.3-1
+- Added some config file sanity checks
+
 * Wed Feb 20 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.6.2-1
 - Switched to beaker in sqlalchemy
 
-* Wed Feb 20 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.6.1-0
+* Wed Feb 20 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.6.1-1
 - Corrected a mimetype issue
 
 * Tue Feb 19 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 0.6.0-1

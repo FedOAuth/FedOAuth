@@ -1,2 +1,3 @@
 #!/usr/bin/bash
-pybabel extract --mapping=babel.map --output=fas_openid/translations/en.pot --msgid-bugs-address="puiterwijk@fedoraproject.org" --copyright-holder="Patrick Uiterwijk" --project="FAS-OpenID" --version="`cat VERSION`" fas_openid/
+version=`cat fas-openid.spec | grep "Version:" | sed 's/Version:[ ]*//'`
+pybabel extract --mapping=babel.map --output=fas_openid/translations/en.pot --msgid-bugs-address="puiterwijk@fedoraproject.org" --copyright-holder="Patrick Uiterwijk" --project="FAS-OpenID" --version="$version" fas_openid/

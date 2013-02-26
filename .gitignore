@@ -2,3 +2,4 @@
 *.pyc
 *.sqlite
 *.cfg
+release/

@@ -291,6 +291,9 @@ def view_yadis():
     return Response(render_template('yadis.xrds'), mimetype='application/xrds+xml')
 
 def openid_respond(openid_response):
+    get_session()['TRUSTED_ROOTS'] = []
+    get_session()['NON_TRUSTED_ROOTS'] = []
+    get_session().save()
     if 'values' in get_session():
         get_session()['values'] = None
         get_session().save()

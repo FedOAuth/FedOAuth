@@ -6,7 +6,7 @@ import time
 
 class Session(db.Model):
     id          = db.Column(db.Integer, primary_key=True)
-    namespace   = db.Column(db.String(255), nullable=False)
+    namespace   = db.Column(db.String(255), nullable=False, unique=True)
     accessed    = db.Column(db.DateTime, nullable=False)
     created     = db.Column(db.DateTime, nullable=False)
     data        = db.Column(db.LargeBinary, nullable=False)

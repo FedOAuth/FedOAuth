@@ -1,4 +1,4 @@
-#!/usr/bin/bash -e
+#!/usr/bin/bash -ex
 if [ ! -d ".git" ];
 then
     echo >&2 "Please execute utils/make_release.sh from the root"

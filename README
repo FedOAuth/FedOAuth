@@ -3,6 +3,27 @@ FAS-OpenID
 
     https://github.com/fedora-infra/fas-openid
 
+Required Postgresql permissions
+===============================
+grant connect on database fas_openid to fasopenidapp;
+grant usage on schema public to fasopenidapp;
+
+grant select on association to fasopenidapp;
+grant insert on association to fasopenidapp;
+grant update on association to fasopenidapp;
+grant delete on association to fasopenidapp;
+
+grant select on nonce to fasopenidapp;
+grant insert on nonce to fasopenidapp;
+grant update on nonce to fasopenidapp;
+grant delete on nonce to fasopenidapp;
+grant all privileges on sequence nonce_timestamp_seq to fasopenidapp;
+
+grant select on session to fasopenidapp;
+grant insert on session to fasopenidapp;
+grant update on session to fasopenidapp;
+grant delete on session to fasopenidapp;
+grant all privileges on sequence session_id_seq to fasopenidapp;
 
 Rewriting rules to get *.id.fp.o pointing to id.fp.o/id/*
 =========================================================

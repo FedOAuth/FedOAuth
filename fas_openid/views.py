@@ -1,5 +1,6 @@
 from time import time
 from datetime import datetime
+import sys
 from urlparse import urljoin
 from uuid import uuid4 as uuid
 

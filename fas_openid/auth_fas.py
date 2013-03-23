@@ -28,10 +28,13 @@ try:
 except ImportError:
     from flask import _request_ctx_stack as stack
 
+from flask import Flask, request, g, redirect, url_for, \
+     abort, render_template, flash, Response
+
 from fedora.client.fasproxy import FasProxyClient
 from fedora.client import AuthError
 
-from fas_openid import get_session
+from fas_openid import get_session, APP as app
 
 
 def _get_fasclient():

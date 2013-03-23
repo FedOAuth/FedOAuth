@@ -2,23 +2,22 @@
 @var cla_uri: The URI used for the CLA extension namespace and XRD Type Value
 """
 
-from openid.message import registerNamespaceAlias, \
-     NamespaceAliasRegistrationError
+from openid.message import registerNamespaceAlias,
+                            NamespaceAliasRegistrationError
 from openid.extension import Extension
 import logging
 
 try:
-    basestring #pylint:disable-msg=W0104
+    basestring  # pylint:disable-msg=W0104
 except NameError:
     # For Python 2.2
-    basestring = (str, unicode) #pylint:disable-msg=W0622
+    basestring = (str, unicode)  # pylint:disable-msg=W0622
 
 __all__ = [
     'CLARequest',
     'CLAResponse',
     'cla_uri',
-    'supportsCLA',
-    ]
+    'supportsCLA']
 
 # The namespace for this extension
 cla_uri = 'http://fedoraproject.org/specs/open_id/cla'
@@ -38,10 +37,13 @@ try:
     registerNamespaceAlias(cla_uri, 'cla')
 except NamespaceAliasRegistrationError, e:
     logging.exception('registerNamespaceAlias(%r, %r) failed: %s' % (cla_uri,
-                                                               'cla', str(e),))
+                                                                     'cla',
+                                                                     str(e),))
+
 
 def supportsCLA(endpoint):
     return endpoint.usesExtension(cla_uri)
+
 
 class CLARequest(Extension):
     ns_uri = 'http://fedoraproject.org/specs/open_id/cla'
@@ -102,6 +104,7 @@ class CLARequest(Extension):
             args['query_cla'] = ','.join(self.requested)
 
         return args
+
 
 class CLAResponse(Extension):
     ns_uri = 'http://fedoraproject.org/specs/open_id/cla'

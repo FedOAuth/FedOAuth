@@ -1,6 +1,6 @@
 """Teams extension request and response parsing and object representation
 
-This module contains objects representing team extension requests 
+This module contains objects representing team extension requests
 and responses that can be used with both OpenID relying parties and
 OpenID providers.
 
@@ -12,40 +12,39 @@ OpenID providers.
 
     2. The OpenID provider extracts the teams extension request from
        the OpenID request using C{L{TeamsRequest.fromOpenIDRequest}},
-       gets the user's approval and team membership, creates a C{L{TeamsResponse}}
-       object and adds it to the C{id_res} response::
+       gets the user's approval and team membership, creates a
+       C{L{TeamsResponse}} object and adds it to the C{id_res} response::
 
-        teams_req = TeamsRequest.fromOpenIDRequest(checkid_request)
-        # [ get the user's approval and team membership, informing the user that
-        #   the groups in teams_response were requested and accepted ]
-        teams_resp = TeamsResponse.extractResponse(teams_req, group_memberships)
-        teams_resp.toMessage(openid_response.fields)
+       teams_req = TeamsRequest.fromOpenIDRequest(checkid_request)
+       # [ get the user's approval and team membership, informing the user
+       #   that the groups in teams_response were requested and accepted ]
+       teams_resp = TeamsResponse.extractResponse(teams_req, group_memberships)
+       teams_resp.toMessage(openid_response.fields)
 
     3. The relying party uses C{L{TeamsResponse.fromSuccessResponse}} to
        exxtract the data from the OpenID response::
 
         teams_resp = TeamsResponse.fromSuccessResponse(success_response)
 
-@var teams_uri: The URI used for the teams extension namespace and XRD Type Value
+@var teams_uri: The URI used for the teams extension namespace
 """
 
-from openid.message import registerNamespaceAlias, \
-     NamespaceAliasRegistrationError
+from openid.message import registerNamespaceAlias,
+                            NamespaceAliasRegistrationError
 from openid.extension import Extension
 import logging
 
 try:
-    basestring #pylint:disable-msg=W0104
+    basestring  # pylint:disable-msg=W0104
 except NameError:
     # For Python 2.2
-    basestring = (str, unicode) #pylint:disable-msg=W0622
+    basestring = (str, unicode)  # pylint:disable-msg=W0622
 
 __all__ = [
     'TeamsRequest',
     'TeamsResponse',
     'teams_uri',
-    'supportsTeams',
-    ]
+    'supportsTeams']
 
 # The namespace for this extension
 teams_uri = 'http://ns.launchpad.net/2007/openid-teams'
@@ -54,7 +53,9 @@ try:
     registerNamespaceAlias(teams_uri, 'lp')
 except NamespaceAliasRegistrationError, e:
     logging.exception('registerNamespaceAlias(%r, %r) failed: %s' % (teams_uri,
-                                                               'teams', str(e),))
+                                                                     'teams',
+                                                                     str(e),))
+
 
 def supportsTeams(endpoint):
     """Does the given endpoint advertise support for team extension?
@@ -66,6 +67,7 @@ def supportsTeams(endpoint):
     @rtype: bool
     """
     return endpoint.usesExtension(teams_uri)
+
 
 class TeamsRequest(Extension):
     """An object to hold the state of a teams extension request.
@@ -191,6 +193,7 @@ class TeamsRequest(Extension):
             args['query_membership'] = ','.join(self.requested)
 
         return args
+
 
 class TeamsResponse(Extension):
     """Represents the data returned in a simple registration response

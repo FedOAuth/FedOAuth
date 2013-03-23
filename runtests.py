@@ -8,6 +8,7 @@ from fas_openid import model
 from fas_openid.model import FASOpenIDStore
 from time import time
 
+
 class FasOpenIDStoreTest(unittest.TestCase):
     def setUp(self):
         self.db_fd, self.filename = tempfile.mkstemp()
@@ -21,7 +22,9 @@ class FasOpenIDStoreTest(unittest.TestCase):
 #        os.unlink(self.filename)
 
     def test_assocications(self):
-        self.store.storeAssociation("me-local", Association("handle1", "oursecret", time(), 50, "HMAC-SHA1"))
+        self.store.storeAssociation("me-local",
+                                    Association("handle1", "oursecret",
+                                                time(), 50, "HMAC-SHA1"))
         assert self.store.getAssociation("me-local", "handle1")
         assert self.store.getAssociation("me-local", "handle2") is None
         assert self.store.removeAssociation("me-local", "handle1")

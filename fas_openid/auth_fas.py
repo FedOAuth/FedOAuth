@@ -27,14 +27,17 @@ try:
     from flask import _app_ctx_stack as stack
 except ImportError:
     from flask import _request_ctx_stack as stack
+from flaskext.babel import gettext as _
 
 from flask import Flask, request, g, redirect, url_for, \
      abort, render_template, flash, Response
+from time import time
+from datetime import datetime
 
 from fedora.client.fasproxy import FasProxyClient
 from fedora.client import AuthError
 
-from fas_openid import get_session, APP as app
+from fas_openid import get_session, APP as app, log_debug, log_info, log_warning, log_error
 
 
 def _get_fasclient():
@@ -76,7 +79,7 @@ def auth_login():
     if 'next' in request.args:
         get_session()['next'] = request.args['next']
         get_session().save()
-    if get_user() and not ('timeout' in get_session() and get_session()['timeout']): # We can also have "timeout" as of 0.4.0, indicating PAPE or application configuration requires a re-auth
+    if logged_in() and not ('timeout' in get_session() and get_session()['timeout']): # We can also have "timeout" as of 0.4.0, indicating PAPE or application configuration requires a re-auth
         log_debug('Info', {'message': 'User tried to login but is already authenticated'})
         return redirect(get_session()['next'])
     if request.method == 'POST':
@@ -88,9 +91,6 @@ def auth_login():
                 log_info('Success', {'username': username, 'message': 'User authenticated succesfully'})
                 user = user.toDict() # A bunch is not serializable...
                 user['groups'] = [x['name'] for x in user['approved_memberships']]
-                for key in user.keys():
-                    if not key in USEFUL_FIELDS:
-                        del user[key]
                 get_session()['user'] = user
                 get_session()['last_auth_time'] = time()
                 get_session()['timeout'] = False

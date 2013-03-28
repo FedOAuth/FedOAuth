@@ -157,7 +157,7 @@ def user_ask_trust_root(openid_request):
     return render_template('user_ask_trust_root.html'
                           , action              = request.url
                           , trust_root          = openid_request.trust_root
-                          , sreg_policy_url     = sreg_req.policy_url
+                          , sreg_policy_url     = sreg_req.policy_url or _('None provided')
                           , sreg_data           = sreg_resp.data
                           , teams_provided      = teams_resp.teams
                           , cla_done            = cla.CLA_URI_FEDORA_DONE in clas_resp.clas

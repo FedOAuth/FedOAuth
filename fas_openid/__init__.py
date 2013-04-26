@@ -19,36 +19,50 @@ import sys
 
 # Create the application
 APP = flask.Flask(__name__)
-# Set up logging (https://fedoraproject.org/wiki/Infrastructure/AppBestPractices#Centralized_logging)
+# Set up logging
+# (https://fedoraproject.org/wiki/Infrastructure/AppBestPractices)
 FORMAT = '%(asctime)-15s OpenID[%(process)d] %(message)s'
 logging.basicConfig(format=FORMAT)
 logger = logging.getLogger('openid')
 logger.setLevel(logging.DEBUG)
-handler = logging.handlers.SysLogHandler(address='/dev/log', facility=logging.handlers.SysLogHandler.LOG_LOCAL4)
+handler = logging.handlers.SysLogHandler(address='/dev/log',
+                        facility=logging.handlers.SysLogHandler.LOG_LOCAL4)
 logger.addHandler(handler)
+
+
 def log_create_message(message, info):
     if not 'log_id' in get_session():
         get_session()['log_id'] = uuid().hex
         get_session().save()
     other = ''
     for key, value in info.iteritems():
-        other = '%(other)s, %(key)s=%(value)s' % {'other': other, 'key': key, 'value': value}
-    return '%(message)s: sessionid=%(sessionid)s%(other)s' % {'message': message, 'sessionid': get_session()['log_id'], 'other': other}
+        other = '%(other)s, %(key)s=%(value)s' 
+                    % {'other': other, 'key': key, 'value': value}
+    return '%(message)s: sessionid=%(sessionid)s%(other)s'
+                % {'message': message,
+                   'sessionid': get_session()['log_id'],
+                   'other': other}
+
 
 def log_debug(message, info={}):
     logger.debug(log_create_message(message, info))
 
+
 def log_info(message, info={}):
     logger.info(log_create_message(message, info))
+
 
 def log_warning(message, info={}):
     logger.warning(log_create_message(message, info))
 
+
 def log_error(message, info={}):
     logger.error(log_create_message(message, info))
 
+
 def get_session():
     return flask.request.environ['beaker.session']
+
 
 APP.config.from_object('fas_openid.default_config')
 APP.config.from_envvar('FAS_OPENID_CONFIG', silent=True)

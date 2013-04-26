@@ -1,41 +1,32 @@
-from flask import Flask, request, g, redirect, url_for, \
-     abort, render_template, flash, Response
-
-from model import FASOpenIDStore
-
-from fas_openid import APP as app, get_session, log_debug, log_info, log_warning, log_error
-from fas_openid.model import FASOpenIDStore
-
-from fedora.client import AuthError
-
-from flask_fas import fas_login_required
-
-from fas_openid import openid_teams as teams
-from fas_openid import openid_cla as cla
-
 from time import time
 from datetime import datetime
+import sys
+from urlparse import urljoin
+from uuid import uuid4 as uuid
 
+from flask import Flask, request, g, redirect, url_for, \
+     abort, render_template, flash, Response
 import openid
 from openid.extensions import sreg
 from openid.extensions import pape
 from openid.server.server import Server as openid_server
 from openid.server import server
 from openid.consumer import discover
-
-from urlparse import urljoin
-
 from flaskext.babel import gettext as _
-
-from fedora.client.fasproxy import FasProxyClient
-
-from uuid import uuid4 as uuid
-
 try:
     from flask import _app_ctx_stack as stack
 except ImportError:
     from flask import _request_ctx_stack as stack
 
+from model import FASOpenIDStore
+from fas_openid import APP as app, get_session, log_debug, log_info, log_warning, log_error
+from fas_openid.model import FASOpenIDStore
+from fas_openid import openid_teams as teams
+from fas_openid import openid_cla as cla
+
+# Import enabled auth method
+__import__(app.config['AUTH_MODULE'])
+auth_module = sys.modules[app.config['AUTH_MODULE']]
 
 # Possible AUTH results
 AUTH_NOT_LOGGED_IN = 0
@@ -56,29 +47,12 @@ CLA_GROUPS = { 'cla_click': cla.CLA_URI_FEDORA_CLICK
              , 'cla_redhat': cla.CLA_URI_FEDORA_REDHAT
              }
 
-USEFUL_FIELDS = ['human_name', 'email', 'groups', 'id', 'timezone', 'username']
-
-def get_fasclient():
-    ctx = stack.top
-    if not hasattr(ctx, 'fasclient'):
-        ctx.fasclient = FasProxyClient(
-                                base_url = app.config['FAS_BASE_URL'], 
-                                useragent = app.config['FAS_USER_AGENT'],
-                                insecure = not app.config['FAS_CHECK_CERT']
-                                )
-    return ctx.fasclient
-
 def get_server():
     ctx = stack.top
     if not hasattr(ctx, 'openid_server'):
         ctx.openid_server = openid_server(FASOpenIDStore(), op_endpoint=app.config['OPENID_ENDPOINT'])
     return ctx.openid_server
 
-
-def get_user():
-    if not 'user' in get_session():
-        return None
-    return get_session()['user']
 
 def filter_cla_groups(groups):
     return [group for group in groups if not group in CLA_GROUPS.keys()]
@@ -99,12 +73,12 @@ def getPapeRequestInfo(request):
         return 0, [], {}
     return pape_req.max_auth_age, pape_req.preferred_auth_policies, pape_req.preferred_auth_level_types
 
-def addSReg(request, response, user):
+def addSReg(request, response):
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(request)
-    sreg_data = { 'nickname'    : user['username']
-                , 'email'       : user['email']
-                , 'fullname'    : user['human_name']
-                , 'timezone'    : user['timezone']
+    sreg_data = { 'nickname'    : auth_module.get('username')
+                , 'email'       : auth_module.get('email')
+                , 'fullname'    : auth_module.get('human_name')
+                , 'timezone'    : auth_module.get('timezone')
                 }
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     response.addExtension(sreg_resp)
@@ -168,22 +142,22 @@ def user_ask_trust_root(openid_request):
     get_session()['csrf_id'] = uuid().hex
     get_session().save()
     # Get which stuff we will send
-    sreg_data = { 'nickname'    : get_user()['username']
-                , 'email'       : get_user()['email']
-                , 'fullname'    : get_user()['human_name']
-                , 'timezone'    : get_user()['timezone']
+    sreg_data = { 'nickname'    : auth_module.get('username')
+                , 'email'       : auth_module.get('email')
+                , 'fullname'    : auth_module.get('human_name')
+                , 'timezone'    : auth_module.get('timezone')
                 }
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
-    teams_resp = teams.TeamsResponse.extractResponse(teams_req, filter_cla_groups(get_user()['groups']))
+    teams_resp = teams.TeamsResponse.extractResponse(teams_req, filter_cla_groups(auth_module.get('groups')))
     clas_req = cla.CLARequest.fromOpenIDRequest(openid_request)
-    clas_resp = cla.CLAResponse.extractResponse(clas_req, get_cla_uris(get_user()['groups']))
+    clas_resp = cla.CLAResponse.extractResponse(clas_req, get_cla_uris(auth_module.get('groups')))
     # Show form
     return render_template('user_ask_trust_root.html'
                           , action              = request.url
                           , trust_root          = openid_request.trust_root
-                          , sreg_policy_url     = sreg_req.policy_url
+                          , sreg_policy_url     = sreg_req.policy_url or _('None provided')
                           , sreg_data           = sreg_resp.data
                           , teams_provided      = teams_resp.teams
                           , cla_done            = cla.CLA_URI_FEDORA_DONE in clas_resp.clas
@@ -216,12 +190,12 @@ def view_main():
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
         authed = isAuthorized(openid_request)
         if authed == AUTH_OK:
-            openid_response = openid_request.answer(True, identity=get_claimed_id(get_user()['username']), claimed_id=get_claimed_id(get_user()['username']))
-            sreg_info = addSReg(openid_request, openid_response, get_user())
-            teams_info = addTeams(openid_request, openid_response, filter_cla_groups(get_user()['groups']))
-            cla_info = addCLAs(openid_request, openid_response, get_cla_uris(get_user()['groups']))
+            openid_response = openid_request.answer(True, identity=get_claimed_id(auth_module.get('username')), claimed_id=get_claimed_id(auth_module.get('username')))
+            sreg_info = addSReg(openid_request, openid_response)
+            teams_info = addTeams(openid_request, openid_response, filter_cla_groups(auth_module.get('groups')))
+            cla_info = addCLAs(openid_request, openid_response, get_cla_uris(auth_module.get('groups')))
             auth_level = addPape(openid_request, openid_response)
-            log_info('Success', {'claimed_id': get_claimed_id(get_user()['username']), 'trust_root': openid_request.trust_root, 'security_level': auth_level, 'message': 'The user succesfully claimed the identity'})
+            log_info('Success', {'claimed_id': get_claimed_id(auth_module.get('username')), 'trust_root': openid_request.trust_root, 'security_level': auth_level, 'message': 'The user succesfully claimed the identity'})
             log_debug('Info', {'teams': teams_info})
             return openid_respond(openid_response)
         elif authed == AUTH_TRUST_ROOT_ASK:
@@ -247,7 +221,7 @@ def view_main():
             get_session().save()
             return redirect(app.config['LOGIN_URL'])
         else:
-            log_error('Failure', {'username': get_user()['username'], 'attempted_claimed_id': openid_request.identity, 'trust_root': openid_request.trust_root, 'message': 'The user tried to claim an ID that is not theirs'})
+            log_error('Failure', {'username': auth_module.get('username'), 'attempted_claimed_id': openid_request.identity, 'trust_root': openid_request.trust_root, 'message': 'The user tried to claim an ID that is not theirs'})
             return 'This is not your ID! If it is, please contact the administrators at admin@fedoraproject.org. Be sure to mention your session ID: %(logid)s' % {'logid': get_session()['log_id']}
     else:
         return openid_respond(get_server().handleRequest(openid_request))
@@ -255,15 +229,15 @@ def view_main():
 def isAuthorized(openid_request):
     pape_req_time, pape_auth_policies, pape_auth_level_types = getPapeRequestInfo(openid_request)
 
-    if get_user() is None:
+    if not auth_module.logged_in():
         return AUTH_NOT_LOGGED_IN
     elif (pape_req_time) and (pape_req_time != 0) and (get_session()['last_auth_time'] < (time() - pape_req_time)):
         return AUTH_TIMEOUT
     elif (app.config['MAX_AUTH_TIME'] != 0) and (get_session()['last_auth_time'] < (time() - (app.config['MAX_AUTH_TIME'] * 60))):
         return AUTH_TIMEOUT
     # Add checks if yubikey is required by application
-    elif (not openid_request.idSelect()) and (openid_request.identity != get_claimed_id(get_user()['username'])):
-        print 'Incorrect claimed id. Claimed: %s, correct: %s' % (openid_request.identity, get_claimed_id(get_user()['username']))
+    elif (not openid_request.idSelect()) and (openid_request.identity != get_claimed_id(auth_module.get('username'))):
+        print 'Incorrect claimed id. Claimed: %s, correct: %s' % (openid_request.identity, get_claimed_id(auth_module.get('username')))
         return AUTH_INCORRECT_IDENTITY
     elif openid_request.trust_root in app.config['TRUSTED_ROOTS']:
         return AUTH_OK
@@ -307,60 +281,7 @@ def openid_respond(openid_response):
 
 @app.route('/logout/')
 def auth_logout():
-    if not get_user():
-        return redirect(url_for('view_main'))
+    # No check if we are logged in, as we can always delete the session
     get_session().delete()
     flash(_('You have been logged out'))
     return redirect(url_for('view_main'))
-
-def check_login(username, password):
-    try:
-        session_id, data = get_fasclient().login(username, password)
-        return data.user
-    except AuthError:
-        return False
-    except Exception, ex:
-        log_warning('Error', {'message': 'An error occured while checking username/password: %s' % ex})
-        return False
-
-@app.route('/login/', methods=['GET','POST'])
-def auth_login():
-    if not 'next' in request.args and not 'next' in get_session():
-        return redirect(url_for('view_main'))
-    if 'next' in request.args:
-        get_session()['next'] = request.args['next']
-        get_session().save()
-    if get_user() and not ('timeout' in get_session() and get_session()['timeout']): # We can also have "timeout" as of 0.4.0, indicating PAPE or application configuration requires a re-auth
-        log_debug('Info', {'message': 'User tried to login but is already authenticated'})
-        return redirect(get_session()['next'])
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        if (not app.config['AVAILABLE_FILTER']) or (username in app.config['AVAILABLE_TO']):
-            user = check_login(username, password)
-            if user:
-                log_info('Success', {'username': username, 'message': 'User authenticated succesfully'})
-                user = user.toDict()        # A bunch is not serializable...
-                user['groups'] = [x['name'] for x in user['approved_memberships']]
-                for key in user.keys():
-                    if not key in USEFUL_FIELDS:
-                        del user[key]
-                get_session()['user'] = user
-                get_session()['last_auth_time'] = time()
-                get_session()['timeout'] = False
-                get_session()['trust_root'] = ''
-                get_session().save()
-                return redirect(get_session()['next'])
-            else:
-                log_warning('Failure', {'username': username, 'message': 'User entered incorrect username or password'})
-                flash(_('Incorrect username or password'))
-        else:
-            log_warning('Failure', {'username': username, 'message': 'Tried to login with an account that is not allowed to use this service'})
-            flash(_('This service is limited to the following users: %(users)s', users=', '.join(app.config['AVAILABLE_TO'])))
-    return render_template('login.html', trust_root=get_session()['trust_root'])
-
-@app.route('/test/')
-def view_test():
-    if not get_user():
-        do_login()
-    return render_template('test.html', user='%s' % get_user()) 

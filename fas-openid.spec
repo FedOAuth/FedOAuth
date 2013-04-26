@@ -1,5 +1,5 @@
 Name:           fas-openid
-Version:        1.0.0
+Version:        1.1.0
 Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
@@ -72,6 +72,9 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Sat Mar 23 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 1.1.0-1
+- Split auth system from the core code
+
 * Tue Mar 05 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 1.0.0-1
 - Launch version
 

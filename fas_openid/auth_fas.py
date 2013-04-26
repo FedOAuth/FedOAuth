@@ -71,8 +71,8 @@ def check_login(username, password):
         return False
     except Exception, ex:
         log_warning('Error', {
-            'message': 'An error occured while checking username/password: %s' 
-                % ex})
+            'message': 'An error occured while checking username/password: %s'
+            % ex})
         return False
 
 
@@ -87,9 +87,9 @@ def auth_login():
         ('timeout' in get_session() and get_session()['timeout']):
         # We can also have "timeout" as of 0.4.0
         # indicating PAPE or application configuration requires a re-auth
-        log_debug('Info', {
-            'message': 'User tried to login but is already authenticated'})
-        return redirect(get_session()['next'])
+            log_debug('Info', {
+                'message': 'User tried to login but is already authenticated'})
+            return redirect(get_session()['next'])
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -101,8 +101,8 @@ def auth_login():
                     'username': username,
                     'message': 'User authenticated succesfully'})
                 user = user.toDict()  # A bunch is not serializable...
-                user['groups'] = [x['name'] for x in \
-                    user['approved_memberships']]
+                user['groups'] = [x['name'] for x in
+                        user['approved_memberships']]
                 get_session()['user'] = user
                 get_session()['last_auth_time'] = time()
                 get_session()['timeout'] = False
@@ -112,12 +112,14 @@ def auth_login():
             else:
                 log_warning('Failure', {
                     'username': username,
-                     'message': 'User entered incorrect username or password'})
+                    'message': 'User entered incorrect username or password'})
                 flash(_('Incorrect username or password'))
         else:
             log_warning('Failure', {
                 'username': username,
                 'message': 'Tried to login with an account that is not allowed to use this service'})
-            flash(_('This service is limited to the following users: %(users)s'
-                , users=', '.join(app.config['AVAILABLE_TO'])))
-    return render_template('auth_fas_login.html', trust_root=get_session()['trust_root'])
+            flash(_('This service is limited to the following users: %(users)s',
+                users=', '.join(app.config['AVAILABLE_TO'])))
+    return render_template(
+        'auth_fas_login.html',
+        trust_root=get_session()['trust_root'])

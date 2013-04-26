@@ -102,3 +102,18 @@ input {
  	font-weight:bold;
  }
 
+.button {
+   border: 1px solid #555;
+   padding-top: 5px;
+   padding-bottom: 5px;
+   font-size: 15px;
+   line-height: 1.2em;
+   width: 100%;
+   background: #fff;
+   text-indent: 10px;
+   font-family: 'Cantarell', sans-serif;
+   text-indent: 0px;
+   background-image: url('/static/repeater.png');
+   color: white;
+   font-weight: bold;
+}

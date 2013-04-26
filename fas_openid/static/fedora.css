@@ -102,7 +102,7 @@ input {
  	font-weight:bold;
  }
 
-button {
+#button {
    border: 1px solid #555;
    padding-top:5px;
    padding-bottom:5px;

@@ -31,3 +31,6 @@ SECRET_KEY='<The web application secret key>'
 # Note: as of 0.6.2, sqlite is no longer supported
 #SQLALCHEMY_DATABASE_URI=mysql://user:pass@host/db_name
 #SQLALCHEMY_DATABASE_URI=postgresql://user:pass@host/db_name
+
+# Modules to use
+AUTH_MODULE='fas_openid.auth_fas'

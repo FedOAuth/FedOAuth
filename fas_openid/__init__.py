@@ -19,7 +19,8 @@ import sys
 
 # Create the application
 APP = flask.Flask(__name__)
-# Set up logging (https://fedoraproject.org/wiki/Infrastructure/AppBestPractices#Centralized_logging)
+# Set up logging
+# (https://fedoraproject.org/wiki/Infrastructure/AppBestPractices)
 FORMAT = '%(asctime)-15s OpenID[%(process)d] %(message)s'
 logging.basicConfig(format=FORMAT)
 logger = logging.getLogger('openid')

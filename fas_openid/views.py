@@ -5,7 +5,7 @@ from urlparse import urljoin
 from uuid import uuid4 as uuid
 
 from flask import Flask, request, g, redirect, url_for, \
-     abort, render_template, flash, Response
+    abort, render_template, flash, Response
 import openid
 from openid.extensions import sreg
 from openid.extensions import pape
@@ -19,7 +19,8 @@ except ImportError:
     from flask import _request_ctx_stack as stack
 
 from model import FASOpenIDStore
-from fas_openid import APP as app, get_session, log_debug, log_info, log_warning, log_error
+from fas_openid import APP as app, get_session, log_debug, \
+    log_info, log_warning, log_error
 from fas_openid.model import FASOpenIDStore
 from fas_openid import openid_teams as teams
 from fas_openid import openid_cla as cla
@@ -89,7 +90,7 @@ def addSReg(request, response):
                  'email': auth_module.get('email'),
                  'fullname': auth_module.get('human_name'),
                  'timezone': auth_module.get('timezone')
-                }
+                 }
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     response.addExtension(sreg_resp)
     return sreg_resp.data
@@ -168,24 +169,26 @@ def user_ask_trust_root(openid_request):
                  'email': auth_module.get('email'),
                  'fullname': auth_module.get('human_name'),
                  'timezone': auth_module.get('timezone')
-                }
+                 }
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
-    teams_resp = teams.TeamsResponse.extractResponse(teams_req, filter_cla_groups(auth_module.get('groups')))
+    teams_resp = teams.TeamsResponse.extractResponse(teams_req, 
+        filter_cla_groups(auth_module.get('groups')))
     clas_req = cla.CLARequest.fromOpenIDRequest(openid_request)
-    clas_resp = cla.CLAResponse.extractResponse(clas_req, get_cla_uris(auth_module.get('groups')))
+    clas_resp = cla.CLAResponse.extractResponse(clas_req, 
+        get_cla_uris(auth_module.get('groups')))
     # Show form
     return render_template(
         'user_ask_trust_root.html',
-        action = request.url,
-        trust_root = openid_request.trust_root,
-        sreg_policy_url = sreg_req.policy_url or _('None provided'),
-        sreg_data = sreg_resp.data,
-        teams_provided = teams_resp.teams,
-        cla_done = cla.CLA_URI_FEDORA_DONE in clas_resp.clas,
-        csrf = get_session()['csrf_id']
-        )
+        action=request.url,
+        trust_root=openid_request.trust_root,
+        sreg_policy_url=sreg_req.policy_url or _('None provided'),
+        sreg_data=sreg_resp.data,
+        teams_provided=teams_resp.teams,
+        cla_done=cla.CLA_URI_FEDORA_DONE in clas_resp.clas,
+        csrf=get_session()['csrf_id'])
+
 
 @app.route('/robots.txt')
 def view_robots():
@@ -226,8 +229,10 @@ def view_main():
                 claimed_id=get_claimed_id(auth_module.get('username'))
             )
             sreg_info = addSReg(openid_request, openid_response)
-            teams_info = addTeams(openid_request, openid_response, filter_cla_groups(auth_module.get('groups')))
-            cla_info = addCLAs(openid_request, openid_response, get_cla_uris(auth_module.get('groups')))
+            teams_info = addTeams(openid_request, openid_response, 
+                filter_cla_groups(auth_module.get('groups')))
+            cla_info = addCLAs(openid_request, openid_response, 
+                get_cla_uris(auth_module.get('groups')))
             auth_level = addPape(openid_request, openid_response)
             log_info('Success', {
                 'claimed_id': get_claimed_id(auth_module.get('username')),
@@ -294,7 +299,8 @@ def isAuthorized(openid_request):
         return AUTH_TIMEOUT
     # Add checks if yubikey is required by application
     elif (not openid_request.idSelect()) and (
-            openid_request.identity != get_claimed_id(auth_module.get('username'))):
+            openid_request.identity != get_claimed_id(
+                auth_module.get('username'))):
         print 'Incorrect claimed id. Claimed: %s, correct: %s' % (
             openid_request.identity,
             get_claimed_id(auth_module.get('username')))

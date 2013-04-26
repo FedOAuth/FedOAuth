@@ -174,10 +174,10 @@ def user_ask_trust_root(openid_request):
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
     teams_resp = teams.TeamsResponse.extractResponse(teams_req,
-                    filter_cla_groups(auth_module.get('groups')))
+        filter_cla_groups(auth_module.get('groups')))
     clas_req = cla.CLARequest.fromOpenIDRequest(openid_request)
     clas_resp = cla.CLAResponse.extractResponse(clas_req,
-                    get_cla_uris(auth_module.get('groups')))
+        get_cla_uris(auth_module.get('groups')))
     # Show form
     return render_template(
         'user_ask_trust_root.html',
@@ -230,9 +230,9 @@ def view_main():
             )
             sreg_info = addSReg(openid_request, openid_response)
             teams_info = addTeams(openid_request, openid_response,
-                            filter_cla_groups(auth_module.get('groups')))
+                filter_cla_groups(auth_module.get('groups')))
             cla_info = addCLAs(openid_request, openid_response,
-                            get_cla_uris(auth_module.get('groups')))
+                get_cla_uris(auth_module.get('groups')))
             auth_level = addPape(openid_request, openid_response)
             log_info('Success', {
                 'claimed_id': get_claimed_id(auth_module.get('username')),

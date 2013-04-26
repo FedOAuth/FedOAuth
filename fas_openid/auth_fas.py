@@ -12,10 +12,10 @@
 #       names of its contributors may be used to endorse or promote products
 #       derived from this software without specific prior written permission.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL Patrick Uiterwijk BE LIABLE FOR ANY
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL Patrick Uiterwijk BE LIABLE FOR ANY
 # DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 # (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 # LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -30,28 +30,30 @@ except ImportError:
 from flaskext.babel import gettext as _
 
 from flask import Flask, request, g, redirect, url_for, \
-     abort, render_template, flash, Response
+    abort, render_template, flash, Response
 from time import time
 from datetime import datetime
 
 from fedora.client.fasproxy import FasProxyClient
 from fedora.client import AuthError
 
-from fas_openid import get_session, APP as app, log_debug, log_info, log_warning, log_error
+from fas_openid import get_session, APP as app, log_debug, \
+    log_info, log_warning, log_error
 
 
 def _get_fasclient():
     ctx = stack.top
     if not hasattr(ctx, 'fasclient'):
         ctx.fasclient = FasProxyClient(
-                                base_url = app.config['FAS_BASE_URL'], 
-                                useragent = app.config['FAS_USER_AGENT'],
-                                insecure = not app.config['FAS_CHECK_CERT']
-                                )
+            base_url=app.config['FAS_BASE_URL'], 
+            useragent=app.config['FAS_USER_AGENT'],
+            insecure=not app.config['FAS_CHECK_CERT'])
     return ctx.fasclient
+
 
 def logged_in():
     return 'user' in get_session()
+
 
 def get(field):
     if not 'user' in get_session():
@@ -59,7 +61,6 @@ def get(field):
     if not field in get_session()['user']:
         return None
     return get_session()['user'][field]
-
 
 
 def check_login(username, password):

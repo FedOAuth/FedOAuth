@@ -15,22 +15,25 @@ OpenID providers.
        gets the user's approval and team membership, creates a
        C{L{TeamsResponse}} object and adds it to the C{id_res} response::
 
-       teams_req = TeamsRequest.fromOpenIDRequest(checkid_request)
-       # [ get the user's approval and team membership, informing the user
-       #   that the groups in teams_response were requested and accepted ]
-       teams_resp = TeamsResponse.extractResponse(teams_req, group_memberships)
-       teams_resp.toMessage(openid_response.fields)
+        teams_req = TeamsRequest.fromOpenIDRequest(checkid_request)
+        # [ get the user's approval and team membership, informing the
+        #   user that the groups in teams_response were requested and
+        #   accepted ]
+        teams_resp = TeamsResponse.extractResponse(teams_req,
+                                                   group_memberships)
+        teams_resp.toMessage(openid_response.fields)
 
     3. The relying party uses C{L{TeamsResponse.fromSuccessResponse}} to
        exxtract the data from the OpenID response::
 
         teams_resp = TeamsResponse.fromSuccessResponse(success_response)
 
-@var teams_uri: The URI used for the teams extension namespace
+@var teams_uri: The URI used for the teams extension namespace and XRD
+    Type Value
 """
 
-from openid.message import registerNamespaceAlias,
-                            NamespaceAliasRegistrationError
+from openid.message import registerNamespaceAlias, \
+    NamespaceAliasRegistrationError
 from openid.extension import Extension
 import logging
 
@@ -40,11 +43,13 @@ except NameError:
     # For Python 2.2
     basestring = (str, unicode)  # pylint:disable-msg=W0622
 
+
 __all__ = [
     'TeamsRequest',
     'TeamsResponse',
     'teams_uri',
-    'supportsTeams']
+    'supportsTeams',
+]
 
 # The namespace for this extension
 teams_uri = 'http://ns.launchpad.net/2007/openid-teams'
@@ -52,9 +57,8 @@ teams_uri = 'http://ns.launchpad.net/2007/openid-teams'
 try:
     registerNamespaceAlias(teams_uri, 'lp')
 except NamespaceAliasRegistrationError, e:
-    logging.exception('registerNamespaceAlias(%r, %r) failed: %s' % (teams_uri,
-                                                                     'teams',
-                                                                     str(e),))
+    logging.exception('registerNamespaceAlias(%r, %r) failed: %s' % (
+        teams_uri, 'teams', str(e),))
 
 
 def supportsTeams(endpoint):
@@ -75,7 +79,8 @@ class TeamsRequest(Extension):
     @ivar requested: A list of team names in this teams extension request
     @type required: [str]
 
-    @group Consumer: requestField, requestFields, getExtensionArgs, addToOpenIDRequest
+    @group Consumer: requestField, requestFields, getExtensionArgs,
+        addToOpenIDRequest
     @group Server: fromOpenIDRequest, parseExtensionArgs
     """
     ns_uri = 'http://ns.launchpad.net/2007/openid-teams'

@@ -2,8 +2,8 @@
 @var cla_uri: The URI used for the CLA extension namespace and XRD Type Value
 """
 
-from openid.message import registerNamespaceAlias,
-                            NamespaceAliasRegistrationError
+from openid.message import registerNamespaceAlias, \
+    NamespaceAliasRegistrationError
 from openid.extension import Extension
 import logging
 
@@ -17,7 +17,8 @@ __all__ = [
     'CLARequest',
     'CLAResponse',
     'cla_uri',
-    'supportsCLA']
+    'supportsCLA',
+]
 
 # The namespace for this extension
 cla_uri = 'http://fedoraproject.org/specs/open_id/cla'
@@ -36,9 +37,8 @@ CLA_URI_FEDORA_REDHAT = 'http://admin.fedoraproject.org/accounts/cla/redhat'
 try:
     registerNamespaceAlias(cla_uri, 'cla')
 except NamespaceAliasRegistrationError, e:
-    logging.exception('registerNamespaceAlias(%r, %r) failed: %s' % (cla_uri,
-                                                                     'cla',
-                                                                     str(e),))
+    logging.exception('registerNamespaceAlias(%r, %r) failed: %s' % (
+        cla_uri, 'cla', str(e),))
 
 
 def supportsCLA(endpoint):

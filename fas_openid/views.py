@@ -335,20 +335,30 @@ def view_id(username):
     ),
     200,
     {'X-XRDS-Location':
-     complete_url_for('view_yadis_id', username=username)}
+     complete_url_for('view_yadis_id', username=username),
+     'Cache-Control': 'no-cache, must-revalidate',
+     'Pragma': 'no-cache',
+     'Expires': 'Sat, 26 Jul 1997 05:00:00 GMT'}
+
+
+def no_cache(resp):
+    resp.headers['Cache-Control'] = 'no-cache, must-revalidate'
+    resp.headers['Pragma'] = 'no-cache'
+    resp.headers['Expires'] = 'Sat, 26 Jul 1997 05:00:00 GMT'
+    return resp
 
 
 @app.route('/yadis/<username>.xrds')
 def view_yadis_id(username):
-    return Response(render_template('yadis_user.xrds',
+    return no_cache(Response(render_template('yadis_user.xrds',
                     claimed_id=get_claimed_id(username)),
-                    mimetype='application/xrds+xml')
+                    mimetype='application/xrds+xml'))
 
 
 @app.route('/yadis.xrds')
 def view_yadis():
-    return Response(render_template('yadis.xrds'),
-                    mimetype='application/xrds+xml')
+    return no_cache(Response(render_template('yadis.xrds'),
+                    mimetype='application/xrds+xml'))
 
 
 def openid_respond(openid_response):

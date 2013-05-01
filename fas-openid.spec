@@ -72,8 +72,11 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
-* Sat Mar 23 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 1.1.0-1
+* Wed May 01 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 1.1.0-1
 - Split auth system from the core code
+- Add a button for user creation to the login screen
+- Fixed an issue which made some browsers give a warning about posting the approval form to http
+- Cleaned up the code to be pep8-compliant
 
 * Tue Mar 05 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 1.0.0-1
 - Launch version

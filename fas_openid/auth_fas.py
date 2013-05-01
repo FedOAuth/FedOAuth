@@ -65,7 +65,7 @@ def get(field):
 
 def check_login(username, password):
     try:
-        session_id, data = get_fasclient().login(username, password)
+        session_id, data = _get_fasclient().login(username, password)
         return data.user
     except AuthError:
         return False

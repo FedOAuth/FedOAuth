@@ -116,9 +116,12 @@ input {
    background-image: url('/static/repeater.png');
    color: white;
    font-weight: bold;
+   text-decoration: none;
+   display: block;
 }
 
-.button a {
-   color: white;
-   text-decoration: none;
+input::-moz-focus-inner {
+   border:0;
+   padding:0;
 }
+

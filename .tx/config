@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.net
+
+[fas-openid.english]
+file_filter = fas_openid/translations/<lang>.po
+host = https://fedora.transifex.com
+source_file = fas_openid/translations/en.pot
+source_lang = en
+

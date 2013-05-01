@@ -95,7 +95,10 @@ def auth_login():
         password = request.form['password']
         if (not app.config['AVAILABLE_FILTER']) or \
             (username in app.config['AVAILABLE_TO']):
-                user = check_login(username, password)
+                if username == '' or password == '':
+                    user = None
+                else:
+                    user = check_login(username, password)
                 if user:
                     log_info('Success', {
                         'username': username,

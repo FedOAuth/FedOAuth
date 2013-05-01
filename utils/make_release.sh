@@ -27,7 +27,13 @@ then
 else
     mkdir -p release
 fi
+git branch make-release
+git checkout make-release
+tx pull -a
+git add fas_openid/translations
+git commit -m "Updated translations"
 git tag -s v$version -m "Release v$version"
+git commit -d make-release
 git push origin v$version
 git archive --format=tar --prefix=fas-openid-$version/ HEAD | gzip > release/fas-openid-$version.tar.gz
 (

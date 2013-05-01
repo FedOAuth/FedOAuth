@@ -8,7 +8,7 @@
     <div>
         <form method="post" action="/login/">
             <p class="form_item">
-                <input name="username" placeholder="{% trans %}FAS Username{% endtrans %}">
+                <input name="username" placeholder="{% trans %}FAS Username{% endtrans %}" autofocus>
             </p>
             <p class="form_item">
                 <input name="password" type="password" placeholder="{% trans %}Password{% endtrans %}">
@@ -16,6 +16,7 @@
             <p class="form_item">
                 <input type="submit" value="{% trans %}login{% endtrans %}">
             </p>
+            <a href="https://admin.fedoraproject.org/accounts/user/new" target="_blank" class="button">Create a new account</a>
         </form>
     </div>
 {% endblock %}

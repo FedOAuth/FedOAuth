@@ -33,7 +33,8 @@ tx pull -a
 git add fas_openid/translations
 git commit -m "Updated translations"
 git tag -s v$version -m "Release v$version"
-git commit -d make-release
+git branch -d make-release
+git checkout master
 git push origin v$version
 git archive --format=tar --prefix=fas-openid-$version/ HEAD | gzip > release/fas-openid-$version.tar.gz
 (

@@ -335,7 +335,10 @@ def view_id(username):
     ),
     200,
     {'X-XRDS-Location':
-     complete_url_for('view_yadis_id', username=username)}
+     complete_url_for('view_yadis_id', username=username),
+     'Cache-Control': 'no-cache, must-revalidate',
+     'Pragma': 'no-cache',
+     'Expires': 'Sat, 26 Jul 1997 05:00:00 GMT'}
 
 
 def no_cache(resp):

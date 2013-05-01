@@ -1,6 +1,6 @@
 Name:           fas-openid
 Version:        1.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
 License:        GPLv2+
@@ -72,6 +72,9 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Wed May 01 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 1.1.0-2
+- Update URL to fonts to https
+
 * Wed May 01 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 1.1.0-1
 - Split auth system from the core code
 - Add a button for user creation to the login screen

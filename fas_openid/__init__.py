@@ -17,6 +17,8 @@ import logging.handlers
 from uuid import uuid4 as uuid
 import sys
 
+from utils import ReverseProxied
+
 # Create the application
 APP = flask.Flask(__name__)
 # Set up logging
@@ -102,6 +104,7 @@ session_opts = {
     'session.table_name': 'session'
 }
 APP.wsgi_app = SessionMiddleware(APP.wsgi_app, session_opts)
+APP.wsgi_app = ReverseProxied(APP.wsgi_app)
 
 # Import the other stuff
 import model

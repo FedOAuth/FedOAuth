@@ -12,6 +12,7 @@ from openid.extensions import pape
 from openid.server.server import Server as openid_server
 from openid.server import server
 from openid.consumer import discover
+import openid_teams.teams as teams
 from flaskext.babel import gettext as _
 try:
     from flask import _app_ctx_stack as stack
@@ -22,7 +23,6 @@ from model import FASOpenIDStore
 from fas_openid import APP as app, get_session, log_debug, \
     log_info, log_warning, log_error
 from fas_openid.model import FASOpenIDStore
-from fas_openid import openid_teams as teams
 from fas_openid import openid_cla as cla
 
 # Import enabled auth method

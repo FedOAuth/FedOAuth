@@ -1,5 +1,5 @@
 Name:           fas-openid
-Version:        1.1.1
+Version:        1.2
 Release:        1%{?dist}
 Summary:        An OpenID provider which authenticates users against FAS
 
@@ -19,6 +19,7 @@ BuildRequires:  python-flask-babel
 BuildRequires:  python-sqlalchemy0.7
 BuildRequires:  python-flask-sqlalchemy
 BuildRequires:  python-openid
+BuildRequires:  python-openid-teams
 BuildRequires:  python-beaker
 Requires:       python-sqlalchemy0.7
 Requires:       python-flask
@@ -28,6 +29,7 @@ Requires:       python-flask-babel
 Requires:       python-flask-sqlalchemy
 Requires:       python-beaker
 Requires:       python-openid
+Requires:       python-openid-teams
 Requires:       mod_wsgi
 Requires:       httpd
 Requires(pre):  shadow-utils
@@ -72,6 +74,9 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
+* Sat Jun 01 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 1.2-1
+- Migrated the openid teams module to python-openid-teams
+
 * Wed May 01 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 1.1.1-1
 - Update URL to fonts to https
 

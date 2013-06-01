@@ -20,6 +20,7 @@ BuildRequires:  python-sqlalchemy0.7
 BuildRequires:  python-flask-sqlalchemy
 BuildRequires:  python-openid
 BuildRequires:  python-openid-teams
+BuildRequires:  python-openid-cla
 BuildRequires:  python-beaker
 Requires:       python-sqlalchemy0.7
 Requires:       python-flask
@@ -30,6 +31,7 @@ Requires:       python-flask-sqlalchemy
 Requires:       python-beaker
 Requires:       python-openid
 Requires:       python-openid-teams
+Requires:       python-openid-cla
 Requires:       mod_wsgi
 Requires:       httpd
 Requires(pre):  shadow-utils

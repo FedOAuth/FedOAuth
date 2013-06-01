@@ -15,4 +15,5 @@ setup(name='FAS-OpenID',
       install_requires=['Flask', 'SQLAlchemy>=0.7',
                         'python-openid', 'flask-sqlalchemy',
                         'beaker', 'flask-babel',
-                        'python-openid-teams'])
+                        'python-openid-teams',
+                        'python-openid-cla'])

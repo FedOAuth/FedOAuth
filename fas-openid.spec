@@ -76,6 +76,7 @@ exit 0
 %changelog
 * Sat Jun 01 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 1.2-1
 - Migrated the openid teams module to python-openid-teams
+- Migrated the openid cla module to python-openid-cla
 
 * Wed May 01 2013 Patrick Uiterwijk <puiterwijk@gmail.com> - 1.1.1-1
 - Update URL to fonts to https

@@ -33,4 +33,4 @@ SECRET_KEY='<The web application secret key>'
 #SQLALCHEMY_DATABASE_URI=postgresql://user:pass@host/db_name
 
 # Modules to use
-AUTH_MODULE='fas_openid.auth_fas'
+AUTH_MODULE=fas_openid.auth.fas.Auth_FAS

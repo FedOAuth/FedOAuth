@@ -26,8 +26,8 @@ from fas_openid import APP as app, get_session, log_debug, \
 from fas_openid.model import FASOpenIDStore
 
 # Import enabled auth method
-__import__(app.config['AUTH_MODULE'])
-auth_module = sys.modules[app.config['AUTH_MODULE']]
+auth_module_name = app.config['AUTH_MODULE']
+auth_module = auth_module_name(app.config)
 
 # Possible AUTH results
 AUTH_NOT_LOGGED_IN = 0
@@ -86,11 +86,7 @@ def getPapeRequestInfo(request):
 
 def addSReg(request, response):
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(request)
-    sreg_data = {'nickname': auth_module.get('username'),
-                 'email': auth_module.get('email'),
-                 'fullname': auth_module.get('human_name'),
-                 'timezone': auth_module.get('timezone')
-                 }
+    sreg_data = auth_module.get_sreg()
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     response.addExtension(sreg_resp)
     return sreg_resp.data
@@ -165,21 +161,17 @@ def user_ask_trust_root(openid_request):
     get_session()['csrf_id'] = uuid().hex
     get_session().save()
     # Get which stuff we will send
-    sreg_data = {'nickname': auth_module.get('username'),
-                 'email': auth_module.get('email'),
-                 'fullname': auth_module.get('human_name'),
-                 'timezone': auth_module.get('timezone')
-                 }
+    sreg_data = auth_module.get_sreg()
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
     teams_resp = teams.TeamsResponse.extractResponse(
         teams_req,
-        filter_cla_groups(auth_module.get('groups')))
+        filter_cla_groups(auth_module.get_groups()))
     clas_req = cla.CLARequest.fromOpenIDRequest(openid_request)
     clas_resp = cla.CLAResponse.extractResponse(
         clas_req,
-        get_cla_uris(auth_module.get('groups')))
+        get_cla_uris(auth_module.get_groups()))
     # Show form
     return render_template(
         'user_ask_trust_root.html',
@@ -226,22 +218,22 @@ def view_main():
             openid_response = openid_request.answer(
                 True,
                 identity=get_claimed_id(
-                    auth_module.get('username')
+                    auth_module.get_username()
                 ),
-                claimed_id=get_claimed_id(auth_module.get('username'))
+                claimed_id=get_claimed_id(auth_module.get_username())
             )
             sreg_info = addSReg(openid_request, openid_response)
             teams_info = addTeams(
                 openid_request,
                 openid_response,
-                filter_cla_groups(auth_module.get('groups')))
+                filter_cla_groups(auth_module.get_groups()))
             cla_info = addCLAs(
                 openid_request,
                 openid_response,
-                get_cla_uris(auth_module.get('groups')))
+                get_cla_uris(auth_module.get_groups()))
             auth_level = addPape(openid_request, openid_response)
             log_info('Success', {
-                'claimed_id': get_claimed_id(auth_module.get('username')),
+                'claimed_id': get_claimed_id(auth_module.get_username()),
                 'trust_root': openid_request.trust_root,
                 'security_level': auth_level,
                 'message': 'The user succesfully claimed the identity'})
@@ -277,7 +269,7 @@ def view_main():
             return redirect(app.config['LOGIN_URL'])
         else:
             log_error('Failure', {
-                'username': auth_module.get('username'),
+                'username': auth_module.get_username(),
                 'attempted_claimed_id': openid_request.identity,
                 'trust_root': openid_request.trust_root,
                 'message':
@@ -306,10 +298,10 @@ def isAuthorized(openid_request):
     # Add checks if yubikey is required by application
     elif (not openid_request.idSelect()) and (
             openid_request.identity != get_claimed_id(
-                auth_module.get('username'))):
+                auth_module.get_username())):
         print 'Incorrect claimed id. Claimed: %s, correct: %s' % (
             openid_request.identity,
-            get_claimed_id(auth_module.get('username')))
+            get_claimed_id(auth_module.get_username()))
         return AUTH_INCORRECT_IDENTITY
     elif openid_request.trust_root in app.config['TRUSTED_ROOTS']:
         return AUTH_OK

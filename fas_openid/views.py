@@ -26,8 +26,10 @@ from fas_openid import APP as app, get_session, log_debug, \
 from fas_openid.model import FASOpenIDStore
 
 # Import enabled auth method
-auth_module_name = app.config['AUTH_MODULE']
-auth_module = auth_module_name(app.config)
+auth_module_name = app.config['AUTH_MODULE'].rsplit('.', 1)
+auth_module = __import__(auth_module_name[0])
+auth_module = getattr(auth_module, auth_module_name[1])
+auth_module = auth_module(app.config)
 
 # Possible AUTH results
 AUTH_NOT_LOGGED_IN = 0

@@ -13,7 +13,7 @@ from openid.server.server import Server as openid_server
 from openid.server import server
 from openid.consumer import discover
 import openid_teams.teams as teams
-import openid_cla as cla
+import openid_cla.cla as cla
 from flaskext.babel import gettext as _
 try:
     from flask import _app_ctx_stack as stack

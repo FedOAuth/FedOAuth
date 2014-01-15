@@ -15,7 +15,7 @@ BuildRequires:  python-devel
 BuildRequires:  python-flask
 BuildRequires:  python-fedora
 BuildRequires:  python-fedora-flask
-BuildRequires:  python-flask-babel
+BuildRequires:  python-flask-babel <= 0.8
 BuildRequires:  python-sqlalchemy0.7
 BuildRequires:  python-flask-sqlalchemy
 BuildRequires:  python-openid
@@ -26,7 +26,7 @@ Requires:       python-sqlalchemy0.7
 Requires:       python-flask
 Requires:       python-fedora
 Requires:       python-fedora-flask
-Requires:       python-flask-babel
+Requires:       python-flask-babel <= 0.8
 Requires:       python-flask-sqlalchemy
 Requires:       python-beaker
 Requires:       python-openid

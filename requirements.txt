@@ -6,4 +6,4 @@ sqlalchemy
 python-fedora
 python-openid
 beaker
-flask-babel
+flask-babel <= 0.8

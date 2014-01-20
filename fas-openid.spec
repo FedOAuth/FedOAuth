@@ -21,14 +21,12 @@ BuildRequires:  python-flask-sqlalchemy
 BuildRequires:  python-openid
 BuildRequires:  python-openid-teams
 BuildRequires:  python-openid-cla
-BuildRequires:  python-beaker
 Requires:       python-sqlalchemy0.7
 Requires:       python-flask
 Requires:       python-fedora
 Requires:       python-fedora-flask
 Requires:       python-flask-babel <= 0.8
 Requires:       python-flask-sqlalchemy
-Requires:       python-beaker
 Requires:       python-openid
 Requires:       python-openid-teams
 Requires:       python-openid-cla

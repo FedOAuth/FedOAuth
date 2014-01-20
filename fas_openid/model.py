@@ -1,4 +1,5 @@
 from fas_openid import db
+from flask.sessions import SessionMixin
 from openid.association import Association as openid_assoc
 from openid.store.nonce import SKEW as NonceSKEW
 from openid.store.interface import OpenIDStore
@@ -11,6 +12,15 @@ class Session(db.Model):
     accessed = db.Column(db.DateTime, nullable=False)
     created = db.Column(db.DateTime, nullable=False)
     data = db.Column(db.LargeBinary, nullable=False)
+
+
+class DBSession(dict, SessionMixin):
+    @classmethod
+    def open_session(cls, app, request):
+        pass
+
+    def save_session(self, app, response):
+        pass
 
 
 class Association(db.Model):

@@ -5,5 +5,4 @@ flask-sqlalchemy
 sqlalchemy
 python-fedora
 python-openid
-beaker
 flask-babel <= 0.8

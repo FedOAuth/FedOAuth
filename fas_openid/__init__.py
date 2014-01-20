@@ -7,7 +7,6 @@ import pkg_resources
 
 # Imports
 import flask
-from beaker.middleware import SessionMiddleware
 from flask.ext.sqlalchemy import SQLAlchemy
 from flaskext.babel import Babel
 
@@ -17,6 +16,7 @@ import logging.handlers
 from uuid import uuid4 as uuid
 import sys
 
+from middleware import DBSessionMiddleware
 from utils import ReverseProxied
 
 # Create the application
@@ -66,7 +66,7 @@ def log_error(message, info={}):
 
 
 def get_session():
-    return flask.request.environ['beaker.session']
+    return flask.session
 
 
 APP.config.from_object('fas_openid.default_config')
@@ -75,9 +75,6 @@ APP.config.from_envvar('FAS_OPENID_CONFIG', silent=True)
 # Make sure the configuration is sane
 if not APP.config['SQLALCHEMY_DATABASE_URI']:
     print 'Error: Please make sure to configure SQLALCHEMY_DATABASE_URI'
-    sys.exit(1)
-if APP.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite'):
-    print 'Error: FAS-OpenID does not support sqlite at this moment'
     sys.exit(1)
 if APP.config['SQLALCHEMY_DATABASE_URI'].startswith('postgres:'):
     print 'Error: Please use the postgresql dialect (postgresql: '\
@@ -91,20 +88,8 @@ if not APP.config['SECRET_KEY'] or APP.config['SECRET_KEY'] == 'Secret Key':
 db = SQLAlchemy(APP)
 # Set up Babel
 babel = Babel(APP)
-# Set up sessions
-session_opts = {
-    'session.lock_dir': '/tmp/beaker',
-    'session.type': 'ext:database',
-    'session.url': APP.config['SQLALCHEMY_DATABASE_URI'],
-    'session.auto': False,
-    'session.cookie_expires': True,
-    'session.key': 'FAS_OPENID',
-    'session.secret': APP.config['SECRET_KEY'],
-    'session.secure': False,
-    'session.table_name': 'session'
-}
-APP.wsgi_app = SessionMiddleware(APP.wsgi_app, session_opts)
 APP.wsgi_app = ReverseProxied(APP.wsgi_app)
+APP.session_interface = DBSessionMiddleware()
 
 # Import the other stuff
 import model

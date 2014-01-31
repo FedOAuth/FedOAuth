@@ -19,7 +19,7 @@ class Session(db.Model):
 
 class DBSession(db.Model, SessionMixin, DictMixin):
     id = db.Column(db.Integer, primary_key=True)
-    sessionid = db.Column(db.String(32), primary_key=True)
+    sessionid = db.Column(db.String(32), nullable=False)
     remote_addr = db.Column(db.String(50), nullable=False)
     created = db.Column(db.DateTime, nullable=False)
     saved = db.Column(db.DateTime, nullable=False)

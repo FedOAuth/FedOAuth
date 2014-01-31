@@ -25,12 +25,16 @@ class DBSession(db.Model, SessionMixin, DictMixin):
     data = db.Column(db.PickleType, nullable=False)
 
     new = False
+    modified = False
 
     def __init__(self):
         self.sessionid = uuid.uuid1().hex
         self.created = datetime.now()
         self.saved = datetime.now()
         self.data = {}
+
+    def save():
+        modified = True
 
     def __delitem__(self, key):
         return self.data.__delitem__(key)
@@ -49,22 +53,22 @@ class DBSession(db.Model, SessionMixin, DictMixin):
         sessionid = request.cookies.get('sessionid')
 
         if sessionid:
-            print 'Got a sessionid'
             retrieved = DBSession.query.filter_by(sessionid=sessionid,
                                                   remote_addr=request.remote_addr).first()
-            if retrieved:
-                print 'Retrieved session: %s' % retrieved
+            if not retrieved is None:
                 return retrieved
 
         new = DBSession()
         new.remote_addr = request.remote_addr
         new.new = True
+        new.modified = True
         db.session.add(new)
         db.session.commit()
         return new
 
     def save_session(self, app, response):
-        self.saved = datetime.now()
+        if self.modified:
+            self.saved = datetime.now()
         db.session.commit()
         response.set_cookie('sessionid', self.sessionid)
 

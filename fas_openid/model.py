@@ -9,14 +9,6 @@ import uuid
 from UserDict import DictMixin
 
 
-class Session(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    namespace = db.Column(db.String(255), nullable=False, unique=True)
-    accessed = db.Column(db.DateTime, nullable=False)
-    created = db.Column(db.DateTime, nullable=False)
-    data = db.Column(db.LargeBinary, nullable=False)
-
-
 class DBSession(db.Model, SessionMixin, DictMixin):
     sessionid = db.Column(db.String(32), primary_key=True)
     remote_addr = db.Column(db.String(50), primary_key=True)

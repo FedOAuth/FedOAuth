@@ -27,14 +27,14 @@ class Auth_Base:
     def __init__(self, config):
         pass
 
-    def logged_in():
+    def logged_in(self):
         raise NotImplementedError()
 
-    def get_username():
+    def get_username(self):
         raise NotImplementedError()
 
-    def get_sreg():
+    def get_sreg()self:
         raise NotImplementedError()
 
-    def get_groups():
+    def get_groups(self):
         raise NotImplementedError()

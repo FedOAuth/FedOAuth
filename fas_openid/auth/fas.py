@@ -43,7 +43,7 @@ from fas_openid.auth.base import Auth_Base
 
 
 class Auth_FAS(Auth_Base):
-    def _get_fasclient():
+    def _get_fasclient(self):
         ctx = stack.top
         if not hasattr(ctx, 'fasclient'):
             ctx.fasclient = FasProxyClient(
@@ -53,16 +53,16 @@ class Auth_FAS(Auth_Base):
         return ctx.fasclient
 
 
-    def logged_in():
+    def logged_in(self):
         return 'user' in get_session()
 
 
-    def get_username():
+    def get_username(self):
         if not 'user' in get_session():
             return None
         return get_session()['user']['username']
 
-    def get_sreg():
+    def get_sreg(self):
         if not 'user' in get_session():
             return {}
         return {'username': self.get_username(),
@@ -70,14 +70,14 @@ class Auth_FAS(Auth_Base):
                 'fullname': get_session()['user']['human_name'],
                 'timezone': get_session()['user']['timezone']}
 
-    def get_groups():
+    def get_groups(self):
         if not 'user' in get_session():
             return None
         return get_session()['user']['groups']
 
 
 
-    def check_login(username, password):
+    def check_login(self, username, password):
         try:
             session_id, data = _get_fasclient().login(username, password)
             return data.user
@@ -91,7 +91,7 @@ class Auth_FAS(Auth_Base):
 
 
     @app.route('/login/', methods=['GET', 'POST'])
-    def auth_login():
+    def auth_login(self):
         if not 'next' in request.args and not 'next' in get_session():
             return redirect(url_for('view_main'))
         if 'next' in request.args:

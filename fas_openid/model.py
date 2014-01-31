@@ -25,8 +25,8 @@ class DBSession(db.Model, SessionMixin, DictMixin):
 
     def __init__(self):
         self.id = uuid.uuid1().hex
-        self.created = datetime.now
-        self.saved = datetime.now
+        self.created = datetime.now()
+        self.saved = datetime.now()
         self.data = {}
 
     def __delitem__(self, key):
@@ -49,7 +49,7 @@ class DBSession(db.Model, SessionMixin, DictMixin):
         return new  
 
     def save_session(self, app, response):
-        self.saved = datetime.now
+        self.saved = datetime.now()
         db.session.commit()
 
 

@@ -91,7 +91,7 @@ class Auth_FAS(Auth_Base):
 
 
     @app.route('/login/', methods=['GET', 'POST'])
-    def auth_login(self):
+    def auth_login():
         if not 'next' in request.args and not 'next' in get_session():
             return redirect(url_for('view_main'))
         if 'next' in request.args:

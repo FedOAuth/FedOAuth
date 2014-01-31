@@ -17,7 +17,7 @@ class Session(db.Model):
     data = db.Column(db.LargeBinary, nullable=False)
 
 
-class DBSession(dict, SessionMixin, DictMixin):
+class DBSession(db.Model, SessionMixin, DictMixin):
     id = db.Column(db.String(32), primary_key=True)
     created = db.Column(db.DateTime, nullable=False)
     saved = db.Column(db.DateTime, nullable=False)

@@ -25,8 +25,8 @@ class DBSession(db.Model, SessionMixin, DictMixin):
         self.saved = datetime.now()
         self.data = {}
 
-    def save():
-        modified = True
+    def save(self):
+        self.modified = True
 
     def __delitem__(self, key):
         return self.data.__delitem__(key)

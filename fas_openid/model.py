@@ -48,7 +48,7 @@ class DBSession(db.Model, SessionMixin, DictMixin):
 
         if sessionid:
             print 'Got a sessionid'
-            retrieved = DBSession.get(sessionid)
+            retrieved = db.session.Query(DBSession).get(sessionid)
             print 'Retrieved session: %s' % retrieved
             if retrieved and retrieved.remote_addr == request.remote_addr:
                 print 'Returning received session'

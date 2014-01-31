@@ -33,7 +33,7 @@ class Auth_Base:
     def get_username(self):
         raise NotImplementedError()
 
-    def get_sreg()self:
+    def get_sreg(self):
         raise NotImplementedError()
 
     def get_groups(self):

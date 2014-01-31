@@ -1,9 +1,12 @@
 from fas_openid import db
+from datetime import datetime
 from flask.sessions import SessionMixin
 from openid.association import Association as openid_assoc
 from openid.store.nonce import SKEW as NonceSKEW
 from openid.store.interface import OpenIDStore
 import time
+import uuid
+from UserDict import DictMixin
 
 
 class Session(db.Model):
@@ -14,13 +17,40 @@ class Session(db.Model):
     data = db.Column(db.LargeBinary, nullable=False)
 
 
-class DBSession(dict, SessionMixin):
+class DBSession(dict, SessionMixin, DictMixin):
+    id = db.Column(db.String(32), primary_key=True)
+    created = db.Column(db.DateTime, nullable=False)
+    saved = db.Column(db.DateTime, nullable=False)
+    data = db.Column(db.PickleType, nullable=False)
+
+    def __init__(self):
+        self.id = uuid.uuid1().hex
+        self.created = datetime.now
+        self.saved = datetime.now
+        self.data = {}
+
+    def __delitem__(self, key):
+        return self.data.__delitem__(key)
+
+    def __getitem__(self, key):
+        return self.data.__getitem__(key)
+
+    def __setitem__(self, key, value):
+        return self.data.__setitem__(key, value)
+
+    def keys(self):
+        return self.data.keys()
+
     @classmethod
     def open_session(cls, app, request):
-        pass
+        new = DBSession()
+        db.session.add(new)
+        db.session.commit()
+        return new  
 
     def save_session(self, app, response):
-        pass
+        self.saved = datetime.now
+        db.session.commit()
 
 
 class Association(db.Model):

@@ -6,6 +6,8 @@ from fas_openid import db
 
 
 class DBSessionMiddleware(SessionInterface):
+    pickle_based = True
+
     def open_session(self, app, request):
         return DBSession.open_session(app, request)
 

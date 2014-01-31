@@ -18,14 +18,17 @@ class Session(db.Model):
 
 
 class DBSession(db.Model, SessionMixin, DictMixin):
-    id = db.Column(db.String(32), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    sessionid = db.Column(db.String(32), primary_key=True)
     remote_addr = db.Column(db.String(50), nullable=False)
     created = db.Column(db.DateTime, nullable=False)
     saved = db.Column(db.DateTime, nullable=False)
     data = db.Column(db.PickleType, nullable=False)
 
+    new = False
+
     def __init__(self):
-        self.id = uuid.uuid1().hex
+        self.sessionid = uuid.uuid1().hex
         self.created = datetime.now()
         self.saved = datetime.now()
         self.data = {}
@@ -48,22 +51,21 @@ class DBSession(db.Model, SessionMixin, DictMixin):
 
         if sessionid:
             print 'Got a sessionid'
-            retrieved = db.session.Query(DBSession).get(sessionid)
+            retrieved = DBSession.query.filter_by(sessionid=sessionid,
+                                                  remote_addr=request.remote_addr)
             print 'Retrieved session: %s' % retrieved
-            if retrieved and retrieved.remote_addr == request.remote_addr:
-                print 'Returning received session'
-                return retrieved
 
         new = DBSession()
         new.remote_addr = request.remote_addr
+        new.new = True
         db.session.add(new)
         db.session.commit()
-        return new  
+        return new
 
     def save_session(self, app, response):
         self.saved = datetime.now()
         db.session.commit()
-        response.set_cookie('sessionid', self.id)
+        response.set_cookie('sessionid', self.sessionid)
 
 
 class Association(db.Model):

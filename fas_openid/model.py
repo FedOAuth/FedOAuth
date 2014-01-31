@@ -46,11 +46,13 @@ class DBSession(db.Model, SessionMixin, DictMixin):
     def open_session(cls, app, request):
         sessionid = request.cookies.get('sessionid')
 
-        retrieved = DBSession.get(sessionid)
-        print 'Retrieved session: %s' % retrieved
-        if retrieved and retrieved.remote_addr == request.remote_addr:
-            print 'Returning received session'
-            return retrieved
+        if sessionid:
+            print 'Got a sessionid'
+            retrieved = DBSession.get(sessionid)
+            print 'Retrieved session: %s' % retrieved
+            if retrieved and retrieved.remote_addr == request.remote_addr:
+                print 'Returning received session'
+                return retrieved
 
         new = DBSession()
         new.remote_addr = request.remote_addr
@@ -61,6 +63,7 @@ class DBSession(db.Model, SessionMixin, DictMixin):
     def save_session(self, app, response):
         self.saved = datetime.now()
         db.session.commit()
+        response.set_cookie('sessionid', self.id)
 
 
 class Association(db.Model):

@@ -52,7 +52,9 @@ class DBSession(db.Model, SessionMixin, DictMixin):
             print 'Got a sessionid'
             retrieved = DBSession.query.filter_by(sessionid=sessionid,
                                                   remote_addr=request.remote_addr).first()
-            print 'Retrieved session: %s' % retrieved
+            if retrieved:
+                print 'Retrieved session: %s' % retrieved
+                return retrieved
 
         new = DBSession()
         new.remote_addr = request.remote_addr

@@ -1,0 +1,4 @@
+#!/bin/bash
+export FAS_OPENID_CONFIG=../fas-openid.cfg
+python createdb.py
+print 'Database populated'

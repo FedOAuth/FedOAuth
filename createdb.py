@@ -4,7 +4,6 @@
 __requires__ = ['SQLAlchemy >= 0.7', 'jinja2 >= 2.4']
 import pkg_resources
 
-from fas_openid import APP
-from fas_openid import model
+from fas_openid import db
 
-model.create_tables(APP.config['SQLALCHEMY_DATABASE_URI'], True)
+db.create_all()

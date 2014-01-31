@@ -16,7 +16,6 @@ import logging.handlers
 from uuid import uuid4 as uuid
 import sys
 
-from middleware import DBSessionMiddleware
 from utils import ReverseProxied
 
 # Create the application
@@ -89,8 +88,10 @@ db = SQLAlchemy(APP)
 # Set up Babel
 babel = Babel(APP)
 APP.wsgi_app = ReverseProxied(APP.wsgi_app)
-APP.session_interface = DBSessionMiddleware()
 
-# Import the other stuff
+# Import the other stuff (this needs to be done AFTER setting db connection)
 import model
 import views
+from middleware import DBSessionMiddleware
+
+APP.session_interface = DBSessionMiddleware()

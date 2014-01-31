@@ -19,6 +19,7 @@ class Session(db.Model):
 
 class DBSession(db.Model, SessionMixin, DictMixin):
     id = db.Column(db.String(32), primary_key=True)
+    remote_addr = db.Column(db.String(50), nullable=False)
     created = db.Column(db.DateTime, nullable=False)
     saved = db.Column(db.DateTime, nullable=False)
     data = db.Column(db.PickleType, nullable=False)
@@ -43,7 +44,16 @@ class DBSession(db.Model, SessionMixin, DictMixin):
 
     @classmethod
     def open_session(cls, app, request):
+        sessionid = request.cookies.get('sessionid')
+
+        retrieved = DBSession.get(sessionid)
+        print 'Retrieved session: %s' % retrieved
+        if retrieved and retrieved.remote_addr == request.remote_addr:
+            print 'Returning received session'
+            return retrieved
+
         new = DBSession()
+        new.remote_addr = request.remote_addr
         db.session.add(new)
         db.session.commit()
         return new  

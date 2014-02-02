@@ -22,11 +22,6 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-try:
-    from flask import _app_ctx_stack as stack
-except ImportError:
-    from flask import _request_ctx_stack as stack
 from flaskext.babel import gettext as _
 
 from flask import Flask, request, g, redirect, url_for, \
@@ -34,55 +29,37 @@ from flask import Flask, request, g, redirect, url_for, \
 from time import time
 from datetime import datetime
 
-from fedora.client.fasproxy import FasProxyClient
-from fedora.client import AuthError
-
 from fas_openid import get_session, APP as app, log_debug, \
     log_info, log_warning, log_error, get_auth_module
 from fas_openid.auth.base import Auth_Base
 
 
-class Auth_FAS(Auth_Base):
-    def _get_fasclient(self):
-        ctx = stack.top
-        if not hasattr(ctx, 'fasclient'):
-            ctx.fasclient = FasProxyClient(
-                base_url=app.config['FAS_BASE_URL'],
-                useragent=app.config['FAS_USER_AGENT'],
-                insecure=not app.config['FAS_CHECK_CERT'])
-        return ctx.fasclient
-
+class Auth_Test(Auth_Base):
     def logged_in(self):
-        return 'user' in get_session()
+        return 'loggedin' in get_session()
 
     def get_username(self):
-        if not 'user' in get_session():
+        if not 'loggedin' in get_session():
             return None
-        return get_session()['user']['username']
+        return 'tester'
 
     def get_sreg(self):
         if not 'user' in get_session():
             return {}
-        return {'username': self.get_username(),
-                'email': get_session()['user']['email'],
-                'fullname': get_session()['user']['human_name'],
-                'timezone': get_session()['user']['timezone']}
+        return {'username': 'tester',
+                'email': 'tester@fedoauth.org',
+                'fullname': 'DONT TRUST ME',
+                'timezone': 'UTC'}
 
     def get_groups(self):
-        if not 'user' in get_session():
+        if not 'loggedin' in get_session():
             return None
-        return get_session()['user']['groups']
+        return ['awesome']
 
     def check_login(self, username, password):
-        try:
-            session_id, data = self._get_fasclient().login(username, password)
-            return data.user
-        except AuthError:
-            return False
-        except Exception, ex:
-            log_warning('Error', {
-                'message': 'An error occured while checking username/password: %s'
-                % ex})
+        if username == 'tester' and password == 'testing':
+            return 'tester'
+        else:
             return False
 
     def used_multi_factor(self):
@@ -114,38 +91,25 @@ class Auth_FAS(Auth_Base):
         if request.method == 'POST':
             username = request.form['username']
             password = request.form['password']
-            if (not app.config['AVAILABLE_FILTER']) or \
-                    (username in app.config['AVAILABLE_TO']):
-                if username == '' or password == '':
-                    user = None
-                else:
-                    user = get_auth_module().check_login(username, password)
-                if user:
-                    log_info('Success', {
-                        'username': username,
-                        'message': 'User authenticated succesfully'})
-                    user = user.toDict()  # A bunch is not serializable...
-                    user['groups'] = [x['name'] for x in
-                                      user['approved_memberships']]
-                    get_session()['user'] = user
-                    get_session()['last_auth_time'] = time()
-                    get_session()['timeout'] = False
-                    get_session()['trust_root'] = ''
-                    get_session().save()
-                    return redirect(get_session()['next'])
-                else:
-                    log_warning('Failure', {
-                        'username': username,
-                        'message': 'User entered incorrect username or password'})
-                    flash(_('Incorrect username or password'))
+            if username == '' or password == '':
+                user = None
+            else:
+                user = get_auth_module().check_login(username, password)
+            if user:
+                log_info('Success', {
+                    'username': username,
+                    'message': 'User authenticated succesfully'})
+                get_session()['loggedin'] = True
+                get_session()['last_auth_time'] = time()
+                get_session()['timeout'] = False
+                get_session()['trust_root'] = ''
+                get_session().save()
+                return redirect(get_session()['next'])
             else:
                 log_warning('Failure', {
                     'username': username,
-                    'message': 'Tried to login with an account that is not '
-                               'allowed to use this service'})
-                flash(_('This service is limited to the following '
-                        'users: %(users)s',
-                        users=', '.join(app.config['AVAILABLE_TO'])))
+                    'message': 'User entered incorrect username or password'})
+                flash(_('Incorrect username or password'))
         return render_template(
-            'auth_fas_login.html',
+            'auth_test_login.html',
             trust_root=get_session()['trust_root'])

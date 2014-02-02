@@ -59,7 +59,6 @@ class DBSession(db.Model, SessionMixin, DictMixin):
     @classmethod
     def open_session(cls, app, request):
         if not request.path == '/' and not get_auth_module().is_dynamic_content(request.path):
-            print 'Not doing session for %s' % request.path
             return None
         request.path
         sessionid = request.cookies.get('sessionid')
@@ -68,7 +67,6 @@ class DBSession(db.Model, SessionMixin, DictMixin):
             retrieved = DBSession.query.filter_by(sessionid=sessionid,
                                                   remote_addr=request.remote_addr).first()
             if not retrieved is None:
-                print 'Retrieved: %s' % retrieved
                 return retrieved
 
         new = DBSession()
@@ -83,8 +81,6 @@ class DBSession(db.Model, SessionMixin, DictMixin):
         if self.modified:
             self.saved = datetime.now()
             self.rawdata = serializer.dumps(self.data)
-            print 'SAVING: %s' % self
-            print 'Rawdata: %s' % self.rawdata
             db.session.add(self)
             db.session.commit()
             response.set_cookie('sessionid', self.sessionid)

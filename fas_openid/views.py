@@ -68,8 +68,10 @@ def complete_url_for(func, **values):
 
 
 def get_claimed_id(username):
-    # The urljoin is so that we alway get <id>/ instead of both <id> and <id>/
-    return urljoin(app.config['OPENID_IDENTITY_URL'] % username, '/')
+    identity = app.config['OPENID_IDENTITY_URL'] % {'username': username}
+    if not app.config['OPENID_IDENTITY_URL'].endswith('/'):
+        identity = identity + '/'
+    return identity
 
 
 def getPapeRequestInfo(request):
@@ -212,7 +214,6 @@ def view_main():
 
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
         authed = isAuthorized(openid_request)
-        print 'Authed: %s' % authed
         if authed == AUTH_OK:
             openid_response = openid_request.answer(
                 True,

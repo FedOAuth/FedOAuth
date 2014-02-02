@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block title %}{% trans %}Login{% endtrans %}{% endblock %}
+{% block toptext %}
+{% trans %}{{trust_root}} is asking to authenticate via OpenID using the TEST SYSTEM{% endtrans %}
+{% endblock %}
+{% block body %}
+    {% trans %}Login with your TESTING credentials (tester / testing){% endtrans %}
+    <div>
+        <form method="post" action="/login/">
+            <p class="form_item">
+                <input name="username" placeholder="{% trans %}Username{% endtrans %}" autofocus>
+            </p>
+            <p class="form_item">
+                <input name="password" type="password" placeholder="{% trans %}Password{% endtrans %}">
+            </p>
+            <p class="form_item">
+                <input type="submit" value="{% trans %}login{% endtrans %}">
+            </p>
+        </form>
+    </div>
+{% endblock %}

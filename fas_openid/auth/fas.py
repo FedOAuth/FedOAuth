@@ -38,7 +38,7 @@ from fedora.client.fasproxy import FasProxyClient
 from fedora.client import AuthError
 
 from fas_openid import get_session, APP as app, log_debug, \
-    log_info, log_warning, log_error
+    log_info, log_warning, log_error, get_auth_module
 from fas_openid.auth.base import Auth_Base
 
 
@@ -50,15 +50,16 @@ class Auth_FAS(Auth_Base):
                 base_url=app.config['FAS_BASE_URL'],
                 useragent=app.config['FAS_USER_AGENT'],
                 insecure=not app.config['FAS_CHECK_CERT'])
+        print 'fasclient: %s' % ctx.fasclient
         return ctx.fasclient
 
-
     def logged_in(self):
+        print 'Logged in check'
         return 'user' in get_session()
-
 
     def get_username(self):
         if not 'user' in get_session():
+            print 'No user'
             return None
         return get_session()['user']['username']
 
@@ -75,11 +76,9 @@ class Auth_FAS(Auth_Base):
             return None
         return get_session()['user']['groups']
 
-
-
     def check_login(self, username, password):
         try:
-            session_id, data = _get_fasclient().login(username, password)
+            session_id, data = self._get_fasclient().login(username, password)
             return data.user
         except AuthError:
             return False
@@ -89,15 +88,30 @@ class Auth_FAS(Auth_Base):
                 % ex})
             return False
 
+    def used_multi_factor(self):
+        return False
+
+    def used_multi_factor_physical(self):
+        return False
+
+    def used_phishing_resistant(self):
+        return False
+
+    def is_dynamic_content(self, path):
+        return path.startswith('/login')
 
     @app.route('/login/', methods=['GET', 'POST'])
     def auth_login():
+        print 'AUTHMOD IMPORT: %s' % get_auth_module()
+        print 'auth_login'
+        print 'requestargs: %s' % request.args
         if not 'next' in request.args and not 'next' in get_session():
+            print 'nonext'
             return redirect(url_for('view_main'))
         if 'next' in request.args:
             get_session()['next'] = request.args['next']
             get_session().save()
-        if logged_in() and not \
+        if get_auth_module().logged_in() and not \
                 ('timeout' in get_session() and get_session()['timeout']):
             # We can also have "timeout" as of 0.4.0
             # indicating PAPE or application configuration requires a re-auth
@@ -112,7 +126,7 @@ class Auth_FAS(Auth_Base):
                 if username == '' or password == '':
                     user = None
                 else:
-                    user = check_login(username, password)
+                    user = get_auth_module().check_login(username, password)
                 if user:
                     log_info('Success', {
                         'username': username,

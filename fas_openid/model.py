@@ -1,29 +1,45 @@
-from fas_openid import db
+from fas_openid import db, get_auth_module
 from datetime import datetime
 from flask.sessions import SessionMixin
 from openid.association import Association as openid_assoc
 from openid.store.nonce import SKEW as NonceSKEW
 from openid.store.interface import OpenIDStore
 import time
+import cPickle as serializer
 import uuid
 from UserDict import DictMixin
 
 
 class DBSession(db.Model, SessionMixin, DictMixin):
     sessionid = db.Column(db.String(32), primary_key=True)
-    remote_addr = db.Column(db.String(50), primary_key=True)
+    remote_addr = db.Column(db.String(50), nullable=False)
     created = db.Column(db.DateTime, nullable=False)
     saved = db.Column(db.DateTime, nullable=False)
-    data = db.Column(db.PickleType, nullable=False)
+    rawdata = db.Column(db.LargeBinary, nullable=False)
+    data_cache = None
+
+    @property
+    def data(self):
+        if self.data_cache is None:
+            self.data_cache = serializer.loads(self.rawdata)
+        return self.data_cache
 
     new = False
     modified = False
+
+    def __repr__(self):
+        return 'DBSession(%s, %s, %s, %s, %s)' % (self.sessionid,
+                                                  self.remote_addr,
+                                                  self.created,
+                                                  self.saved,
+                                                  self.data)
 
     def __init__(self):
         self.sessionid = uuid.uuid1().hex
         self.created = datetime.now()
         self.saved = datetime.now()
-        self.data = {}
+        self.rawdata = serializer.dumps({})
+        self.save()
 
     def save(self):
         self.modified = True
@@ -42,12 +58,17 @@ class DBSession(db.Model, SessionMixin, DictMixin):
 
     @classmethod
     def open_session(cls, app, request):
+        if not request.path == '/' and not get_auth_module().is_dynamic_content(request.path):
+            print 'Not doing session for %s' % request.path
+            return None
+        request.path
         sessionid = request.cookies.get('sessionid')
 
         if sessionid:
             retrieved = DBSession.query.filter_by(sessionid=sessionid,
                                                   remote_addr=request.remote_addr).first()
             if not retrieved is None:
+                print 'Retrieved: %s' % retrieved
                 return retrieved
 
         new = DBSession()
@@ -61,8 +82,12 @@ class DBSession(db.Model, SessionMixin, DictMixin):
     def save_session(self, app, response):
         if self.modified:
             self.saved = datetime.now()
-        db.session.commit()
-        response.set_cookie('sessionid', self.sessionid)
+            self.rawdata = serializer.dumps(self.data)
+            print 'SAVING: %s' % self
+            print 'Rawdata: %s' % self.rawdata
+            db.session.add(self)
+            db.session.commit()
+            response.set_cookie('sessionid', self.sessionid)
 
 
 class Association(db.Model):

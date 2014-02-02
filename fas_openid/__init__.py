@@ -90,6 +90,16 @@ babel = Babel(APP)
 APP.wsgi_app = ReverseProxied(APP.wsgi_app)
 
 # Import the other stuff (this needs to be done AFTER setting db connection)
+# Import enabled auth method
+def get_auth_module():
+    global auth_module
+    return auth_module
+auth_module_name = APP.config['AUTH_MODULE'].rsplit('.', 1)
+auth_module = __import__(auth_module_name[0], fromlist=[auth_module_name[1]])
+auth_module = getattr(auth_module, auth_module_name[1])
+auth_module = auth_module(APP.config)
+
+
 import model
 import views
 from middleware import DBSessionMiddleware

@@ -38,3 +38,15 @@ class Auth_Base:
 
     def get_groups(self):
         raise NotImplementedError()
+
+    def used_multi_factor(self):
+        raise NotImplementedError()
+
+    def used_multi_factor_physical(self):
+        raise NotImplementedError()
+
+    def used_phishing_resistant(self):
+        raise NotImplementedError()
+
+    def is_dynamic_content(self, path):
+        raise NotImplementedError()

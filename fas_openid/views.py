@@ -22,14 +22,8 @@ except ImportError:
 
 from model import FASOpenIDStore
 from fas_openid import APP as app, get_session, log_debug, \
-    log_info, log_warning, log_error
+    log_info, log_warning, log_error, get_auth_module
 from fas_openid.model import FASOpenIDStore
-
-# Import enabled auth method
-auth_module_name = app.config['AUTH_MODULE'].rsplit('.', 1)
-auth_module = __import__(auth_module_name[0], fromlist=[auth_module_name[1]])
-auth_module = getattr(auth_module, auth_module_name[1])
-auth_module = auth_module(app.config)
 
 # Possible AUTH results
 AUTH_NOT_LOGGED_IN = 0
@@ -88,27 +82,29 @@ def getPapeRequestInfo(request):
 
 def addSReg(request, response):
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(request)
-    sreg_data = auth_module.get_sreg()
+    sreg_data = get_auth_module().get_sreg()
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     response.addExtension(sreg_resp)
     return sreg_resp.data
 
 
 def addPape(request, response):
-    done_yubikey = False
-
     auth_time = datetime.utcfromtimestamp(
         get_session()['last_auth_time']).strftime('%Y-%m-%dT%H:%M:%SZ')
     auth_policies = []
     auth_levels = {}
-    if done_yubikey:
+    auth_levels[pape.LEVELS_NIST] = 2
+
+    if get_auth_module().used_multi_factor():
         auth_policies.append(pape.AUTH_MULTI_FACTOR)
-        auth_policies.append(pape.AUTH_MULTI_FACTOR_PHYSICAL)
-        auth_policies.append(pape.AUTH_PHISHING_RESISTANT)
-        auth_levels[pape.LEVELS_NIST] = 3
+        if get_auth_module().used_multi_factor_physical():
+            auth_policies.append(pape.AUTH_MULTI_FACTOR_PHYSICAL)
+            if get_auth_module().used_phishing_resistant():
+                auth_policies.append(pape.AUTH_PHISHING_RESISTANT)
+                auth_levels[pape.LEVELS_NIST] = 3
     else:
         auth_policies.append(pape.AUTH_NONE)
-        auth_levels[pape.LEVELS_NIST] = 2
+
     pape_resp = pape.Response(
         auth_policies=auth_policies,
         auth_time=auth_time,
@@ -163,17 +159,17 @@ def user_ask_trust_root(openid_request):
     get_session()['csrf_id'] = uuid().hex
     get_session().save()
     # Get which stuff we will send
-    sreg_data = auth_module.get_sreg()
+    sreg_data = get_auth_module().get_sreg()
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
     teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
     teams_resp = teams.TeamsResponse.extractResponse(
         teams_req,
-        filter_cla_groups(auth_module.get_groups()))
+        filter_cla_groups(get_auth_module().get_groups()))
     clas_req = cla.CLARequest.fromOpenIDRequest(openid_request)
     clas_resp = cla.CLAResponse.extractResponse(
         clas_req,
-        get_cla_uris(auth_module.get_groups()))
+        get_cla_uris(get_auth_module().get_groups()))
     # Show form
     return render_template(
         'user_ask_trust_root.html',
@@ -216,26 +212,27 @@ def view_main():
 
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
         authed = isAuthorized(openid_request)
+        print 'Authed: %s' % authed
         if authed == AUTH_OK:
             openid_response = openid_request.answer(
                 True,
                 identity=get_claimed_id(
-                    auth_module.get_username()
+                    get_auth_module().get_username()
                 ),
-                claimed_id=get_claimed_id(auth_module.get_username())
+                claimed_id=get_claimed_id(get_auth_module().get_username())
             )
             sreg_info = addSReg(openid_request, openid_response)
             teams_info = addTeams(
                 openid_request,
                 openid_response,
-                filter_cla_groups(auth_module.get_groups()))
+                filter_cla_groups(get_auth_module().get_groups()))
             cla_info = addCLAs(
                 openid_request,
                 openid_response,
-                get_cla_uris(auth_module.get_groups()))
+                get_cla_uris(get_auth_module().get_groups()))
             auth_level = addPape(openid_request, openid_response)
             log_info('Success', {
-                'claimed_id': get_claimed_id(auth_module.get_username()),
+                'claimed_id': get_claimed_id(get_auth_module().get_username()),
                 'trust_root': openid_request.trust_root,
                 'security_level': auth_level,
                 'message': 'The user succesfully claimed the identity'})
@@ -271,7 +268,7 @@ def view_main():
             return redirect(app.config['LOGIN_URL'])
         else:
             log_error('Failure', {
-                'username': auth_module.get_username(),
+                'username': get_auth_module().get_username(),
                 'attempted_claimed_id': openid_request.identity,
                 'trust_root': openid_request.trust_root,
                 'message':
@@ -288,7 +285,7 @@ def isAuthorized(openid_request):
     pape_req_time, pape_auth_policies, pape_auth_level_types = \
         getPapeRequestInfo(openid_request)
 
-    if not auth_module.logged_in():
+    if not get_auth_module().logged_in():
         return AUTH_NOT_LOGGED_IN
     elif (pape_req_time) and (pape_req_time != 0) and (
             get_session()['last_auth_time'] < (time() - pape_req_time)):
@@ -300,10 +297,10 @@ def isAuthorized(openid_request):
     # Add checks if yubikey is required by application
     elif (not openid_request.idSelect()) and (
             openid_request.identity != get_claimed_id(
-                auth_module.get_username())):
+                get_auth_module().get_username())):
         print 'Incorrect claimed id. Claimed: %s, correct: %s' % (
             openid_request.identity,
-            get_claimed_id(auth_module.get_username()))
+            get_claimed_id(get_auth_module().get_username()))
         return AUTH_INCORRECT_IDENTITY
     elif openid_request.trust_root in app.config['TRUSTED_ROOTS']:
         return AUTH_OK

@@ -79,9 +79,6 @@ if APP.config['SQLALCHEMY_DATABASE_URI'].startswith('postgres:'):
     print 'Error: Please use the postgresql dialect (postgresql: '\
         'instead of postgres: in the database URI)'
     sys.exit(1)
-if not APP.config['SECRET_KEY'] or APP.config['SECRET_KEY'] == 'Secret Key':
-    print 'Error: Please make sure to configure SECRET_KEY'
-    sys.exit(1)
 
 # Set up SQLAlchemy
 db = SQLAlchemy(APP)

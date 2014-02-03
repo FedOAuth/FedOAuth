@@ -40,6 +40,7 @@ from fedora.client import AuthError
 from fas_openid import get_session, APP as app, log_debug, \
     log_info, log_warning, log_error, get_auth_module
 from fas_openid.auth.base import Auth_Base
+from fas_openid.utils import complete_url_for
 
 
 class Auth_FAS(Auth_Base):
@@ -56,7 +57,7 @@ class Auth_FAS(Auth_Base):
         return 'user' in get_session()
 
     def start_authentication(self):
-        return redirect(app.config['LOGIN_URL'])
+        return redirect(complete_url_for('view_fas_login'))
 
     def get_username(self):
         if not 'user' in get_session():
@@ -98,11 +99,13 @@ class Auth_FAS(Auth_Base):
         return False
 
     def is_dynamic_content(self, path):
-        return path.startswith('/login')
+        return path.startswith('/fas/login')
 
-    @app.route('/login/', methods=['GET', 'POST'])
-    def auth_login():
+    @app.route('/fas/login/', methods=['GET', 'POST'])
+    def view_fas_login():
+        print 'SESS: %s' % get_session()
         if not 'next' in request.args and not 'next' in get_session():
+            print 'nonext'
             return redirect(url_for('view_main'))
         if 'next' in request.args:
             get_session()['next'] = request.args['next']
@@ -113,6 +116,7 @@ class Auth_FAS(Auth_Base):
             # indicating PAPE or application configuration requires a re-auth
             log_debug('Info', {
                 'message': 'User tried to login but is already authenticated'})
+            print 'loggedin'
             return redirect(get_session()['next'])
         if request.method == 'POST':
             username = request.form['username']
@@ -135,6 +139,7 @@ class Auth_FAS(Auth_Base):
                     get_session()['timeout'] = False
                     get_session()['trust_root'] = ''
                     get_session().save()
+                    print 'done'
                     return redirect(get_session()['next'])
                 else:
                     log_warning('Failure', {

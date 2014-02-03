@@ -32,11 +32,16 @@ from datetime import datetime
 from fas_openid import get_session, APP as app, log_debug, \
     log_info, log_warning, log_error, get_auth_module
 from fas_openid.auth.base import Auth_Base
+from fas_openid.utils import complete_url_for
 
 
 class Auth_Test(Auth_Base):
     def logged_in(self):
         return 'loggedin' in get_session()
+
+    def start_authentication(self):
+        return redirect(complete_url_for('view_test_login'))
+
 
     def get_username(self):
         if not 'loggedin' in get_session():
@@ -72,11 +77,12 @@ class Auth_Test(Auth_Base):
         return False
 
     def is_dynamic_content(self, path):
-        return path.startswith('/login')
+        return path.startswith('/test/login')
 
-    @app.route('/login/', methods=['GET', 'POST'])
-    def auth_login():
+    @app.route('/test/login/', methods=['GET', 'POST'])
+    def view_test_login():
         if not 'next' in request.args and not 'next' in get_session():
+            print 'nonext'
             return redirect(url_for('view_main'))
         if 'next' in request.args:
             get_session()['next'] = request.args['next']

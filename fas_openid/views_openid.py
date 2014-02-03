@@ -163,7 +163,7 @@ def user_ask_trust_root(openid_request):
 
 
 @app.route('/openid/', methods=['GET', 'POST'])
-def view_main():
+def view_openid_main():
     if 'openid.mode' in request.values:
         values = request.values
         get_session()['values'] = request.values
@@ -286,31 +286,31 @@ def isAuthorized(openid_request):
 
 
 @app.route('/id/<username>/')
-def view_id(username):
+def view_openid_id(username):
     return render_template(
         'user.html',
         username=username,
         claimed_id=get_claimed_id(username),
-        yadis_url=complete_openid_url_for('view_yadis_id',
+        yadis_url=complete_openid_url_for('view_openid_yadis_id',
         username=username)
     ),
     200,
     {'X-XRDS-Location':
-     complete_openid_url_for('view_yadis_id', username=username),
+     complete_openid_url_for('view_openid_yadis_id', username=username),
      'Cache-Control': 'no-cache, must-revalidate',
      'Pragma': 'no-cache',
      'Expires': 'Sat, 26 Jul 1997 05:00:00 GMT'}
 
 
 @app.route('/openid/yadis/<username>.xrds')
-def view_yadis_id(username):
+def view_openid_yadis_id(username):
     return no_cache(Response(render_template('yadis_user.xrds',
                     claimed_id=get_claimed_id(username)),
                     mimetype='application/xrds+xml'))
 
 
 @app.route('/openid/yadis.xrds')
-def view_yadis():
+def view_openid_yadis():
     return no_cache(Response(render_template('yadis.xrds'),
                     mimetype='application/xrds+xml'))
 

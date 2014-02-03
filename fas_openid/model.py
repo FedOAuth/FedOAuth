@@ -85,6 +85,11 @@ class DBSession(db.Model, SessionMixin, DictMixin):
             db.session.commit()
             response.set_cookie('sessionid', self.sessionid)
 
+    def delete_session(self, app, response):
+        DBSession.query.filter_by(sessionid=self.sessionid,
+                                  remote_addr=self.remote_addr).delete()
+        response.delete_cookie('sessionid')
+
 
 class Association(db.Model):
     server_url = db.Column(db.String(2048), nullable=False, primary_key=True)

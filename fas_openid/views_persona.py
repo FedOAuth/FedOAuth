@@ -1,32 +1,31 @@
-from time import time
-from datetime import datetime
-import sys
-from urlparse import urljoin
-from uuid import uuid4 as uuid
-
-from flask import Flask, request, g, redirect, url_for, \
+from flask import request, g, redirect, url_for, \
     abort, render_template, flash, Response
 from flaskext.babel import gettext as _
+import json
 
-from model import FASOpenIDStore
 from fas_openid import APP as app, get_session, log_debug, \
     log_info, log_warning, log_error, get_auth_module
-from views_openid import view_openid_main
 
 
-@app.route('/robots.txt')
-def view_robots():
-    return render_template(
-        'user_ask_trust_root.html',
-        action=request.url,
-        trust_root=openid_request.trust_root
-        )
-    return 'User-Agent: *\nDisallow: /'
+@app.route('/.well-known/browserid')
+def view_browserid():
+    info = {}
+    info['authentication'] = '/persona/sign_in/'
+    info['provisioning'] = '/persona/provision/'
+    info['public-key'] = {}
+
+    info['public-key']['algorithm'] = ''
+    info['public-key']['n'] = ''
+    info['public-key']['e'] = ''
+
+    return json.dumps(info)
 
 
-@app.route('/logout/')
-def auth_logout():
-    # No check if we are logged in, as we can always delete the session
-    get_session().delete()
-    flash(_('You have been logged out'))
-    return redirect(url_for('view_main'))
+@app.route('/persona/provision/')
+def view_persona_provision():
+    return "PROVISION"
+
+
+@app.route('/persona/sign_in/')
+def view_persona_sign_in():
+    return 'SIGNIN'

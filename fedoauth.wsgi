@@ -7,11 +7,11 @@ import pkg_resources
 
 import os
 ## Set the environment variable pointing to the configuration file
-os.environ['FAS_OPENID_CONFIG'] = '/etc/fas-openid/fas-openid.cfg'
+os.environ['FEDOAUTH_CONFIG'] = '/etc/fedoauth/fedoauth.cfg'
 
 ## The following is only needed if you did not install
 ## as a python module (for example if you run it from a git clone).
 #import sys
-#sys.path.insert(0, '/path/to/fas_openid/')
+#sys.path.insert(0, '/path/to/fedoauth/')
 
-from fas_openid import APP as application
+from fedoauth import APP as application

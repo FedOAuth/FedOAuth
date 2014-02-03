@@ -5,10 +5,10 @@ import pkg_resources
 
 from setuptools import setup, find_packages
 
-setup(name='FAS-OpenID',
+setup(name='FedOAuth',
       version='@VERSION@',
       author='Patrick Uiterwijk',
-      author_email='puiterwijk@fedoraproject.org',
+      author_email='puiterwijk@gmail.com',
       packages=find_packages(),
       zip_safe=False,
       include_package_data=True,

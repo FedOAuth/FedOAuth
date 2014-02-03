@@ -1,6 +1,6 @@
 from flask.sessions import SessionInterface
 
-from fas_openid.model import DBSession
+from fedoauth.model import DBSession
 
 
 class DBSessionMiddleware(SessionInterface):

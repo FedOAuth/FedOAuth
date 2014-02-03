@@ -16,11 +16,10 @@ import openid_teams.teams as teams
 import openid_cla.cla as cla
 from flaskext.babel import gettext as _
 
-from model import FASOpenIDStore
-from fas_openid import APP as app, get_session, log_debug, \
+from fedoauth import APP as app, get_session, log_debug, \
     log_info, log_warning, log_error, get_auth_module
-from fas_openid.model import FASOpenIDStore
-from fas_openid.utils import addToSessionArray, getSessionValue, no_cache, \
+from fedoauth.model import FedOAuthOpenIDStore
+from fedoauth.utils import addToSessionArray, getSessionValue, no_cache, \
     complete_url_for
 
 # Possible AUTH results
@@ -49,7 +48,7 @@ def get_server():
     global openid_server_instance
     if openid_server_instance is None:
         openid_server_instance = openid_server(
-            FASOpenIDStore(), op_endpoint=app.config['WEBSITE_ROOT'])
+            FedOAuthOpenIDStore(), op_endpoint=app.config['WEBSITE_ROOT'])
     return openid_server_instance
 
 

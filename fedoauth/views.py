@@ -1,7 +1,7 @@
 from flask import redirect, url_for, render_template, flash
 from flaskext.babel import gettext as _
 
-from fas_openid import APP as app, get_session
+from fedoauth import APP as app, get_session
 from views_openid import view_openid_main
 
 

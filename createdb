@@ -1,4 +1,4 @@
 #!/bin/bash
-export FAS_OPENID_CONFIG=../fas-openid.cfg
+export FEDOAUTH_CONFIG=../fedoauth.cfg
 python createdb.py
 print 'Database populated'

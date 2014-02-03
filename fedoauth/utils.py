@@ -24,7 +24,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from urlparse import urljoin
 
-from fas_openid import APP as app, get_session
+from fedoauth import APP as app, get_session
 from flask import Flask, request, g, redirect, url_for
 
 

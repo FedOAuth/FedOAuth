@@ -68,8 +68,8 @@ def get_session():
     return flask.session
 
 
-APP.config.from_object('fas_openid.default_config')
-APP.config.from_envvar('FAS_OPENID_CONFIG', silent=True)
+APP.config.from_object('fedoauth.default_config')
+APP.config.from_envvar('FEDOAUTH_CONFIG', silent=True)
 
 # Make sure the configuration is sane
 if not APP.config['SQLALCHEMY_DATABASE_URI']:

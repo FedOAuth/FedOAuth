@@ -3,7 +3,7 @@ from flask import request, g, redirect, url_for, \
 from flaskext.babel import gettext as _
 import json
 
-from fas_openid import APP as app, get_session, log_debug, \
+from fedoauth import APP as app, get_session, log_debug, \
     log_info, log_warning, log_error, get_auth_module
 
 

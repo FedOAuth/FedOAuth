@@ -1,2 +1,2 @@
-recursive-include fas_openid/templates *
-recursive-include fas_openid/translations *
+recursive-include fedoauth/templates *
+recursive-include fedoauth/translations *

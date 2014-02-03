@@ -29,10 +29,10 @@ from flask import Flask, request, g, redirect, url_for, \
 from time import time
 from datetime import datetime
 
-from fas_openid import get_session, APP as app, log_debug, \
+from fedoauth import get_session, APP as app, log_debug, \
     log_info, log_warning, log_error, get_auth_module
-from fas_openid.auth.base import Auth_Base
-from fas_openid.utils import complete_url_for
+from fedoauth.auth.base import Auth_Base
+from fedoauth.utils import complete_url_for
 
 
 class Auth_Test(Auth_Base):

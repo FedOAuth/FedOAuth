@@ -37,10 +37,10 @@ from datetime import datetime
 from fedora.client.fasproxy import FasProxyClient
 from fedora.client import AuthError
 
-from fas_openid import get_session, APP as app, log_debug, \
+from fedoauth import get_session, APP as app, log_debug, \
     log_info, log_warning, log_error, get_auth_module
-from fas_openid.auth.base import Auth_Base
-from fas_openid.utils import complete_url_for
+from fedoauth.auth.base import Auth_Base
+from fedoauth.utils import complete_url_for
 
 
 class Auth_FAS(Auth_Base):

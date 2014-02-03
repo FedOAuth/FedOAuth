@@ -4,7 +4,7 @@
 __requires__ = ['SQLAlchemy >= 0.7', 'jinja2 >= 2.4']
 import pkg_resources
 
-from fas_openid import APP, db
+from fedoauth import APP, db
 
 # It is no problem if the database gets created every time
 # as everything in it is only used during that run anyway

@@ -1,4 +1,4 @@
-from fas_openid import db, get_auth_module
+from fedoauth import db, get_auth_module
 from datetime import datetime
 from flask.sessions import SessionMixin
 from openid.association import Association as openid_assoc
@@ -119,7 +119,7 @@ class Nonce(db.Model):
         self.timestamp = timestamp
 
 
-class FASOpenIDStore(OpenIDStore):
+class FedOAuthOpenIDStore(OpenIDStore):
     def storeAssociation(self, server_url, association):
         assoc = Association(server_url, association)
         db.session.add(assoc)

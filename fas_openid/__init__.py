@@ -105,6 +105,7 @@ auth_module = auth_module(APP.config)
 import model
 import views
 import views_openid
+import views_persona
 from middleware import DBSessionMiddleware
 
 APP.session_interface = DBSessionMiddleware()

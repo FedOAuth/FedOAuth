@@ -49,8 +49,8 @@ def view_robots():
 def view_main():
     return render_template(
         'index.html',
-        yadis_url=complete_url_for('view_yadis')
-    ), 200, {'X-XRDS-Location': complete_url_for('view_yadis')}
+        yadis_url=complete_url_for('view_openid_yadis')
+    ), 200, {'X-XRDS-Location': complete_url_for('view_openid_yadis')}
 
 
 @app.route('/logout/')

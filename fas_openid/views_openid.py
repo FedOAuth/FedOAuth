@@ -20,7 +20,8 @@ from model import FASOpenIDStore
 from fas_openid import APP as app, get_session, log_debug, \
     log_info, log_warning, log_error, get_auth_module
 from fas_openid.model import FASOpenIDStore
-from fas_openid.views import addToSessionArray, getSessionValue, no_cache
+from fas_openid.utils import addToSessionArray, getSessionValue, no_cache, \
+    complete_url_for
 
 # Possible AUTH results
 AUTH_NOT_LOGGED_IN = 0
@@ -49,7 +50,7 @@ def get_server():
     if openid_server_instance is None:
         openid_server_instance = openid_server(
             FASOpenIDStore(), op_endpoint=app.config['OPENID_ENDPOINT'])
-    return ctx.openid_server_instance
+    return openid_server_instance
 
 
 def filter_cla_groups(groups):
@@ -162,7 +163,6 @@ def user_ask_trust_root(openid_request):
         csrf=get_session()['csrf_id'])
 
 
-@app.route('/openid/', methods=['GET', 'POST'])
 def view_openid_main():
     if 'openid.mode' in request.values:
         values = request.values
@@ -180,7 +180,10 @@ def view_openid_main():
         return openid_respond(openid_error)
 
     if openid_request is None:
-        return redirect(app.config['WEBSITE_ROOT'])
+        return render_template(
+            'index.html',
+            yadis_url=complete_url_for('view_openid_yadis')
+        ), 200, {'X-XRDS-Location': complete_url_for('view_openid_yadis')}
     elif openid_request.mode in ['checkid_immediate', 'checkid_setup']:
         authed = isAuthorized(openid_request)
         if authed == AUTH_OK:
@@ -291,25 +294,25 @@ def view_openid_id(username):
         'user.html',
         username=username,
         claimed_id=get_claimed_id(username),
-        yadis_url=complete_openid_url_for('view_openid_yadis_id',
+        yadis_url=complete_url_for('view_openid_yadis_id',
         username=username)
     ),
     200,
     {'X-XRDS-Location':
-     complete_openid_url_for('view_openid_yadis_id', username=username),
+     complete_url_for('view_openid_yadis_id', username=username),
      'Cache-Control': 'no-cache, must-revalidate',
      'Pragma': 'no-cache',
      'Expires': 'Sat, 26 Jul 1997 05:00:00 GMT'}
 
 
-@app.route('/openid/yadis/<username>.xrds')
+@app.route('/yadis/<username>.xrds')
 def view_openid_yadis_id(username):
     return no_cache(Response(render_template('yadis_user.xrds',
                     claimed_id=get_claimed_id(username)),
                     mimetype='application/xrds+xml'))
 
 
-@app.route('/openid/yadis.xrds')
+@app.route('/yadis.xrds')
 def view_openid_yadis():
     return no_cache(Response(render_template('yadis.xrds'),
                     mimetype='application/xrds+xml'))

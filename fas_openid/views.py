@@ -11,33 +11,7 @@ from flaskext.babel import gettext as _
 from model import FASOpenIDStore
 from fas_openid import APP as app, get_session, log_debug, \
     log_info, log_warning, log_error, get_auth_module
-
-
-def complete_url_for(func, **values):
-    return urljoin(app.config['WEBSITE_ROOT'], url_for(func, **values))
-
-
-def addToSessionArray(array, value):
-    if array in get_session():
-        get_session()[array].append(value)
-        get_session().save()
-    else:
-        get_session()[array] = [value]
-        get_session().save()
-
-
-def getSessionValue(key, default_value=None):
-    if key in get_session():
-        return get_session()[key]
-    else:
-        return default_value
-
-
-def no_cache(resp):
-    resp.headers['Cache-Control'] = 'no-cache, must-revalidate'
-    resp.headers['Pragma'] = 'no-cache'
-    resp.headers['Expires'] = 'Sat, 26 Jul 1997 05:00:00 GMT'
-    return resp
+from views_openid import view_openid_main
 
 
 @app.route('/robots.txt')
@@ -47,10 +21,9 @@ def view_robots():
 
 @app.route('/', methods=['GET', 'POST'])
 def view_main():
-    return render_template(
-        'index.html',
-        yadis_url=complete_url_for('view_openid_yadis')
-    ), 200, {'X-XRDS-Location': complete_url_for('view_openid_yadis')}
+    # We are using view_openid_main because this makes sure that the
+    #  website root is also a valid OpenID endpoint URL
+    return view_openid_main()
 
 
 @app.route('/logout/')

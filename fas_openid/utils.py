@@ -22,37 +22,36 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+from urlparse import urljoin
+
+from fas_openid import APP as app, get_session
+from flask import Flask, request, g, redirect, url_for
 
 
-class ReverseProxied(object):
-    '''Wrap the application in this middleware and configure the
-    front-end server to add these headers, to let you quietly bind
-    this to a URL other than / and to an HTTP scheme that is
-    different than what is used locally.
+def complete_url_for(func, **values):
+    return urljoin(app.config['WEBSITE_ROOT'], url_for(func, **values))
 
-    In nginx:
-    location /myprefix {
-        proxy_pass http://192.168.0.1:5001;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Scheme $scheme;
-        proxy_set_header X-Script-Name /myprefix;
-        }
 
-    :param app: the WSGI application
-    '''
-    def __init__(self, app):
-        self.app = app
+def addToSessionArray(array, value):
+    if array in get_session():
+        get_session()[array].append(value)
+        get_session().save()
+    else:
+        get_session()[array] = [value]
+        get_session().save()
 
-    def __call__(self, environ, start_response):
-        script_name = environ.get('HTTP_X_SCRIPT_NAME', '')
-        if script_name:
-            environ['SCRIPT_NAME'] = script_name
-            path_info = environ['PATH_INFO']
-            if path_info.startswith(script_name):
-                environ['PATH_INFO'] = path_info[len(script_name):]
 
-        scheme = environ.get('HTTP_X_FORWARDED_SCHEME', '')
-        if scheme:
-            environ['wsgi.url_scheme'] = scheme
-        return self.app(environ, start_response)
+def getSessionValue(key, default_value=None):
+    if key in get_session():
+        return get_session()[key]
+    else:
+        return default_value
+
+
+def no_cache(resp):
+    resp.headers['Cache-Control'] = 'no-cache, must-revalidate'
+    resp.headers['Pragma'] = 'no-cache'
+    resp.headers['Expires'] = 'Sat, 26 Jul 1997 05:00:00 GMT'
+    return resp
+
+

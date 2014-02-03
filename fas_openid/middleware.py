@@ -2,8 +2,6 @@ from flask.sessions import SessionInterface
 
 from fas_openid.model import DBSession
 
-from fas_openid import db
-
 
 class DBSessionMiddleware(SessionInterface):
     pickle_based = True

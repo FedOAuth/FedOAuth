@@ -16,7 +16,7 @@ import logging.handlers
 from uuid import uuid4 as uuid
 import sys
 
-from utils import ReverseProxied
+from proxied import ReverseProxied
 
 # Create the application
 APP = flask.Flask(__name__)
@@ -83,7 +83,7 @@ if not APP.config['SECRET_KEY'] or APP.config['SECRET_KEY'] == 'Secret Key':
     print 'Error: Please make sure to configure SECRET_KEY'
     sys.exit(1)
 
-APP.config['OPENID_ENDPOINT'] = APP.config['WEBSITE_ROOT'] + '/openid/'
+APP.config['OPENID_ENDPOINT'] = APP.config['WEBSITE_ROOT']
 
 # Set up SQLAlchemy
 db = SQLAlchemy(APP)

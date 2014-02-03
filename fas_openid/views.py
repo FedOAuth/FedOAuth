@@ -1,16 +1,7 @@
-from time import time
-from datetime import datetime
-import sys
-from urlparse import urljoin
-from uuid import uuid4 as uuid
-
-from flask import Flask, request, g, redirect, url_for, \
-    abort, render_template, flash, Response
+from flask import redirect, url_for, render_template, flash
 from flaskext.babel import gettext as _
 
-from model import FASOpenIDStore
-from fas_openid import APP as app, get_session, log_debug, \
-    log_info, log_warning, log_error, get_auth_module
+from fas_openid import APP as app, get_session
 from views_openid import view_openid_main
 
 

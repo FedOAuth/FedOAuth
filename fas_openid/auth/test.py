@@ -44,7 +44,7 @@ class Auth_Test(Auth_Base):
         return 'tester'
 
     def get_sreg(self):
-        if not 'user' in get_session():
+        if not 'loggedin' in get_session():
             return {}
         return {'username': 'tester',
                 'email': 'tester@fedoauth.org',

@@ -83,6 +83,8 @@ if not APP.config['SECRET_KEY'] or APP.config['SECRET_KEY'] == 'Secret Key':
     print 'Error: Please make sure to configure SECRET_KEY'
     sys.exit(1)
 
+APP.config['OPENID_ENDPOINT'] = APP.config['WEBSITE_ROOT'] + '/openid/'
+
 # Set up SQLAlchemy
 db = SQLAlchemy(APP)
 # Set up Babel
@@ -102,6 +104,7 @@ auth_module = auth_module(APP.config)
 
 import model
 import views
+import views_openid
 from middleware import DBSessionMiddleware
 
 APP.session_interface = DBSessionMiddleware()

@@ -16,7 +16,7 @@ FAS_USER_AGENT = 'FAS-OpenID'
 FAS_CHECK_CERT = True
 
 # This is the OpenID endpoint url, at which the server is available
-OPENID_ENDPOINT = 'http://localhost:5000'
+WEBSITE_ROOT = 'http://localhost:5000'
 
 # This is the OpenID url provided to users. Add %s where the username should be entered
 OPENID_IDENTITY_URL = 'http://localhost:5000/id/%s'

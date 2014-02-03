@@ -49,7 +49,7 @@ def get_server():
     global openid_server_instance
     if openid_server_instance is None:
         openid_server_instance = openid_server(
-            FASOpenIDStore(), op_endpoint=app.config['OPENID_ENDPOINT'])
+            FASOpenIDStore(), op_endpoint=app.config['WEBSITE_ROOT'])
     return openid_server_instance
 
 
@@ -233,12 +233,12 @@ def view_openid_main():
             get_session()['timeout'] = True
             get_session()['next'] = request.base_url
             get_session().save()
-            return redirect(app.config['LOGIN_URL'])
+            return get_auth_module().start_authentication()
         elif authed == AUTH_NOT_LOGGED_IN:
             get_session()['next'] = request.base_url
             get_session()['trust_root'] = openid_request.trust_root
             get_session().save()
-            return redirect(app.config['LOGIN_URL'])
+            return get_auth_module().start_authentication()
         else:
             log_error('Failure', {
                 'username': get_auth_module().get_username(),
@@ -263,9 +263,9 @@ def isAuthorized(openid_request):
     elif (pape_req_time) and (pape_req_time != 0) and (
             get_session()['last_auth_time'] < (time() - pape_req_time)):
         return AUTH_TIMEOUT
-    elif (app.config['MAX_AUTH_TIME'] != 0) and (
+    elif (app.config['OPENID_MAX_AUTH_TIME'] != 0) and (
             get_session()['last_auth_time'] < (time() - (
-            app.config['MAX_AUTH_TIME'] * 60))):
+            app.config['OPENID_MAX_AUTH_TIME'] * 60))):
         return AUTH_TIMEOUT
     # Add checks if yubikey is required by application
     elif (not openid_request.idSelect()) and (
@@ -275,9 +275,9 @@ def isAuthorized(openid_request):
             openid_request.identity,
             get_claimed_id(get_auth_module().get_username()))
         return AUTH_INCORRECT_IDENTITY
-    elif openid_request.trust_root in app.config['TRUSTED_ROOTS']:
+    elif openid_request.trust_root in app.config['OPENID_TRUSTED_ROOTS']:
         return AUTH_OK
-    elif openid_request.trust_root in app.config['NON_TRUSTED_ROOTS']:
+    elif openid_request.trust_root in app.config['OPENID_NON_TRUSTED_ROOTS']:
         return AUTH_TRUST_ROOT_CONFIG_NOT_OK
     elif openid_request.trust_root in getSessionValue('TRUSTED_ROOTS', []):
         return AUTH_OK

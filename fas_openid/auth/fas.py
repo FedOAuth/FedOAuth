@@ -55,6 +55,9 @@ class Auth_FAS(Auth_Base):
     def logged_in(self):
         return 'user' in get_session()
 
+    def start_authentication(self):
+        return redirect(app.config['LOGIN_URL'])
+
     def get_username(self):
         if not 'user' in get_session():
             return None
@@ -114,8 +117,8 @@ class Auth_FAS(Auth_Base):
         if request.method == 'POST':
             username = request.form['username']
             password = request.form['password']
-            if (not app.config['AVAILABLE_FILTER']) or \
-                    (username in app.config['AVAILABLE_TO']):
+            if (not app.config['FAS_AVAILABLE_FILTER']) or \
+                    (username in app.config['FAS_AVAILABLE_TO']):
                 if username == '' or password == '':
                     user = None
                 else:
@@ -145,7 +148,7 @@ class Auth_FAS(Auth_Base):
                                'allowed to use this service'})
                 flash(_('This service is limited to the following '
                         'users: %(users)s',
-                        users=', '.join(app.config['AVAILABLE_TO'])))
+                        users=', '.join(app.config['FAS_AVAILABLE_TO'])))
         return render_template(
             'auth_fas_login.html',
             trust_root=get_session()['trust_root'])

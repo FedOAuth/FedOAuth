@@ -27,6 +27,9 @@ class Auth_Base:
     def __init__(self, config):
         pass
 
+    def start_authentication(self):
+        raise NotImplementedError()
+
     def logged_in(self):
         raise NotImplementedError()
 

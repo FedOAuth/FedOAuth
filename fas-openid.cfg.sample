@@ -20,6 +20,11 @@ FAS_CHECK_CERT = True
 FAS_AVAILABLE_FILTER = False
 FAS_AVAILABLE_TO = []
 
+# PERSONA CONFIGURATION
+# This is the domain for which we are willing to sign
+PERSONA_DOMAIN = 'localhost'
+PERSONA_CERTIFICATE_PATH = ''
+PERSONA_CERTIFICATE_PASSPHRASE = ''
 
 # OPENID CONFIGURATION
 # This is the OpenID url provided to users. Add %(username)s where the username should be entered

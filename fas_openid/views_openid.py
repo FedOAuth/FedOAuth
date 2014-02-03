@@ -153,7 +153,7 @@ def user_ask_trust_root(openid_request):
         get_cla_uris(get_auth_module().get_groups()))
     # Show form
     return render_template(
-        'user_ask_trust_root.html',
+        'openid_user_ask_trust_root.html',
         action=request.url,
         trust_root=openid_request.trust_root,
         sreg_policy_url=sreg_req.policy_url or _('None provided'),
@@ -291,7 +291,7 @@ def isAuthorized(openid_request):
 @app.route('/id/<username>/')
 def view_openid_id(username):
     return render_template(
-        'user.html',
+        'openid_user.html',
         username=username,
         claimed_id=get_claimed_id(username),
         yadis_url=complete_url_for('view_openid_yadis_id',
@@ -307,14 +307,14 @@ def view_openid_id(username):
 
 @app.route('/yadis/<username>.xrds')
 def view_openid_yadis_id(username):
-    return no_cache(Response(render_template('yadis_user.xrds',
+    return no_cache(Response(render_template('openid_yadis_user.xrds',
                     claimed_id=get_claimed_id(username)),
                     mimetype='application/xrds+xml'))
 
 
 @app.route('/yadis.xrds')
 def view_openid_yadis():
-    return no_cache(Response(render_template('yadis.xrds'),
+    return no_cache(Response(render_template('openid_yadis.xrds'),
                     mimetype='application/xrds+xml'))
 
 

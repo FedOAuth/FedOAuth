@@ -111,6 +111,9 @@ def addPape(request, response):
 
 def addTeams(request, response, groups):
     teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
+    if teams_req.requested == []:
+        # If they don't want any groups, we won't force them upon them
+        return
     teams_resp = teams.TeamsResponse.extractResponse(teams_req, groups)
     response.addExtension(teams_resp)
     return teams_resp.teams

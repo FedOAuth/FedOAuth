@@ -18,7 +18,8 @@ def view_browserid():
     info['public-key']['n'] = ''
     info['public-key']['e'] = ''
 
-    return json.dumps(info)
+    return Response(json.dumps(info),
+                    mimetype='application/json')
 
 
 @app.route('/persona/provision/')

@@ -156,7 +156,7 @@ def user_ask_trust_root(openid_request):
     # Show form
     return render_template(
         'openid_user_ask_trust_root.html',
-        action=request.url,
+        action=complete_url_for('view_main'),
         trust_root=openid_request.trust_root,
         sreg_policy_url=sreg_req.policy_url or _('None provided'),
         sreg_data=sreg_resp.data,

@@ -10,7 +10,7 @@ SQLALCHEMY_DATABASE_URI='sqlite:///fasopenid.sqlite'
 WEBSITE_ROOT = 'http://localhost:5000'
 
 # Modules to use
-AUTH_MODULE='fas_openid.auth.fas.Auth_FAS'
+AUTH_MODULE='fedoauth.auth.fas.Auth_FAS'
 
 # FAS PROVIDER CONFIGURATION
 FAS_BASE_URL = 'https://admin.fedoraproject.org/accounts/'

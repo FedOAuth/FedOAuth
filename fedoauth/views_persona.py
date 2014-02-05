@@ -23,7 +23,7 @@ def view_browserid():
 
 @app.route('/persona/provision/')
 def view_persona_provision():
-    return "PROVISION"
+    return render_template('persona_provision.html')
 
 
 @app.route('/persona/sign_in/')

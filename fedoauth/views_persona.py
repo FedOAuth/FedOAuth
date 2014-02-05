@@ -23,7 +23,8 @@ def view_browserid():
 
 @app.route('/persona/provision/')
 def view_persona_provision():
-    return render_template('persona_provision.html')
+    return render_template('persona_provision.html',
+                           user_email=PERSONA_ADDRESS % {'username': get_auth_module().get_username())
 
 
 @app.route('/persona/sign_in/')

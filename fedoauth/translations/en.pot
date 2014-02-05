@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FedOAuth 2.0\n"
 "Report-Msgid-Bugs-To: puiterwijk@gmail.com\n"
-"POT-Creation-Date: 2014-02-03 22:12+0100\n"
+"POT-Creation-Date: 2014-02-05 21:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "You have been logged out"
 msgstr ""
 
-#: fedoauth/views_openid.py:158
+#: fedoauth/views_openid.py:161
 msgid "None provided"
 msgstr ""
 
@@ -83,7 +83,7 @@ msgid "Home"
 msgstr ""
 
 #: fedoauth/templates/index.html:4
-msgid "This is the FAS-OpenID homepage."
+msgid "This is the Federated Open Authentication provider homepage."
 msgstr ""
 
 #: fedoauth/templates/index.html:7

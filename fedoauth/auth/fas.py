@@ -104,6 +104,46 @@ class Auth_FAS(Auth_Base):
     def is_dynamic_content(self, path):
         return path.startswith('/fas/login')
 
+    @app.route('/fas/login/persona/', methods=['POST'])
+    def view_persona_fas_login():
+        if not 'username' in request.form or not 'password' in  request.form:
+            return Response('No user or pw', status=400)
+        if get_auth_module().logged_in():
+            return Response('Already logged in', status=409)
+        username = request.form['username']
+        password = request.form['password']
+        if (not app.config['FAS_AVAILABLE_FILTER']) or \
+                (username in app.config['FAS_AVAILABLE_TO']):
+            if username == '' or password == '':
+                user = None
+            else:
+                user = get_auth_module().check_login(username, password)
+            if user:
+                log_info('Success', {
+                    'username': username,
+                    'message': 'User authenticated succesfully'})
+                user = user.toDict()  # A bunch is not serializable...
+                user['groups'] = [x['name'] for x in
+                                  user['approved_memberships']]
+                get_session()['user'] = user
+                get_session()['last_auth_time'] = time()
+                get_session()['timeout'] = False
+                get_session()['trust_root'] = ''
+                get_session().save()
+                return Response('Success', status=200)
+            else:
+                log_warning('Failure', {
+                    'username': username,
+                    'message': 'User entered incorrect username or password'})
+                return Response('Incorrect username or password', status=403)
+        else:
+            log_warning('Failure', {
+                'username': username,
+                'message': 'Tried to login with an account that is not '
+                           'allowed to use this service'})
+            return Response('Service limited to a restricted set of users', status=403)
+
+
     @app.route('/fas/login/', methods=['GET', 'POST'])
     def view_fas_login():
         if not 'next' in request.args and not 'next' in get_session():

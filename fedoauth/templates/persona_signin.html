@@ -1,10 +1,13 @@
 {% extends auth_module_login %}
 {% block action %}#{% endblock %}
-{% block form_options %}onSubmit="checkLogin(self)"{% endblock %}
+{% block form_options %}onSubmit="checkLogin(self); return false;"{% endblock %}
 
 {% block javascript %}
-function ceckLogin(form)
+<script src="https://login.persona.org/authentication_api.js"></script>
+<script type="text/javascript">
+function checkLogin(form)
 {
     alert(form);
 }
+</script>
 {% endblock %}

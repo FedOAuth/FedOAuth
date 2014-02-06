@@ -3,4 +3,6 @@
 *.sqlite
 *.cfg
 *.pfx
+*.key
+*.pem
 release/

@@ -2,4 +2,5 @@
 *.pyc
 *.sqlite
 *.cfg
+*.pfx
 release/

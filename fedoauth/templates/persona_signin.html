@@ -18,9 +18,11 @@ xmlhttp.onreadystatechange=function()
 
 function checkLogin(form)
 {
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
     xmlhttp.open("POST","/fas/login/persona/",true);
     xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xmlhttp.send("username=" + "&passwod=" + "");
+    xmlhttp.send("username=" + username + "&password=" + password);
     alert(xmlhttp);
 }
 </script>

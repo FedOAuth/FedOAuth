@@ -42,6 +42,8 @@ class Auth_Test(Auth_Base):
     def start_authentication(self):
         return redirect(complete_url_for('view_test_login'))
 
+    def get_persona_auth_base(self):
+        return "auth_test_login.html"
 
     def get_username(self):
         if not 'loggedin' in get_session():

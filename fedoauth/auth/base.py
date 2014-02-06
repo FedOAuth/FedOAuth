@@ -30,6 +30,9 @@ class Auth_Base:
     def start_authentication(self):
         raise NotImplementedError()
 
+    def get_persona_auth_base(self):
+        raise NotImplementedError()
+
     def logged_in(self):
         raise NotImplementedError()
 

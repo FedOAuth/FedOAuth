@@ -1,0 +1,10 @@
+{% extends auth_module_login %}
+{% block action %}#{% endblock %}
+{% block form_options %}onSubmit="checkLogin(self)"{% endblock %}
+
+{% block javascript %}
+function ceckLogin(form)
+{
+    alert(form);
+}
+{% endblock %}

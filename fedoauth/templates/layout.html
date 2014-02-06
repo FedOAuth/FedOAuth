@@ -16,8 +16,13 @@
         {% endif %}
         <title>FedOAuth - {% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="/static/fedora.css">
+
+        <script type="text/javascript">
+            {% block javascript %}
+            {% endblock %}
+        </script>
     </head>
-    <body>
+    <body {% block body_options %}{% endblock %}>
         <div class="header_bg">
             <div class="body header">
                 <img id="logo" alt="logo" src="/static/fedora-openid_logo-white.png"/>

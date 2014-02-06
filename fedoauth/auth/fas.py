@@ -59,6 +59,9 @@ class Auth_FAS(Auth_Base):
     def start_authentication(self):
         return redirect(complete_url_for('view_fas_login'))
 
+    def get_persona_auth_base(self):
+        return "auth_fas_login.html"
+
     def get_username(self):
         if not 'user' in get_session():
             return None

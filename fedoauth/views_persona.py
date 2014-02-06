@@ -33,4 +33,5 @@ def view_persona_provision():
 
 @app.route('/persona/sign_in/')
 def view_persona_sign_in():
-    return 'SIGNIN'
+    return render_template('persona_signin.html',
+        auth_module_login=get_auth_module().get_persona_auth_base())

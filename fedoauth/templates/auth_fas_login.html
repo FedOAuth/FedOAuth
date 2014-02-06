@@ -8,10 +8,10 @@
     <div>
         <form method="post" {% block form_options %}{% endblock %} action="{% block action %}/fas/login/{% endblock %}">
             <p class="form_item">
-                <input name="username" placeholder="{% trans %}FAS Username{% endtrans %}" autofocus>
+                <input id="username" name="username" placeholder="{% trans %}FAS Username{% endtrans %}" autofocus>
             </p>
             <p class="form_item">
-                <input name="password" type="password" placeholder="{% trans %}Password{% endtrans %}">
+                <input id="password" name="password" type="password" placeholder="{% trans %}Password{% endtrans %}">
             </p>
             <p class="form_item">
                 <input type="submit" value="{% trans %}login{% endtrans %}">

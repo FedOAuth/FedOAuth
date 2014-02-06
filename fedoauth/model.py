@@ -58,9 +58,6 @@ class DBSession(db.Model, SessionMixin, DictMixin):
 
     @classmethod
     def open_session(cls, app, request):
-        if not request.path == '/' and not request.path == '/logout/' \
-                and not get_auth_module().is_dynamic_content(request.path):
-            return None
         request.path
         sessionid = request.cookies.get('sessionid')
 

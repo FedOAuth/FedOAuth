@@ -78,9 +78,6 @@ class Auth_Test(Auth_Base):
     def used_phishing_resistant(self):
         return False
 
-    def is_dynamic_content(self, path):
-        return path.startswith('/test/login')
-
     @app.route('/test/login/', methods=['GET', 'POST'])
     def view_test_login():
         if not 'next' in request.args and not 'next' in get_session():

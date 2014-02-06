@@ -53,6 +53,3 @@ class Auth_Base:
 
     def used_phishing_resistant(self):
         raise NotImplementedError()
-
-    def is_dynamic_content(self, path):
-        raise NotImplementedError()

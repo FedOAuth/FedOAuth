@@ -101,9 +101,6 @@ class Auth_FAS(Auth_Base):
     def used_phishing_resistant(self):
         return False
 
-    def is_dynamic_content(self, path):
-        return path.startswith('/fas/login')
-
     @app.route('/fas/login/persona/', methods=['POST'])
     def view_persona_fas_login():
         if not 'username' in request.form or not 'password' in  request.form:

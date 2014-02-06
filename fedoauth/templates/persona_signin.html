@@ -5,9 +5,11 @@
 {% block javascript %}
 <script src="https://login.persona.org/authentication_api.js"></script>
 <script type="text/javascript">
+var xmlhttp = new XMLHttpRequest();
+
 function checkLogin(form)
 {
-    alert(form);
+    alert(xmlhttp);      
 }
 </script>
 {% endblock %}

@@ -23,8 +23,8 @@ FAS_AVAILABLE_TO = []
 # PERSONA CONFIGURATION
 # This is the domain for which we are willing to sign
 PERSONA_ADDRESS = '%(username)s@localhost'
-PERSONA_CERTIFICATE_PATH = ''
-PERSONA_CERTIFICATE_PASSPHRASE = ''
+PERSONA_CERTIFICATE_PATH = 'persona.pfx'
+PERSONA_CERTIFICATE_PASSPHRASE = 'test123'
 
 # OPENID CONFIGURATION
 # This is the OpenID url provided to users. Add %(username)s where the username should be entered

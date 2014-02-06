@@ -47,8 +47,8 @@ if key and cert and key_e and key_n:
         info['public-key'] = {}
 
         info['public-key']['algorithm'] = 'RS'
-        info['public-key']['n'] = key_n
-        info['public-key']['e'] = key_e
+        info['public-key']['n'] = str(key_n)
+        info['public-key']['e'] = str(key_e)
 
         return Response(json.dumps(info),
                         mimetype='application/json')

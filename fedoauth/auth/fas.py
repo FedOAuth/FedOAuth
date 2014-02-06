@@ -106,9 +106,7 @@ class Auth_FAS(Auth_Base):
 
     @app.route('/fas/login/', methods=['GET', 'POST'])
     def view_fas_login():
-        print 'SESS: %s' % get_session()
         if not 'next' in request.args and not 'next' in get_session():
-            print 'nonext'
             return redirect(url_for('view_main'))
         if 'next' in request.args:
             get_session()['next'] = request.args['next']
@@ -119,7 +117,6 @@ class Auth_FAS(Auth_Base):
             # indicating PAPE or application configuration requires a re-auth
             log_debug('Info', {
                 'message': 'User tried to login but is already authenticated'})
-            print 'loggedin'
             return redirect(get_session()['next'])
         if request.method == 'POST':
             username = request.form['username']
@@ -142,7 +139,6 @@ class Auth_FAS(Auth_Base):
                     get_session()['timeout'] = False
                     get_session()['trust_root'] = ''
                     get_session().save()
-                    print 'done'
                     return redirect(get_session()['next'])
                 else:
                     log_warning('Failure', {

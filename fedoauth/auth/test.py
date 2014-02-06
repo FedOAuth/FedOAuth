@@ -84,7 +84,6 @@ class Auth_Test(Auth_Base):
     @app.route('/test/login/', methods=['GET', 'POST'])
     def view_test_login():
         if not 'next' in request.args and not 'next' in get_session():
-            print 'nonext'
             return redirect(url_for('view_main'))
         if 'next' in request.args:
             get_session()['next'] = request.args['next']

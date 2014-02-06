@@ -7,9 +7,21 @@
 <script type="text/javascript">
 var xmlhttp = new XMLHttpRequest();
 
+xmlhttp.onreadystatechange=function()
+{
+    if (xmlhttp.readyState==4)
+    {
+        alert("Response code: " + xmlhttp.status);
+        alert("Response text: " + xmlhttp.responseText);
+    }
+}
+
 function checkLogin(form)
 {
-    alert(xmlhttp);      
+    xmlhttp.open("POST","/fas/login/persona/",true);
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xmlhttp.send("username=" + "&passwod=" + "");
+    alert(xmlhttp);
 }
 </script>
 {% endblock %}

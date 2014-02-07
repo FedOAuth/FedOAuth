@@ -1,5 +1,6 @@
 {% extends auth_module_login %}
 {% block action %}#{% endblock %}
+{% block body_options %}onLoad="startAuth()"{% endblock %}
 {% block form_options %}onSubmit="checkLogin(self); return false;"{% endblock %}
 
 {% block javascript %}
@@ -36,15 +37,18 @@ function checkLogin(form)
 
 var domain = '{{domain}}';
 
-navigator.id.beginAuthentication(function(email) {
-    if(email.endsWith('@' + domain))
-    {
-        document.getElementById('username').value = email.substring(0, email.indexOf('@' + domain));
-    }
-    else
-    {
-        alert(email);
-    }
-})
+function startAuth()
+{
+    navigator.id.beginAuthentication(function(email) {
+        if(email.endsWith('@' + domain))
+        {
+            document.getElementById('username').value = email.substring(0, email.indexOf('@' + domain));
+        }
+        else
+        {
+            alert(email);
+        }
+    });
+}
 </script>
 {% endblock %}

@@ -47,6 +47,21 @@ if key and key_e and key_n:
         return Response(json.dumps(info),
                         mimetype='application/json')
 
+    
+    def persona_sign(email, publicKey, certDuration):
+    #key = M2Crypto.RSA.load_key(app.config['PERSONA_PRIVATE_KEY_PATH'], get_passphrase)
+    #e = 0
+    #for c in key.e[4:]:
+    #    e = (e*256) + ord(c)
+    #n = 0
+    #for c in key.n[4:]:
+    #    n = (n*256) + ord(c)
+    #key_e = e
+    #key_n = n
+    #        print 'SIGNING'
+        signed = {}
+        return json.dumps(signed)
+
 
     @app.route('/persona/provision/sign/', methods=['POST'])
     def view_persons_provision_sign():
@@ -58,10 +73,9 @@ if key and key_e and key_n:
         certDuration = request.form['certDuration']
         print 'Certrequest for %s, %s, %s. by user %s' % (email, publicKey, certDuration, get_auth_module().get_username())
         if email == (app.config['PERSONA_ADDRESS'] % {'username': get_auth_module().get_username()}):
-            print 'SIGNING'
-            return Response('Signing', status=200)
+            publicKey = json.loads(publicKey)
+            return persona_sign(email, publicKey, certDuration)
         else:
-            print 'Not signing'
             if get_auth_module().logged_in():
                 return Response('Incorrect user!', status=403)
             else:

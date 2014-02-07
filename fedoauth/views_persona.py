@@ -1,3 +1,4 @@
+import base64
 from flask import request, g, redirect, url_for, \
     abort, render_template, flash, Response
 from flaskext.babel import gettext as _
@@ -48,38 +49,30 @@ if key and key_e and key_n:
                         mimetype='application/json')
 
 
-    def persona_sign_dsa(email, publicKey, certDuration):
-        key_y = publicKey['y']
-        key_p = publicKey['p']
-        key_q = publicKey['q']
-        key_g = publicKey['g']
-
-        return {}
-
-
-    def persona_sign_rsa(email, publicKey, certDuration):
-        print 'RSA sig requested....'
-        return Response('RSA not supported', status=501)
-
-    
     def persona_sign(email, publicKey, certDuration):
-    #key = M2Crypto.RSA.load_key(app.config['PERSONA_PRIVATE_KEY_PATH'], get_passphrase)
-    #e = 0
-    #for c in key.e[4:]:
-    #    e = (e*256) + ord(c)
-    #n = 0
-    #for c in key.n[4:]:
-    #    n = (n*256) + ord(c)
-    #key_e = e
-    #key_n = n
-    #        print 'SIGNING'
-        if publicKey['algorithm'] == 'DS':
-            signed = persona_sign_dsa(email, publicKey, certDuration)
-        elif publicKey['algorithm'] == 'RS':
-            signed = persona_sign_rsa(email, publicKey, certDurtation)
-        else:
-            return Response('Incorrect request', status=400)
-        return json.dumps(signed)
+        header = {'alg': 'RS256'}
+        header = json.dumps(header)
+
+        claim = {}
+        # Valid for at most 24 hours
+        claim['exp'] = min(certDuration, 24 * 60 * 60)
+        claim['iss'] = app.config['PERSONA_DOMAIN']
+        claim['public-key'] = json.loads(publicKey)
+        claim['principal'] = {'email': email}
+
+        claim = json.dumps(claim)
+        claim = base64_urlencode(claim)
+
+        certificate = '%s.%s' % (header, claim)
+        print 'Cert: %s' % certificate
+        signature = key.sign(sha256(certificate).digest(), 'sha256')
+        print 'SIG: '
+        print signature
+        print dir(signature)
+        signed_certificate = '%s.%s' % (certificate, signature)
+        print 'signed cert: %s' % signed_certificate
+
+        return signed_certificate
 
 
     @app.route('/persona/provision/sign/', methods=['POST'])
@@ -93,7 +86,6 @@ if key and key_e and key_n:
         print 'Certrequest for %s, %s, %s. by user %s' % (email, publicKey, certDuration, get_auth_module().get_username())
         if email == ('%s@%s' % (app.config['PERSONA_DOMAIN'],
                 get_auth_module().get_username())):
-            publicKey = json.loads(publicKey)
             return persona_sign(email, publicKey, certDuration)
         else:
             if get_auth_module().logged_in():

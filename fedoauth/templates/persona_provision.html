@@ -7,6 +7,7 @@
 
             xmlhttp.onreadstatechange=function()
             {
+                alert("New status: " + xmlhttp.readyState);
                 if(xmlhttp.readyState==4)
                 {
                     alert("Response code: " + xmlhttp.status);

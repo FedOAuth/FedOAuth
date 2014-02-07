@@ -22,7 +22,7 @@ try:
         return app.config['PERSONA_PRIVATE_KEY_PASSPHRASE']
 
     key = M2Crypto.RSA.load_key(app.config['PERSONA_PRIVATE_KEY_PATH'], get_passphrase)
-    key_len = len(ken)
+    key_len = len(key)
     if key_len == 2048:
         digest_size = '256'
     else:

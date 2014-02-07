@@ -12,7 +12,7 @@ from fedoauth import APP as app, get_session, log_debug, \
 
 # Try to load our key
 key = None
-ken_len = None
+key_len = None
 cert = None
 key_e = None
 key_n = None
@@ -22,7 +22,7 @@ try:
         return app.config['PERSONA_PRIVATE_KEY_PASSPHRASE']
 
     key = M2Crypto.RSA.load_key(app.config['PERSONA_PRIVATE_KEY_PATH'], get_passphrase)
-    ken_len = len(ken)
+    key_len = len(ken)
     if key_len == 2048:
         digest_size = '256'
     else:

@@ -49,6 +49,15 @@ if key and key_e and key_n:
                         mimetype='application/json')
 
 
+    def base64_url_decode(input):
+        input += '=' * (4 - (len(input) % 4))
+        return base64.urlsafe_b64decode(input)
+
+
+    def base64_url_encode(input):
+        return base64.urlsafe_b64encode(input).replace('=', '')
+
+
     def persona_sign(email, publicKey, certDuration):
         header = {'alg': 'RS256'}
         header = json.dumps(header)
@@ -61,7 +70,7 @@ if key and key_e and key_n:
         claim['principal'] = {'email': email}
 
         claim = json.dumps(claim)
-        claim = base64_urlencode(claim)
+        claim = base64_url_encode(claim)
 
         certificate = '%s.%s' % (header, claim)
         print 'Cert: %s' % certificate

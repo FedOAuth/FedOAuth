@@ -2,7 +2,7 @@
 
 # GENERAL CONFIGURATION
 ### url to the database server:
-SQLALCHEMY_DATABASE_URI='sqlite:///fasopenid.sqlite'
+SQLALCHEMY_DATABASE_URI='sqlite:///fedoauth.sqlite'
 #SQLALCHEMY_DATABASE_URI=mysql://user:pass@host/db_name
 #SQLALCHEMY_DATABASE_URI=postgresql://user:pass@host/db_name
 

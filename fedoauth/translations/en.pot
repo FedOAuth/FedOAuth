@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FedOAuth 2.0\n"
 "Report-Msgid-Bugs-To: puiterwijk@gmail.com\n"
-"POT-Creation-Date: 2014-02-05 21:53+0100\n"
+"POT-Creation-Date: 2014-02-07 23:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,34 +17,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: fedoauth/views.py:24
+#: fedoauth/views.py:40
 msgid "You have been logged out"
 msgstr ""
 
-#: fedoauth/views_openid.py:161
+#: fedoauth/views_openid.py:177
 msgid "None provided"
 msgstr ""
 
-#: fedoauth/auth/fas.py:148 fedoauth/auth/test.py:118
+#: fedoauth/auth/fas.py:176
 msgid "Incorrect username or password"
 msgstr ""
 
-#: fedoauth/auth/fas.py:156
+#: fedoauth/auth/fas.py:184
 #, python-format
 msgid "This service is limited to the following users: %(users)s"
 msgstr ""
 
 #: fedoauth/templates/auth_fas_login.html:2
-#: fedoauth/templates/auth_test_login.html:2
+#: fedoauth/templates/auth_fas_login.html:17
 msgid "Login"
 msgstr ""
 
 #: fedoauth/templates/auth_fas_login.html:4
-#: fedoauth/templates/openid_user_ask_trust_root.html:4
 #, python-format
-msgid ""
-"%(trust_root)s is asking to authenticate via OpenID using the Fedora "
-"Account System"
+msgid "%(trust_root)s is asking to authenticate using the Fedora Account System"
 msgstr ""
 
 #: fedoauth/templates/auth_fas_login.html:7
@@ -56,26 +53,7 @@ msgid "FAS Username"
 msgstr ""
 
 #: fedoauth/templates/auth_fas_login.html:14
-#: fedoauth/templates/auth_test_login.html:14
 msgid "Password"
-msgstr ""
-
-#: fedoauth/templates/auth_fas_login.html:17
-#: fedoauth/templates/auth_test_login.html:17
-msgid "login"
-msgstr ""
-
-#: fedoauth/templates/auth_test_login.html:4
-#, python-format
-msgid "%(trust_root)s is asking to authenticate via OpenID using the TEST SYSTEM"
-msgstr ""
-
-#: fedoauth/templates/auth_test_login.html:7
-msgid "Login with your TESTING credentials (tester / testing)"
-msgstr ""
-
-#: fedoauth/templates/auth_test_login.html:11
-msgid "Username"
 msgstr ""
 
 #: fedoauth/templates/index.html:2
@@ -107,6 +85,13 @@ msgstr ""
 
 #: fedoauth/templates/openid_user_ask_trust_root.html:2
 msgid "Approval"
+msgstr ""
+
+#: fedoauth/templates/openid_user_ask_trust_root.html:4
+#, python-format
+msgid ""
+"%(trust_root)s is asking to authenticate via OpenID using the Fedora "
+"Account System"
 msgstr ""
 
 #: fedoauth/templates/openid_user_ask_trust_root.html:8

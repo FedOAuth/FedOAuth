@@ -43,6 +43,7 @@ function startAuth()
         {
             document.getElementById('username').value = email.substring(0, email.indexOf('@' + domain));
             document.getElementById('username').readOnly=true;
+            document.getElementById('password').focus();
         }
         else
         {

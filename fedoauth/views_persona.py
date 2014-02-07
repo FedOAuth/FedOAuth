@@ -118,4 +118,5 @@ if key and key_e and key_n:
         get_session().delete()
         return render_template('persona_signin.html',
             auth_module_login=get_auth_module().get_persona_auth_base(),
-            trust_root='Persona', domain=app.config['PERSONA_DOMAIN'])
+            trust_root='Persona', domain=app.config['PERSONA_DOMAIN'],
+            website_root=app.config['WEBSITE_ROOT'])

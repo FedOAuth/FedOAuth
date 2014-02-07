@@ -28,6 +28,8 @@ try:
         n = (n*256) + ord(c)
     key_e = e
     key_n = n
+    if len(key) != 2048:
+        raise Exception('Only keys with size 2048 bits are supported')
 except Exception as e:
     print 'Unable to read the private key for Persona: %s' % e
 

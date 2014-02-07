@@ -3,6 +3,7 @@ from flask import request, g, redirect, url_for, \
     abort, render_template, flash, Response
 from flaskext.babel import gettext as _
 import json
+import time
 import M2Crypto
 
 from fedoauth import APP as app, get_session, log_debug, \
@@ -64,8 +65,9 @@ if key and key_e and key_n:
 
         claim = {}
         # Valid for at most 24 hours
-        claim['exp'] = min(certDuration, 24 * 60 * 60)
-        claim['iss'] = app.config['PERSONA_DOMAIN']
+        claim['issuedAt'] = int(time.time())
+        claim['expiresAt'] = int(time.time() + min(certDuration, 24 * 60 * 60))
+        claim['issuer'] = app.config['PERSONA_DOMAIN']
         claim['public-key'] = json.loads(publicKey)
         claim['principal'] = {'email': email}
 

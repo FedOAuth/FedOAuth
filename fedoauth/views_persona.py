@@ -1,5 +1,4 @@
 import base64
-from hashlib import sha256
 from flask import request, g, redirect, url_for, \
     abort, render_template, flash, Response
 from flaskext.babel import gettext as _
@@ -75,7 +74,9 @@ if key and key_e and key_n:
 
         certificate = '%s.%s' % (header, claim)
         print 'Cert: %s' % certificate
-        signature = key.sign(sha256(certificate).hexdigest(), 'sha256')
+        digest = M2Crypto.EVP.MessageDigest('sha256')
+        digest.update(certificate)
+        signature = key.sign(digest.digest(), 'sha256')
         signature = base64_url_encode(signature)
         signed_certificate = '%s.%s' % (certificate, signature)
         print 'signed cert: %s' % signed_certificate

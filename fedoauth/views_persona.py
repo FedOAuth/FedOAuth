@@ -12,16 +12,21 @@ from fedoauth import APP as app, get_session, log_debug, \
 
 # Try to load our key
 key = None
+ken_len = None
 cert = None
 key_e = None
 key_n = None
+digest_size = None
 try:
     def get_passphrase(*args):
         return app.config['PERSONA_PRIVATE_KEY_PASSPHRASE']
 
     key = M2Crypto.RSA.load_key(app.config['PERSONA_PRIVATE_KEY_PATH'], get_passphrase)
-    if len(key) != 2048:
-        raise Exception('Only keys with size 2048 bits are supported')
+    ken_len = len(ken)
+    if key_len == 2048:
+        digest_size = '256'
+    else:
+        raise Exception('Keys with size %i bits are not supported' % key_len)
     e = 0
     for c in key.e[4:]:
         e = (e*256) + ord(c)
@@ -35,7 +40,7 @@ except Exception as e:
 
 
 # These things only make sense if we were able to get a key
-if key and key_e and key_n:
+if key and key_len and digest_size and key_e and key_n:
     @app.route('/.well-known/browserid')
     def view_browserid():
         info = {}
@@ -61,7 +66,7 @@ if key and key_e and key_n:
 
 
     def persona_sign(email, publicKey, certDuration):
-        header = {'alg': 'RS256'}
+        header = {'alg': 'RS%s' % digest_size}
         header = json.dumps(header)
         header = base64_url_encode(header)
 
@@ -78,9 +83,9 @@ if key and key_e and key_n:
         claim = base64_url_encode(claim)
 
         certificate = '%s.%s' % (header, claim)
-        digest = M2Crypto.EVP.MessageDigest('sha256')
+        digest = M2Crypto.EVP.MessageDigest('sha%s' % digest_size)
         digest.update(certificate)
-        signature = key.sign(digest.digest(), 'sha256')
+        signature = key.sign(digest.digest(), 'sha%s' % digest_size)
         signature = base64_url_encode(signature)
         signed_certificate = '%s.%s' % (certificate, signature)
 

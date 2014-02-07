@@ -61,6 +61,7 @@ if key and key_e and key_n:
     def persona_sign(email, publicKey, certDuration):
         header = {'alg': 'RS256'}
         header = json.dumps(header)
+        header = base64_url_encode(header)
 
         claim = {}
         # Valid for at most 24 hours
@@ -75,9 +76,7 @@ if key and key_e and key_n:
         certificate = '%s.%s' % (header, claim)
         print 'Cert: %s' % certificate
         signature = key.sign(sha256(certificate).digest(), 'sha256')
-        print 'SIG: '
-        print signature
-        print dir(signature)
+        signature = base64_url_encode(signature)
         signed_certificate = '%s.%s' % (certificate, signature)
         print 'signed cert: %s' % signed_certificate
 

@@ -33,6 +33,7 @@ from flask import Flask, request, g, redirect, url_for, \
     abort, render_template, flash, Response
 from time import time
 from datetime import datetime
+import urllib
 
 from fedora.client.fasproxy import FasProxyClient
 from fedora.client import AuthError

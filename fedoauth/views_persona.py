@@ -99,7 +99,7 @@ if key and key_e and key_n:
         user_email = 'INVALID'
         if get_auth_module().logged_in():
             user_email = '%s@%s' % (get_auth_module().get_username()
-                                   , get_auth_module().get_username())
+                                   , app.config['PERSONA_DOMAIN'])
         return render_template('persona_provision.html', user_email=user_email)
 
 

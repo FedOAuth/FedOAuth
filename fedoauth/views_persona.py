@@ -20,6 +20,8 @@ try:
         return app.config['PERSONA_PRIVATE_KEY_PASSPHRASE']
 
     key = M2Crypto.RSA.load_key(app.config['PERSONA_PRIVATE_KEY_PATH'], get_passphrase)
+    if len(key) != 2048:
+        raise Exception('Only keys with size 2048 bits are supported')
     e = 0
     for c in key.e[4:]:
         e = (e*256) + ord(c)
@@ -28,8 +30,6 @@ try:
         n = (n*256) + ord(c)
     key_e = e
     key_n = n
-    if len(key) != 2048:
-        raise Exception('Only keys with size 2048 bits are supported')
 except Exception as e:
     print 'Unable to read the private key for Persona: %s' % e
 

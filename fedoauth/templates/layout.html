@@ -17,10 +17,8 @@
         <title>FedOAuth - {% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="/static/fedora.css">
 
-        <script type="text/javascript">
-            {% block javascript %}
-            {% endblock %}
-        </script>
+        {% block javascript %}
+        {% endblock %}
     </head>
     <body {% block body_options %}{% endblock %}>
         <div class="header_bg">

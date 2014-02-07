@@ -1,4 +1,5 @@
 import base64
+from hashlib import sha256
 from flask import request, g, redirect, url_for, \
     abort, render_template, flash, Response
 from flaskext.babel import gettext as _

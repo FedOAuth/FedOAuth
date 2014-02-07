@@ -76,13 +76,11 @@ if key and key_e and key_n:
         claim = base64_url_encode(claim)
 
         certificate = '%s.%s' % (header, claim)
-        print 'Cert: %s' % certificate
         digest = M2Crypto.EVP.MessageDigest('sha256')
         digest.update(certificate)
         signature = key.sign(digest.digest(), 'sha256')
         signature = base64_url_encode(signature)
         signed_certificate = '%s.%s' % (certificate, signature)
-        print 'signed cert: %s' % signed_certificate
 
         return signed_certificate
 

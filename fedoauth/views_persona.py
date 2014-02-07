@@ -57,6 +57,15 @@ if key and key_e and key_n:
         publicKey = request.form['publicKey']
         certDuration = request.form['certDuration']
         print 'Certrequest for %s, %s, %s. by user %s' % (email, publicKey, certDuration, get_auth_module().get_username())
+        if email == (app.config['PERSONA_ADDRESS'] % {'username': get_auth_module().get_username()}):
+            print 'SIGNING'
+            return Response('Signing', status=200)
+        else:
+            print 'Not signing'
+            if get_auth_module().logged_in():
+                return Response('Incorrect user!', status=403)
+            else:
+                return Response('Not signed in', status=401)
 
 
     @app.route('/persona/provision/')

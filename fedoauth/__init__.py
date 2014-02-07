@@ -68,8 +68,7 @@ def get_session():
     return flask.session
 
 
-APP.config.from_object('fedoauth.default_config')
-APP.config.from_envvar('FEDOAUTH_CONFIG', silent=True)
+APP.config.from_envvar('FEDOAUTH_CONFIG')
 
 # Make sure the configuration is sane
 if not APP.config['SQLALCHEMY_DATABASE_URI']:

@@ -17,7 +17,6 @@ key_e = None
 key_n = None
 try:
     def get_passphrase():
-        print 'Returning pw'
         return app.config['PERSONA_PRIVATE_KEY_PASSPHRASE']
 
     key = M2Crypto.RSA.load_key(app.config['PERSONA_PRIVATE_KEY_PATH'], get_passphrase)
@@ -85,8 +84,8 @@ if key and key_e and key_n:
         publicKey = request.form['publicKey']
         certDuration = request.form['certDuration']
         print 'Certrequest for %s, %s, %s. by user %s' % (email, publicKey, certDuration, get_auth_module().get_username())
-        if email == ('%s@%s' % (app.config['PERSONA_DOMAIN'],
-                get_auth_module().get_username())):
+        if email == ('%s@%s' % (get_auth_module().get_username()
+                               , app.config['PERSONA_DOMAIN'])):
             return persona_sign(email, publicKey, certDuration)
         else:
             if get_auth_module().logged_in():
@@ -99,8 +98,8 @@ if key and key_e and key_n:
     def view_persona_provision():
         user_email = 'INVALID'
         if get_auth_module().logged_in():
-            user_email = '%s@%s' % (app.config['PERSONA_DOMAIN'],
-                                    get_auth_module().get_username())
+            user_email = '%s@%s' % (get_auth_module().get_username()
+                                   , get_auth_module().get_username())
         return render_template('persona_provision.html', user_email=user_email)
 
 

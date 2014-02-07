@@ -22,7 +22,7 @@ FAS_AVAILABLE_TO = []
 
 # PERSONA CONFIGURATION
 # This is the domain for which we are willing to sign
-PERSONA_ADDRESS = '%(username)s@localhost'
+PERSONA_DOMAIN = 'localhost'
 PERSONA_PRIVATE_KEY_PATH = 'persona.key'
 PERSONA_PRIVATE_KEY_PASSPHRASE = 'test123'
 

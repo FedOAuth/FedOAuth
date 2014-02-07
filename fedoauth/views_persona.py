@@ -47,6 +47,20 @@ if key and key_e and key_n:
         return Response(json.dumps(info),
                         mimetype='application/json')
 
+
+    def persona_sign_dsa(email, publicKey, certDuration):
+        key_y = publicKey['y']
+        key_p = publicKey['p']
+        key_q = publicKey['q']
+        key_g = publicKey['g']
+
+        return {}
+
+
+    def persona_sign_rsa(email, publicKey, certDuration):
+        print 'RSA sig requested....'
+        return Response('RSA not supported', status=501)
+
     
     def persona_sign(email, publicKey, certDuration):
     #key = M2Crypto.RSA.load_key(app.config['PERSONA_PRIVATE_KEY_PATH'], get_passphrase)
@@ -59,7 +73,12 @@ if key and key_e and key_n:
     #key_e = e
     #key_n = n
     #        print 'SIGNING'
-        signed = {}
+        if publicKey['algorithm'] == 'DS':
+            signed = persona_sign_dsa(email, publicKey, certDuration)
+        elif publicKey['algorithm'] == 'RS':
+            signed = persona_sign_rsa(email, publicKey, certDurtation)
+        else:
+            return Response('Incorrect request', status=400)
         return json.dumps(signed)
 
 
@@ -72,7 +91,8 @@ if key and key_e and key_n:
         publicKey = request.form['publicKey']
         certDuration = request.form['certDuration']
         print 'Certrequest for %s, %s, %s. by user %s' % (email, publicKey, certDuration, get_auth_module().get_username())
-        if email == (app.config['PERSONA_ADDRESS'] % {'username': get_auth_module().get_username()}):
+        if email == ('%s@%s' % (app.config['PERSONA_DOMAIN'],
+                get_auth_module().get_username())):
             publicKey = json.loads(publicKey)
             return persona_sign(email, publicKey, certDuration)
         else:
@@ -86,8 +106,8 @@ if key and key_e and key_n:
     def view_persona_provision():
         user_email = 'INVALID'
         if get_auth_module().logged_in():
-            user_email = app.config['PERSONA_ADDRESS'] % {'username':
-                get_auth_module().get_username()}
+            user_email = '%s@%s' % (app.config['PERSONA_DOMAIN'],
+                                    get_auth_module().get_username())
         return render_template('persona_provision.html', user_email=user_email)
 
 

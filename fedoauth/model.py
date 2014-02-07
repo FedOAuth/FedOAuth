@@ -81,7 +81,9 @@ class DBSession(db.Model, SessionMixin, DictMixin):
             self.rawdata = serializer.dumps(self.data)
             db.session.add(self)
             db.session.commit()
-            response.set_cookie('sessionid', self.sessionid)
+            response.set_cookie('sessionid', self.sessionid,
+                                secure=app.config['COOKIE_SECURE'],
+                                domain=app.config['COOKIE_DOMAIN'])
 
     def delete(self):
         self.data_cache = {}

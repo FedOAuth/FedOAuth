@@ -8,6 +8,8 @@ SQLALCHEMY_DATABASE_URI='sqlite:///fasopenid.sqlite'
 
 # This is the OpenID endpoint url, at which the server is available
 WEBSITE_ROOT = 'http://localhost:5000'
+COOKIE_DOMAIN = 'localhost'
+COOKIE_SECURE = False
 
 # Modules to use
 AUTH_MODULE='fedoauth.auth.fas.Auth_FAS'

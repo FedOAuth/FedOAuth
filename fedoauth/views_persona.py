@@ -8,11 +8,7 @@ from fedoauth import APP as app, get_session, log_debug, \
     log_info, log_warning, log_error, get_auth_module
 
 
-PERSONA_CERTIFICATE_PATH = 'persona.pem'
-PERSONA_PRIVATE_KEY_PATH = 'persona.key'
-PERSONA_PRIVATE_KEY_PASSPHRASE = 'test123'
-
-# Try to load our certificate
+# Try to load our key
 key = None
 cert = None
 key_e = None
@@ -23,21 +19,20 @@ try:
         return app.config['PERSONA_PRIVATE_KEY_PASSPHRASE']
 
     key = M2Crypto.RSA.load_key(app.config['PERSONA_PRIVATE_KEY_PATH'], get_passphrase)
-    cert = M2Crypto.X509.load_cert(app.config['PERSONA_CERTIFICATE_PATH'])
     e = 0
-    for c in cert.get_pubkey().get_rsa().e[4:]:
+    for c in key.e[4:]:
         e = (e*256) + ord(c)
     n = 0
-    for c in cert.get_pubkey().get_rsa().n[4:]:
+    for c in key.n[4:]:
         n = (n*256) + ord(c)
     key_e = e
     key_n = n
 except Exception as e:
-    print 'Unable to read the private key or certificate for Persona: %s' % e
+    print 'Unable to read the private key for Persona: %s' % e
 
 
-# These things only make sense if we were able to get a certificate
-if key and cert and key_e and key_n:
+# These things only make sense if we were able to get a key
+if key and key_e and key_n:
     @app.route('/.well-known/browserid')
     def view_browserid():
         info = {}
@@ -55,7 +50,6 @@ if key and cert and key_e and key_n:
 
     @app.route('/persona/provision/sign/', methods=['POST'])
     def view_persons_provision_sign():
-    email, publicKey, certDuration, callback
         if not 'email' in request.form or not 'publicKey' in request.form \
                 or not 'certDuration' in request.form:
             return Response('Invalid request', status=400)

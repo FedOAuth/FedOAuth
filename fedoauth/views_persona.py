@@ -75,7 +75,7 @@ if key and key_e and key_n:
 
         certificate = '%s.%s' % (header, claim)
         print 'Cert: %s' % certificate
-        signature = key.sign(sha256(certificate).digest(), 'sha256')
+        signature = key.sign(sha256(certificate).hexdigest(), 'sha256')
         signature = base64_url_encode(signature)
         signed_certificate = '%s.%s' % (certificate, signature)
         print 'signed cert: %s' % signed_certificate

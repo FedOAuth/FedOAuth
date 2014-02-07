@@ -115,6 +115,7 @@ if key and key_e and key_n:
 
     @app.route('/persona/sign_in/')
     def view_persona_sign_in():
+        get_session().delete()
         return render_template('persona_signin.html',
             auth_module_login=get_auth_module().get_persona_auth_base(),
             trust_root='Persona', domain=app.config['PERSONA_DOMAIN'])

@@ -43,10 +43,11 @@ function startAuth()
         if(email.endsWith('@' + domain))
         {
             document.getElementById('username').value = email.substring(0, email.indexOf('@' + domain));
+            document.getElementById('username').readOnly=true;
         }
         else
         {
-            alert(email);
+            navigator.id.raiseAuthenticationFailure('invalid domain');
         }
     });
 }

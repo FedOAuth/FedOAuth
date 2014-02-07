@@ -16,7 +16,7 @@ cert = None
 key_e = None
 key_n = None
 try:
-    def get_passphrase():
+    def get_passphrase(*args):
         return app.config['PERSONA_PRIVATE_KEY_PASSPHRASE']
 
     key = M2Crypto.RSA.load_key(app.config['PERSONA_PRIVATE_KEY_PATH'], get_passphrase)

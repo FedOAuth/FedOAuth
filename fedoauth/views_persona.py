@@ -38,7 +38,6 @@ except Exception as e:
 
 # These things only make sense if we were able to get a certificate
 if key and cert and key_e and key_n:
-    print 'doing persona'
     @app.route('/.well-known/browserid')
     def view_browserid():
         info = {}
@@ -52,6 +51,18 @@ if key and cert and key_e and key_n:
 
         return Response(json.dumps(info),
                         mimetype='application/json')
+
+
+    @app.route('/persona/provision/sign/', methods=['POST'])
+    def view_persons_provision_sign():
+    email, publicKey, certDuration, callback
+        if not 'email' in request.form or not 'publicKey' in request.form \
+                or not 'certDuration' in request.form:
+            return Response('Invalid request', status=400)
+        email = request.form['email']
+        publicKey = request.form['publicKey']
+        certDuration = request.form['certDuration']
+        print 'Certrequest for %s, %s, %s. by user %s' % (email, publicKey, certDuration, get_auth_module().get_username())
 
 
     @app.route('/persona/provision/')

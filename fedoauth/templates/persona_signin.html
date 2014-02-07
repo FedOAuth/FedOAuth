@@ -34,7 +34,7 @@ function checkLogin(form)
     alert(xmlhttp);
 }
 
-var domain = '{{app.config['PERSONA_DOMAIN']}}';
+var domain = '{{domain}}';
 
 navigator.id.beginAuthentication(function(email) {
     if(email.endsWith('@' + domain))

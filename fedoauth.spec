@@ -3,7 +3,7 @@ Version:        2.0
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
-License:        GPLv2+
+License:        GPLv3+
 URL:            https://github.com/fedora-infra/%{name}
 Source0:        https://fedorahosted.org/releases/f/a/%{name}/%{name}-%{version}.tar.gz
 

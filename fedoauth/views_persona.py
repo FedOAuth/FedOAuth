@@ -93,7 +93,6 @@ if key and key_e and key_n:
         email = request.form['email']
         publicKey = request.form['publicKey']
         certDuration = request.form['certDuration']
-        print 'Certrequest for %s, %s, %s. by user %s' % (email, publicKey, certDuration, get_auth_module().get_username())
         if email == ('%s@%s' % (get_auth_module().get_username()
                                , app.config['PERSONA_DOMAIN'])):
             return persona_sign(email, publicKey, certDuration)

@@ -27,7 +27,9 @@
             {
                 xmlhttp.open("POST", "/persona/provision/sign/", true);
                 xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xmlhttp.send("email=" + email + "&publicKey=" + publicKey + "&certDuration=" + certDuration);
+                xmlhttp.send("email=" + encodeURIComponent(email) 
+                            + "&publicKey=" + encodeURIComponent(publicKey)
+                            + "&certDuration=" + encodeURIComponent(certDuration));
             }
 
             function startProvisioning()

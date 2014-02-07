@@ -58,7 +58,7 @@ if key and key_e and key_n:
 
 
     def persona_sign(email, publicKey, certDuration):
-        header = {'alg': 'RS256'}
+        header = {'alg': 'RS128'}
         header = json.dumps(header)
         header = base64_url_encode(header)
 
@@ -74,9 +74,9 @@ if key and key_e and key_n:
 
         certificate = '%s.%s' % (header, claim)
         print 'Cert: %s' % certificate
-        digest = M2Crypto.EVP.MessageDigest('sha256')
+        digest = M2Crypto.EVP.MessageDigest('sha128')
         digest.update(certificate)
-        signature = key.sign(digest.digest(), 'sha256')
+        signature = key.sign(digest.digest(), 'sha128')
         signature = base64_url_encode(signature)
         signed_certificate = '%s.%s' % (certificate, signature)
         print 'signed cert: %s' % signed_certificate

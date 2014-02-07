@@ -62,7 +62,7 @@ git archive --format=tar --prefix=fedoauth-$version/ HEAD | gzip > release/fedoa
     cd ..
     tar zcf fedoauth-$version.tar.gz fedoauth-$version
     gpg --detach --armor --sign fedoauth-$version.tar.gz
-    scp fedoauth-$version.tar.gz{,.asc} fedorahosted.org:/srv/web/releases/f/a/fedoauth/
+    #scp fedoauth-$version.tar.gz{,.asc} fedorahosted.org:/srv/web/releases/f/a/fedoauth/
     cp fedoauth-$version.tar.gz ~/rpmbuild/SOURCES
     rm -rf fedoauth-$version
 )

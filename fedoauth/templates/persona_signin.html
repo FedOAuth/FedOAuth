@@ -5,14 +5,22 @@
 {% block javascript %}
 <script src="https://login.persona.org/authentication_api.js"></script>
 <script type="text/javascript">
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
+
 var xmlhttp = new XMLHttpRequest();
 
 xmlhttp.onreadystatechange=function()
 {
     if (xmlhttp.readyState==4)
     {
-        alert("Response code: " + xmlhttp.status);
-        alert("Response text: " + xmlhttp.responseText);
+        if(xmlhttp.status == 200)
+        {
+            navigator.id.completeAuthentication();
+            return;
+        }
+        alert(xmlhttp.responseText);
     }
 }
 
@@ -25,5 +33,18 @@ function checkLogin(form)
     xmlhttp.send("username=" + username + "&password=" + password);
     alert(xmlhttp);
 }
+
+var domain = '{{app.config['PERSONA_DOMAIN']}}';
+
+navigator.id.beginAuthentication(function(email) {
+    if(email.endsWith('@' + domain))
+    {
+        document.getElementById('username').value = email.substring(0, email.indexOf('@' + domain));
+    }
+    else
+    {
+        alert(email);
+    }
+})
 </script>
 {% endblock %}

@@ -10,9 +10,15 @@
                 alert("New status: " + xmlhttp.readyState);
                 if(xmlhttp.readyState==4)
                 {
-                    alert("Response code: " + xmlhttp.status);
-                    alert("Response text: " + xmlhttp.responseText);
-                    navigator.id.registerCertificate(certificate);
+                    if(xmlhttp.status == 200)
+                    {
+                        navigator.id.registerCertificate(xmlhttp.responseText);
+                    }
+                    else
+                    {
+                        alert("Response code: " + xmlhttp.status);
+                        alert("Response text: " + xmlhttp.responseText);
+                    }
                 }
             }
 

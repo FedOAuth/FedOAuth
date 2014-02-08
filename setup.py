@@ -15,11 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with FedOAuth.  If not, see <http://www.gnu.org/licenses/>.
 
-## These two lines are needed to run on EL6
-__requires__ = ['SQLAlchemy >= 0.7', 'jinja2 >= 2.4']
-import pkg_resources
-
-
 from setuptools import setup, find_packages
 
 setup(name='FedOAuth',
@@ -31,6 +26,6 @@ setup(name='FedOAuth',
       include_package_data=True,
       install_requires=['Flask', 'SQLAlchemy>=0.7',
                         'python-openid', 'flask-sqlalchemy',
-                        'flask-babel',
+                        'flask-babel', 'Jinja2',
                         'python-openid-teams',
-                        'python-openid-cla'])
+                        'python-openid-cla', "M2Crypto"])

@@ -290,9 +290,6 @@ def isAuthorized(openid_request):
     elif (not openid_request.idSelect()) and (
             openid_request.identity != get_claimed_id(
                 get_auth_module().get_username())):
-        print 'Incorrect claimed id. Claimed: %s, correct: %s' % (
-            openid_request.identity,
-            get_claimed_id(get_auth_module().get_username()))
         return AUTH_INCORRECT_IDENTITY
     elif openid_request.trust_root in app.config['OPENID_TRUSTED_ROOTS']:
         return AUTH_OK

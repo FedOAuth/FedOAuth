@@ -1,0 +1,13 @@
+Release 2.0 (2014-02-08)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+New:
+- More stable session system [Patrick Uiterwijk]
+- Persona provider [Patrick Uiterwijk]
+- Modular authentication backend [Patrick Uiterwijk]
+- API for non-browser authentication [Patrick Uiterwijk]
+
+Fixes:
+- Login button capitalization [Ricky Elrod]
+- Unstable start because of old session system [Patrick Uiterwijk]
+- Attempt to add teams if not requested [Patrick Uiterwijk]

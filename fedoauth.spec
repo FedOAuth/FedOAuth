@@ -71,7 +71,7 @@ getent passwd fedoauth >/dev/null || \
 exit 0
 
 %files
-%doc AUTHORS COPYING README
+%doc AUTHORS COPYING README NEWS
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}.cfg
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf

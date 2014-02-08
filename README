@@ -1,6 +1,5 @@
 Federated Open Authentication (FedOAuth)
 ========================================
-
 FedOAuth is a provider for federated authentication mechanisms with a modular authentication backend.
 
 Currently implemented are:
@@ -8,17 +7,22 @@ Currently implemented are:
 - Persona / BrowserID
 
 
+Setup
+-----
+To setup a local hack instance, just copy fedoauth.cfg.sample to fedoauth.cfg and execute ./runserver.
+
+If it does not give any errors, your FedOAuth instance is now running on http://localhost:5000/.
+
+Please note that Persona will not work if your server is not internet-accessible or available over SSL.
+
 
 OpenID
 ------
-
 The OpenID provider will work out of the box after configuration.
-
 
 
 Persona
 -------
-
 To get the Persona provider working, you need to generate a 2048-bit RSA key.
 To do this, execute: openssl genrsa -des3 -out persona.key 2048 .
 
@@ -30,13 +34,10 @@ If you host FedOAuth on id.example.com, you can get username@example.com to veri
 
 { "authority": "id.example.com" }
 
-
 Please note that this file must be served over HTTPS.
-
 
 
 Problems
 --------
-
 If you have any questions, do not hestitate to contact me.
 Either ping me on IRC (puiterwijk on FreeNode) or drop an email to puiterwijk AT gmail DOT com.

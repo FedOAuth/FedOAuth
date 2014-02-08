@@ -17,4 +17,4 @@
 # along with FedOAuth  If not, see <http://www.gnu.org/licenses/>.
 export FEDOAUTH_CONFIG=../fedoauth.cfg
 python createdb.py
-print 'Database populated'
+echo 'Database populated'

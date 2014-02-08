@@ -105,6 +105,12 @@ if key and key_len and digest_size and key_e and key_n:
         signature = base64_url_encode(signature)
         signed_certificate = '%s.%s' % (certificate, signature)
 
+        log_info('Success', {
+            'email': email,
+            'issuedAt': claim['iat'],
+            'expiresAt': claim['exp'],
+            'message': 'The user succesfully acquired a Persona certificate'})
+
         return signed_certificate
 
 
@@ -121,8 +127,17 @@ if key and key_len and digest_size and key_e and key_n:
             return persona_sign(email, publicKey, certDuration)
         else:
             if get_auth_module().logged_in():
+                log_error('Failure', {
+                    'email': email
+                    'username': get_auth_module().get_username(),
+                    'message': 'User tried to get certificate for incorrect user'
+                })
                 return Response('Incorrect user!', status=403)
             else:
+                log_error('Failure', {
+                    'email': email
+                    'message': 'User tried to get certificate while not logged in'
+                })
                 return Response('Not signed in', status=401)
 
 

@@ -254,8 +254,7 @@ def view_openid_main():
             return get_auth_module().start_authentication()
         elif authed == AUTH_NOT_LOGGED_IN:
             get_session()['next'] = request.base_url
-            if openid_request.trust_root:
-                get_session()['trust_root'] = openid_request.trust_root
+            get_session()['trust_root'] = openid_request.trust_root
             get_session().save()
             return get_auth_module().start_authentication()
         else:

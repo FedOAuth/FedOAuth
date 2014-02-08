@@ -231,8 +231,12 @@ def view_openid_api_v1():
         auth_levels={pape.LEVELS_NIST: 2})
     openid_response.addExtension(pape_resp)
     # Return
-    response = openid_response.encodeToKVForm()
-    response = [{'key': x.split(':', 1)[0], 'value': x.split(':', 1)[1]} for x in response.split('\n')]
+    response_strings = openid_response.encodeToKVForm().split('\n')
+    response = {}
+    for resp in response_strings:
+        if resp != '':
+            resp = resp.split(':', 1)
+            response[resp[0]] = resp[1]
     return {'success': True,
             'response': response}
 

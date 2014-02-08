@@ -26,15 +26,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="157.76564"
+     inkscape:cx="319.27448"
      inkscape:cy="727.0939"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1174"
+     inkscape:window-width="1366"
+     inkscape:window-height="741"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="27"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -56,20 +56,21 @@
        id="rect3160"
        width="271.42856"
        height="205.71428"
-       x="-105.71427"
-       y="183.79076" />
+       x="-95.714272"
+       y="171.64792" />
     <image
-       y="213.36218"
-       x="251.07146"
+       y="206.21933"
+       x="376.78577"
        id="image3153"
        xlink:href="data:image/png;base64,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 "
        height="62"
        width="115" />
     <g
        id="g3930"
-       inkscape:export-filename="/home/rlerch/Source/myfedorapeople/openid_mockups/fedora-openid_logo-white.png"
+       inkscape:export-filename="./fedora-openid_logo-white.png"
        inkscape:export-xdpi="84.787659"
-       inkscape:export-ydpi="84.787659">
+       inkscape:export-ydpi="84.787659"
+       transform="translate(125.71429,-7.1428571)">
       <g
          inkscape:export-ydpi="90"
          inkscape:export-xdpi="90"
@@ -142,15 +143,16 @@
          inkscape:export-filename="/home/rlerch/Source/myfedorapeople/openid_mockups/fedora-openid_logo-white.png"
          sodipodi:linespacing="125%"
          id="text3156"
-         y="363.09369"
-         x="251.94492"
-         style="font-size:26.78141212px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;opacity:0.77600002;fill:#f9f9f9;fill-opacity:1;stroke:none;font-family:Sans"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#f9f9f9;font-family:Comfortaa;-inkscape-font-specification:Comfortaa"
-           y="363.09369"
-           x="251.94492"
+         y="371.0076"
+         x="245.48904"
+         style="font-size:21.13282394px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;opacity:0.77600002;fill:#f9f9f9;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Comfortaa"
+         xml:space="preserve"
+         transform="scale(1.0274552,0.97327845)"><tspan
+           style="font-size:31.56342316px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#f9f9f9;font-family:Comfortaa;-inkscape-font-specification:Comfortaa"
+           y="371.0076"
+           x="245.48904"
            id="tspan3158"
-           sodipodi:role="line">OpenID</tspan></text>
+           sodipodi:role="line">AuthN</tspan></text>
     </g>
   </g>
 </svg>

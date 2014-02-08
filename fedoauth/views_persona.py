@@ -128,7 +128,7 @@ if key and key_len and digest_size and key_e and key_n:
         else:
             if get_auth_module().logged_in():
                 log_error('Failure', {
-                    'email': email
+                    'email': email,
                     'username': get_auth_module().get_username(),
                     'message': 'User tried to get certificate for incorrect user'
                 })

@@ -21,6 +21,7 @@ BuildRequires:  python-flask-sqlalchemy
 BuildRequires:  python-openid
 BuildRequires:  python-openid-teams
 BuildRequires:  python-openid-cla
+BuildRequires:  m2crypto
 Requires:       python-sqlalchemy0.7
 Requires:       python-flask
 Requires:       python-fedora
@@ -30,6 +31,7 @@ Requires:       python-flask-sqlalchemy
 Requires:       python-openid
 Requires:       python-openid-teams
 Requires:       python-openid-cla
+Requires:       m2crypto
 Requires:       mod_wsgi
 Requires:       httpd
 Requires(pre):  shadow-utils
@@ -79,5 +81,6 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
-* Mon Feb 03 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0-1
+* Mon Feb 08 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0-1
 - First package after rename
+- Implemented a lot of new features

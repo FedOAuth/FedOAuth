@@ -16,7 +16,7 @@
 # along with FedOAuth.  If not, see <http://www.gnu.org/licenses/>.
 from fedoauth import db, get_auth_module
 from datetime import datetime
-from flask.sessions import SessionMixin
+from flask.sessions import SessionMixin, SessionInterface
 from openid.association import Association as openid_assoc
 from openid.store.nonce import SKEW as NonceSKEW
 from openid.store.interface import OpenIDStore
@@ -24,6 +24,19 @@ import time
 import cPickle as serializer
 import uuid
 from UserDict import DictMixin
+
+
+class DBSessionMiddleware(SessionInterface):
+    pickle_based = True
+
+    def open_session(self, app, request):
+        return DBSession.open_session(app, request)
+
+    def save_session(self, app, session, response):
+        if session:
+            session.save_session(app, response)
+        else:
+            session.delete_session(app, response)
 
 
 class DBSession(db.Model, SessionMixin, DictMixin):

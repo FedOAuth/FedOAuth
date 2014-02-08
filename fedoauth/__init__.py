@@ -116,6 +116,5 @@ import model
 import views
 import views_openid
 import views_persona
-from middleware import DBSessionMiddleware
 
-APP.session_interface = DBSessionMiddleware()
+APP.session_interface = model.DBSessionMiddleware()

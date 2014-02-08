@@ -21,6 +21,9 @@ class Auth_Base:
     def start_authentication(self):
         raise NotImplementedError()
 
+    def api_authenticate(self, post_data):
+        raise NotImplementedError()
+
     def get_persona_auth_base(self):
         raise NotImplementedError()
 

@@ -84,6 +84,25 @@ class Auth_FAS(Auth_Base):
                 % ex})
             return False
 
+    def api_authenticate(self, post_data):
+        if not 'username' in post_data or not 'password' in post_data:
+            return False
+        username = post_data['username']
+        password = post_data['password']
+        if not username or not password:
+            return False
+        user = get_auth_module().check_login(username, password)
+        if not user:
+            return False
+        user['groups'] = [x['name'] for x in user['approved_memberships']]
+        user['last_auth_time'] = time()
+        return { 'username': user['username']
+               , 'email': user['email']
+               , 'fullname': user['human_name']
+               , 'timezone': user['timezone']
+               , 'groups': user['groups']
+               }
+
     def used_multi_factor(self):
         return False
 

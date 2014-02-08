@@ -16,6 +16,7 @@
 # along with FedOAuth.  If not, see <http://www.gnu.org/licenses/>.
 from time import time
 from datetime import datetime
+import json
 import sys
 from urlparse import urljoin
 from uuid import uuid4 as uuid
@@ -137,7 +138,7 @@ def addTeams(request, response, groups):
 
 def addCLAs(request, response, cla_uris):
     cla_req = cla.CLARequest.fromOpenIDRequest(request)
-    if len(cla_req.requested) < 1:
+    if cla_req.requested == []:
         return
     cla_resp = cla.CLAResponse.extractResponse(cla_req, cla_uris)
     response.addExtension(cla_resp)
@@ -179,6 +180,61 @@ def user_ask_trust_root(openid_request):
         teams_provided=teams_resp.teams,
         cla_done=cla.CLA_URI_FEDORA_DONE in clas_resp.clas,
         csrf=get_session()['csrf_id'])
+
+
+@app.route('/api/v1/')
+def view_openid_api_v1_wrapper():
+    return json.dumps(view_openid_api_v1())
+
+
+def view_openid_api_v1():
+    values = request.form
+    openid_request = get_server().decodeRequest(values)
+    if not openid_request:
+        return { 'success': False
+               , 'status': 400
+               , 'message': 'Invalid request'
+               }
+    auth_result = get_auth_module().api_authenticate(values)
+    if not auth_result:
+        return { 'success': False
+               , 'status': 403
+               , 'message': 'Authentication failed'
+               }
+    openid_response = openid_request.answer(
+        True,
+        identity=get_claimed_id(auth_result['username']),
+        claimed_id=get_claimed_id(auth_result['username'])
+    )
+    # SReg
+    sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
+    sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, auth_result)
+    openid_response.addExtension(sreg_resp)
+    # Teams
+    teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
+    if teams_req.requested != []:
+        groups = filter_cla_groups(auth_result['groups'])
+        teams_resp = teams.TeamsResponse.extractResponse(teams_req,
+                                                         groups)
+        openid_response.addExtension(teams_resp)
+    # CLA
+    cla_req = cla.CLARequest.fromOpenIDRequest(openid_request)
+    if cla_req.requested != []:
+        cla_uris = get_cla_uris(auth_result['groups'])
+        cla_resp = cla.CLAResponse.extractResponse(cla_req, cla_uris)
+        openid_response.addExtension(cla_resp)
+    # PAPE
+    pape_resp = pape.Response(
+        auth_policies=[],
+        auth_time=datetime.utcfromtimestamp(time()).strftime(
+                                        '%Y-%m-%dT%H:%M:%SZ'),
+        auth_levels={pape.LEVELS_NIST: 2})
+    openid_response.addExtension(pape_resp)
+    # Return
+    response = openid_response.encodeToKVForm()
+    response = [{'key': x.split(':', 1)[0], 'value': x.split(':', 1)[1]} for x in response.split('\n')]
+    return {'success': True,
+            'response': response}
 
 
 def view_openid_main():

@@ -135,7 +135,7 @@ if key and key_len and digest_size and key_e and key_n:
                 return Response('Incorrect user!', status=403)
             else:
                 log_error('Failure', {
-                    'email': email
+                    'email': email,
                     'message': 'User tried to get certificate while not logged in'
                 })
                 return Response('Not signed in', status=401)

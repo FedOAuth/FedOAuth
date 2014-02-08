@@ -81,6 +81,6 @@ exit 0
 %{python_sitelib}/*
 
 %changelog
-* Mon Feb 08 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0-1
+* Sat Feb 08 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0-1
 - First package after rename
 - Implemented a lot of new features

@@ -94,6 +94,7 @@ if key and key_len and digest_size and key_e and key_n:
         claim['iss'] = app.config['PERSONA_DOMAIN']
         claim['public-key'] = json.loads(publicKey)
         claim['principal'] = {'email': email}
+        claim_json = claim
 
         claim = json.dumps(claim)
         claim = base64_url_encode(claim)
@@ -107,8 +108,8 @@ if key and key_len and digest_size and key_e and key_n:
 
         log_info('Success', {
             'email': email,
-            'issuedAt': str(claim['iat']),
-            'expiresAt': str(claim['exp']),
+            'issuedAt': str(claim_json['iat']),
+            'expiresAt': str(claim_json['exp']),
             'message': 'The user succesfully acquired a Persona certificate'})
 
         return signed_certificate

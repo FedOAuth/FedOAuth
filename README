@@ -9,7 +9,7 @@ Currently implemented are:
 
 Setup
 -----
-To setup a local hack instance, just copy fedoauth.cfg.sample to fedoauth.cfg and execute ./runserver.
+To setup a local hack instance, just copy fedoauth.cfg.sample to fedoauth.cfg run "python setup.py develop" and execute ./runserver.
 
 If it does not give any errors, your FedOAuth instance is now running on http://localhost:5000/.
 

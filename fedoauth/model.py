@@ -125,7 +125,7 @@ class DBSession(db.Model, SessionMixin, DictMixin):
 
 
 class Association(db.Model):
-    server_url = db.Column(db.String(2048), nullable=False, primary_key=True)
+    server_url = db.Column(db.String(512), nullable=False, primary_key=True)
     handle = db.Column(db.String(128), nullable=False, primary_key=True)
     secret = db.Column(db.LargeBinary(128), nullable=False)
     issued = db.Column(db.Integer, nullable=False)
@@ -142,7 +142,7 @@ class Association(db.Model):
 
 
 class Nonce(db.Model):
-    server_url = db.Column(db.String(2048), nullable=False, primary_key=True)
+    server_url = db.Column(db.String(512), nullable=False, primary_key=True)
     salt = db.Column(db.String(40), nullable=False, primary_key=True)
     timestamp = db.Column(db.Integer, nullable=False, primary_key=True)
 

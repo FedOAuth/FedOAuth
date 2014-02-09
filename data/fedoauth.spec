@@ -56,6 +56,7 @@ Currently implemented:
 Summary: Provides the Fedora template files
 Requires: %{name} = %{version}-%{release}
 License: GPLv3+
+BuildArch: noarch
 
 %description template-fedora
 Provides the Fedora template files
@@ -64,6 +65,7 @@ Provides the Fedora template files
 Summary: Provides the Fedora authentication backend
 Requires: %{name} = %{version}-%{release}
 License: GPLv3+
+BuildArch: noarch
 
 %description backend-fedora
 Provides the Fedora authentication backend

@@ -3,8 +3,8 @@
 # GENERAL CONFIGURATION
 ### url to the database server:
 SQLALCHEMY_DATABASE_URI='sqlite:///fedoauth.sqlite'
-#SQLALCHEMY_DATABASE_URI=mysql://user:pass@host/db_name
-#SQLALCHEMY_DATABASE_URI=postgresql://user:pass@host/db_name
+#SQLALCHEMY_DATABASE_URI='mysql://user:pass@host/db_name'
+#SQLALCHEMY_DATABASE_URI='postgresql://user:pass@host/db_name'
 
 # This is the OpenID endpoint url, at which the server is available
 WEBSITE_ROOT = 'http://localhost:5000'

@@ -139,6 +139,6 @@ exit 0
 
 
 %changelog
-* Sat Feb 08 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0-1
+* Sun Feb 09 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0-1
 - First package after rename
 - Implemented a lot of new features

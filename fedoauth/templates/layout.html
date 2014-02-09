@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+    <head>
+        {% if yadis_url is defined %}
+            <meta http-equiv="X-XRDS-Location" content="{{yadis_url}}">
+        {% endif %}
+
+        <link rel="shortcut icon" type="image/vnd.microsoft.icon"
+            href="//fedoraproject.org/static/images/favicon.ico"/>
+
+        <link rel="openid.server" href="{{config['WEBSITE_ROOT']}}">
+        <link rel="openid2.provider" href="{{config['WEBSITE_ROOT']}}">
+        {% if claimed_id is defined %}
+            <link rel="openid.delegate" href="{{claimed_id}}">
+            <link rel="openid2.local_id" href="{{claimed_id}}">
+        {% endif %}
+        <title>FedOAuth - {% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="/static/fedora.css">
+
+        {% block javascript %}
+        {% endblock %}
+    </head>
+    <body {% block body_options %}{% endblock %}>
+        <div class="header_bg">
+            <div class="body header">
+                <img id="logo" alt="logo" src="/static/fedora-authn-logo-white.png"/>
+            </div>
+        </div>
+        <div class="body main">
+            <p id="toptext">{% block toptext %}{% endblock %}</p>
+            <div class="middlebox {% block body_classes %}{% endblock %}">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+                {% block body %}{% endblock %}
+            </div>
+        </div>
+    </body>
+</html>

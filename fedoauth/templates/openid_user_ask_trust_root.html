@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}{% trans %}Approval{% endtrans %}{% endblock %}
+{% block toptext %}
+{% trans %}{{trust_root}} is asking to authenticate via OpenID using the Fedora Account System{% endtrans %}
+{% endblock %}
+{% block body_classes %}final{% endblock %}
+{% block body %}
+    {% trans %}Review the authorization details{% endtrans %}
+    <div>
+        <form method="post" action="{{action}}">
+            <input type="hidden" name="form_filled" value="true" />
+            <input type="hidden" name="csrf_value" value="{{csrf}}" />
+            <p class="form_item">
+                <table class="details">
+                    <tr>
+                        <td>Trust Root</td>
+                        <td>{{trust_root}}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans %}Privacy Policy{% endtrans %}</td>
+                        <td>{{sreg_policy_url}}</td>
+                    </tr>
+                    {% for field_name in sreg_data %}
+                        <tr>
+                            <td>{{field_name}}</td>
+                            <td>{{sreg_data[field_name]}}</td>
+                        </tr>
+                    {% endfor %}
+                    {% for team in teams_provided %}
+                        <tr>
+                            <td>{% trans %}Group{% endtrans %}</td>
+                            <td>{{team}}</td>
+                        </tr>
+                    {% endfor %}
+                    {% if cla_done %}
+                        <tr>
+                            <td>{% trans %}FPCA Completed{% endtrans %}</td>
+                            <td>{% trans %}True{% endtrans %}</td>
+                        </tr>
+                    {% endif %}
+                </table>
+            </p>
+            <p class="form_item">
+                <input type="submit" name="decided_deny" value="{% trans %}Reject{% endtrans %}">
+                <input type="submit" name="decided_allow" value="{% trans %}Approve{% endtrans %}">
+            </p>
+        </form>
+    </div>
+{% endblock %}

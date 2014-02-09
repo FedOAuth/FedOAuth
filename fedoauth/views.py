@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Copyright (C) 2014 Patrick Uiterwijk <puiterwijk@gmail.com>
 #
 # This file is part of FedOAuth.
@@ -15,17 +14,28 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with FedOAuth.  If not, see <http://www.gnu.org/licenses/>.
+from flask import redirect, url_for, render_template, flash
+from flaskext.babel import gettext as _
 
-## These two lines are needed to run on EL6
-__requires__ = ['SQLAlchemy >= 0.7', 'jinja2 >= 2.4']
-import pkg_resources
+from fedoauth import APP as app, get_session
+from views_openid import view_openid_main
 
-from fedoauth import APP, db
 
-# It is no problem if the database gets created every time
-# as everything in it is only used during that run anyway
-# (unless you want to retain sessions between restarts)
-db.create_all()
+@app.route('/robots.txt')
+def view_robots():
+    return 'User-Agent: *\nDisallow: /'
 
-APP.debug = True
-APP.run()
+
+@app.route('/', methods=['GET', 'POST'])
+def view_main():
+    # We are using view_openid_main because this makes sure that the
+    #  website root is also a valid OpenID endpoint URL
+    return view_openid_main()
+
+
+@app.route('/logout/')
+def auth_logout():
+    # No check if we are logged in, as we can always delete the session
+    get_session().delete()
+    flash(_('You have been logged out'))
+    return redirect(url_for('view_main'))

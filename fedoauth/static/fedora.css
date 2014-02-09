@@ -1,0 +1,136 @@
+@import url(https://fonts.googleapis.com/css?family=Cantarell:400,700);
+
+body
+{
+	padding:0;
+	margin:0;
+	font-family: 'Cantarell', sans-serif;
+	font-size:20px;
+}
+
+.header_bg
+{
+	width:100%;
+	background-image: url('/static/repeater.png');
+	height:84px;
+	display: block;
+}
+
+.body
+{
+	max-width:800px;
+	margin-left:auto;
+	margin-right:auto;
+
+}
+
+.main
+{
+/*	margin-top:50px;*/
+}
+
+.header
+{
+	height:100%;
+}
+
+#logo
+{	
+	padding-top:9px;
+	margin-left:auto;
+	margin-right:auto;
+	display:block;
+}
+
+.middlebox
+{
+	width:320px;
+	background:#eee;
+	margin-left:auto;
+	margin-right:auto;
+	box-shadow: 0px 0px 5px 1px #999;
+	padding:10px 40px 2px 40px;
+	color:#555;
+	text-align:center;
+}
+
+table.details
+{
+	text-align:left;
+	font-size:16px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+table.details td:first-child
+{
+	font-weight:bold;
+	text-align:right;
+	padding-right:10px;
+}
+
+
+#toptext
+{
+	text-align:center;
+/*	margin-bottom:30px;*/
+}
+
+
+input {
+   border: 1px solid #555;
+   padding-top:5px;
+   padding-bottom:5px;
+   font-size: 15px;
+/*   width: 100%; */
+   background: #fff;
+   color: 000000;
+   text-indent:10px;
+   font-family: 'Cantarell', sans-serif;
+ }
+ 
+input:focus {
+   box-shadow: 0px 0px 5px #3366FF;
+}
+ 
+input[type=submit]
+{
+ 	text-indent:0px;
+ 	background-image: url('/static/repeater.png');
+ 	color:white;
+/* 	font-weight:bold;*/
+   width: 150px;
+}
+
+.middlebox a {
+   padding-left: 5px;
+   padding-right: 5px;
+}
+
+.button {
+   border: 1px solid #555;
+   padding-top: 5px;
+   padding-bottom: 5px;
+   font-size: 15px;
+/*   width: 100%; */
+   background: #fff;
+   text-indent: 10px;
+   font-family: 'Cantarell', sans-serif;
+   text-indent: 0px;
+   background-image: url('/static/repeater.png');
+   color: white;
+/*   font-weight: bold;*/
+   text-decoration: none;
+/*   display: block; */
+}
+
+
+#password, #username {
+   width: 310px;
+}
+
+input::-moz-focus-inner {
+   border:0;
+   padding:0;
+}
+

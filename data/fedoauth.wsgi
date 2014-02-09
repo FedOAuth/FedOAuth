@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#-*- coding: UTF-8 -*-
 # Copyright (C) 2014 Patrick Uiterwijk <puiterwijk@gmail.com>
 #
 # This file is part of FedOAuth.
@@ -16,16 +16,18 @@
 # You should have received a copy of the GNU General Public License
 # along with FedOAuth.  If not, see <http://www.gnu.org/licenses/>.
 
-## These two lines are needed to run on EL6
-__requires__ = ['SQLAlchemy >= 0.7', 'jinja2 >= 2.4']
+# These two lines are needed to run on EL6
+import __main__
+__main__.__requires__ = ['SQLAlchemy >= 0.7', 'jinja2 >= 2.4']
 import pkg_resources
 
-from fedoauth import APP, db
+import os
+## Set the environment variable pointing to the configuration file
+os.environ['FEDOAUTH_CONFIG'] = '/etc/fedoauth/fedoauth.cfg'
 
-# It is no problem if the database gets created every time
-# as everything in it is only used during that run anyway
-# (unless you want to retain sessions between restarts)
-db.create_all()
+## The following is only needed if you did not install
+## as a python module (for example if you run it from a git clone).
+#import sys
+#sys.path.insert(0, '/path/to/fedoauth/')
 
-APP.debug = True
-APP.run()
+from fedoauth import APP as application

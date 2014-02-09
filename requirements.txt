@@ -5,5 +5,7 @@ flask-sqlalchemy
 sqlalchemy
 python-fedora
 python-openid
-beaker
-flask-babel
+flask-babel <= 0.8
+python-openid-teams
+python-openid-cla
+M2Crypto

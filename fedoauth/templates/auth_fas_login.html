@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}{% trans %}Login{% endtrans %}{% endblock %}
+{% block toptext %}
+{% trans %}{{trust_root}} is asking to authenticate using the Fedora Account System{% endtrans %}
+{% endblock %}
+{% block body %}
+    {% trans %}Login with your FAS credentials{% endtrans %}
+    <div>
+        <form method="post" {% block form_options %}{% endblock %} action="{% block action %}/fas/login/{% endblock %}">
+            <p class="form_item">
+                <input id="username" name="username" placeholder="{% trans %}FAS Username{% endtrans %}" autofocus>
+            </p>
+            <p class="form_item">
+                <input id="password" name="password" type="password" placeholder="{% trans %}Password{% endtrans %}">
+            </p>
+            <p class="form_item">
+                <a href="https://admin.fedoraproject.org/accounts/user/new" target="_blank" class="button">Create a new account</a>
+                <input type="submit" value="{% trans %}Login{% endtrans %}">
+            </p>
+        </form>
+    </div>
+{% endblock %}

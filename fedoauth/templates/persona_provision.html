@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>Persona Provisioning</title>
+        <script src="https://login.persona.org/provisioning_api.js"></script>
+        <script type="text/javascript">
+            var xmlhttp = new XMLHttpRequest();
+
+            xmlhttp.onreadystatechange=function()
+            {
+                if(xmlhttp.readyState==4)
+                {
+                    if(xmlhttp.status == 200)
+                    {
+                        navigator.id.registerCertificate(xmlhttp.responseText);
+                    }
+                    else
+                    {
+                        alert("Response code: " + xmlhttp.status);
+                        alert("Response text: " + xmlhttp.responseText);
+                    }
+                }
+            }
+
+            var current_email = '{{user_email}}';
+
+            function generateServerSide(email, publicKey, certDuration, callback)
+            {
+                xmlhttp.open("POST", "/persona/provision/sign/", true);
+                xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xmlhttp.send("email=" + encodeURIComponent(email) 
+                            + "&publicKey=" + encodeURIComponent(publicKey)
+                            + "&certDuration=" + encodeURIComponent(certDuration));
+            }
+
+            function startProvisioning()
+            {
+                navigator.id.beginProvisioning(function(email, certDuration) {
+                    if (email == current_email) {
+                        navigator.id.genKeyPair(function(publicKey) {
+                            generateServerSide(email, publicKey, certDuration);
+                        });
+                    } else {
+                        navigator.id.raiseProvisioningFailure('user is not authenticated as target user');
+                    }
+                });
+            }
+        </script>
+    </head>
+    <body onLoad="startProvisioning()">
+        This page is used internally by Persona.
+    </body>
+</html>

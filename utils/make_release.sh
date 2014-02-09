@@ -1,10 +1,26 @@
 #!/usr/bin/bash -ex
+# Copyright (C) 2014 Patrick Uiterwijk <puiterwijk@gmail.com>
+#
+# This file is part of FedOAuth.
+#
+# FedOAuth is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# FedOAuth is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with FedOAuth.  If not, see <http://www.gnu.org/licenses/>.
 if [ ! -d ".git" ];
 then
     echo >&2 "Please execute utils/make_release.sh from the root"
     exit 1
 fi
-version=`cat fas-openid.spec | grep "Version:" | sed 's/Version:[ ]*//'`
+version=`cat fedoauth.spec | grep "Version:" | sed 's/Version:[ ]*//'`
 if [ -n "`git diff | head -10`" ]
 then
     echo >&2 "error: tree is not clean - changes would be lost. aborted"
@@ -16,7 +32,7 @@ then
     git log master ^origin/master
     exit 1
 fi
-if [ -f release/fas-openid-$version.tar.gz  ]
+if [ -f release/fedoauth-$version.tar.gz  ]
 then
     echo >&2 "ERROR: release already exists. Aborted"
     exit 1
@@ -30,30 +46,30 @@ fi
 git branch make-release
 git checkout make-release
 tx pull -a
-git add fas_openid/translations
+git add fedoauth/translations
 git commit -m "Updated translations"
 git tag -s v$version -m "Release v$version"
 git checkout master
 git branch -D make-release
 git push origin v$version
-git archive --format=tar --prefix=fas-openid-$version/ HEAD | gzip > release/fas-openid-$version.tar.gz
+git archive --format=tar --prefix=fedoauth-$version/ HEAD | gzip > release/fedoauth-$version.tar.gz
 (
     cd release
-    tar zxf fas-openid-$version.tar.gz
-    cd fas-openid-$version
+    tar zxf fedoauth-$version.tar.gz
+    cd fedoauth-$version
     sed -i "s/@VERSION@/$version/" setup.py
-    cp fas-openid.spec ~/rpmbuild/SPECS
+    cp fedoauth.spec ~/rpmbuild/SPECS
     cd ..
-    tar zcf fas-openid-$version.tar.gz fas-openid-$version
-    gpg --detach --armor --sign fas-openid-$version.tar.gz
-    scp fas-openid-$version.tar.gz{,.asc} fedorahosted.org:/srv/web/releases/f/a/fas-openid/
-    cp fas-openid-$version.tar.gz ~/rpmbuild/SOURCES
-    rm -rf fas-openid-$version
+    tar zcf fedoauth-$version.tar.gz fedoauth-$version
+    gpg --detach --armor --sign fedoauth-$version.tar.gz
+    #scp fedoauth-$version.tar.gz{,.asc} fedorahosted.org:/srv/web/releases/f/a/fedoauth/
+    cp fedoauth-$version.tar.gz ~/rpmbuild/SOURCES
+    rm -rf fedoauth-$version
 )
 (
     cd ~/rpmbuild/SPECS
-    rpmbuild -ba fas-openid.spec >/dev/null
+    rpmbuild -ba fedoauth.spec >/dev/null
 )
-cp ~/rpmbuild/SRPMS/fas-openid-$version*.src.rpm release/
-ls -l release/fas-openid-$version*
+cp ~/rpmbuild/SRPMS/fedoauth-$version*.src.rpm release/
+ls -l release/fedoauth-$version*
 echo Please build the RPM and publish it

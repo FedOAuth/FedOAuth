@@ -1,35 +1,43 @@
-FAS-OpenID
-==========
+Federated Open Authentication (FedOAuth)
+========================================
+FedOAuth is a provider for federated authentication mechanisms with a modular authentication backend.
 
-    https://github.com/fedora-infra/fas-openid
+Currently implemented are:
+- OpenID
+- Persona / BrowserID
 
-Required Postgresql permissions
-===============================
-grant connect on database fas_openid to fasopenidapp;
-grant usage on schema public to fasopenidapp;
 
-grant select on association to fasopenidapp;
-grant insert on association to fasopenidapp;
-grant update on association to fasopenidapp;
-grant delete on association to fasopenidapp;
+Setup
+-----
+To setup a local hack instance, just copy fedoauth.cfg.sample to fedoauth.cfg run "python setup.py develop" and execute ./runserver.
 
-grant select on nonce to fasopenidapp;
-grant insert on nonce to fasopenidapp;
-grant update on nonce to fasopenidapp;
-grant delete on nonce to fasopenidapp;
-grant all privileges on sequence nonce_timestamp_seq to fasopenidapp;
+If it does not give any errors, your FedOAuth instance is now running on http://localhost:5000/.
 
-grant select on session to fasopenidapp;
-grant insert on session to fasopenidapp;
-grant update on session to fasopenidapp;
-grant delete on session to fasopenidapp;
-grant all privileges on sequence session_id_seq to fasopenidapp;
+Please note that Persona will not work if your server is not internet-accessible or available over SSL.
 
-Rewriting rules to get *.id.fp.o pointing to id.fp.o/id/*
-=========================================================
-RewriteEngine on
-RewriteMap lowercase int:tolower
-RewriteCond ${lowercase:%{SERVER_NAME}} ^[a-z0-9-]+\.openid\.stg\.fedoraproject\.org$
-RewriteRule ^(.+) ${lowercase:%{SERVER_NAME}}$1 [C]
-RewriteRule ^([a-z0-9-]+)\.openid\.stg\.fedoraproject\.org/.* http://localhost:5000/id/$1/ [P]
-RewriteRule ^(.+) - [PT]
+
+OpenID
+------
+The OpenID provider will work out of the box after configuration.
+
+
+Persona
+-------
+To get the Persona provider working, you need to generate a 2048-bit RSA key.
+To do this, execute: openssl genrsa -des3 -out persona.key 2048 .
+
+After this, configure the filename and passphrase to this key.
+
+Please note that for this to work, you need to serve FedOAuth on the core of a domain with SSL.
+
+If you host FedOAuth on id.example.com, you can get username@example.com to verify by putting a file with the following contents in the .well-known/browserid path for example.com:
+
+{ "authority": "id.example.com" }
+
+Please note that this file must be served over HTTPS.
+
+
+Problems
+--------
+If you have any questions, do not hestitate to contact me.
+Either ping me on IRC (puiterwijk on FreeNode) or drop an email to puiterwijk AT gmail DOT com.

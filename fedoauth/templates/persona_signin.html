@@ -1,0 +1,55 @@
+{% extends auth_module_login %}
+{% block action %}#{% endblock %}
+{% block body_options %}onLoad="startAuth()"{% endblock %}
+{% block form_options %}onSubmit="checkLogin(self); return false;"{% endblock %}
+
+{% block javascript %}
+<script src="https://login.persona.org/authentication_api.js"></script>
+<script type="text/javascript">
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
+
+var xmlhttp = new XMLHttpRequest();
+
+xmlhttp.onreadystatechange=function()
+{
+    if (xmlhttp.readyState==4)
+    {
+        if(xmlhttp.status == 200)
+        {
+            navigator.id.completeAuthentication();
+            return;
+        }
+        alert(xmlhttp.responseText);
+    }
+}
+
+function checkLogin(form)
+{
+    var username = encodeURIComponent(document.getElementById('username').value);
+    var password = encodeURIComponent(document.getElementById('password').value);
+    xmlhttp.open("POST","{{website_root}}/fas/login/persona/",true);
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xmlhttp.send("username=" + username + "&password=" + password);
+}
+
+var domain = '{{domain}}';
+
+function startAuth()
+{
+    navigator.id.beginAuthentication(function(email) {
+        if(email.endsWith('@' + domain))
+        {
+            document.getElementById('username').value = email.substring(0, email.indexOf('@' + domain));
+            document.getElementById('username').readOnly=true;
+            document.getElementById('password').focus();
+        }
+        else
+        {
+            navigator.id.raiseAuthenticationFailure('invalid domain');
+        }
+    });
+}
+</script>
+{% endblock %}

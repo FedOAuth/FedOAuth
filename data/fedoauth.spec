@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        2.0
+Version:        2.0.1
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -139,6 +139,9 @@ exit 0
 
 
 %changelog
+* Sun Feb 09 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.1-1
+- Fixes not sending the username in SReg
+
 * Sun Feb 09 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0-1
 - First package after rename
 - Implemented a lot of new features

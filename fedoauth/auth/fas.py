@@ -62,7 +62,7 @@ class Auth_FAS(Auth_Base):
     def get_sreg(self):
         if not 'user' in get_session():
             return {}
-        return {'username': self.get_username(),
+        return {'nickname': self.get_username(),
                 'email': get_session()['user']['email'],
                 'fullname': get_session()['user']['human_name'],
                 'timezone': get_session()['user']['timezone']}

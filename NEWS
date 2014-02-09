@@ -1,3 +1,10 @@
+Release 2.0.1 [Aluminium] (2014-02-09)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixes:
+- Not sending username in SReg response [Patrick Uiterwijk, Ralph Bean]
+
+
 Release 2.0 [Argon] (2014-02-09)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

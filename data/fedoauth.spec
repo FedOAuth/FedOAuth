@@ -54,7 +54,7 @@ Currently implemented:
 
 %package template-fedora
 Summary: Provides the Fedora template files
-Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 License: GPLv3+
 
 %description template-fedora
@@ -62,7 +62,7 @@ Provides the Fedora template files
 
 %package backend-fedora
 Summary: Provides the Fedora authentication backend
-Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 License: GPLv3+
 
 %description backend-fedora

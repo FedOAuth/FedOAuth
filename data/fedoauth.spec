@@ -121,7 +121,8 @@ exit 0
 %{python_sitelib}/%{name}/templates/persona_signin.html
 %{python_sitelib}/*.egg-info
 %{_datadir}/%{name}
-%{_sysconfdir}/%{name}
+%dir %{_sysconfdir}/%{name}
+%{_sysconfdir}/%{name}/%{name}.cfg
 %{_sysconfdir}/httpd/conf.d/%{name}.conf
 
 

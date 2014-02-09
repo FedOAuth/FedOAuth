@@ -20,7 +20,7 @@ then
     echo >&2 "Please execute utils/make_release.sh from the root"
     exit 1
 fi
-version=`cat fedoauth.spec | grep "Version:" | sed 's/Version:[ ]*//'`
+version=`cat data/fedoauth.spec | grep "Version:" | sed 's/Version:[ ]*//'`
 if [ -n "`git diff | head -10`" ]
 then
     echo >&2 "error: tree is not clean - changes would be lost. aborted"
@@ -58,7 +58,7 @@ git archive --format=tar --prefix=fedoauth-$version/ HEAD | gzip > release/fedoa
     tar zxf fedoauth-$version.tar.gz
     cd fedoauth-$version
     sed -i "s/@VERSION@/$version/" setup.py
-    cp fedoauth.spec ~/rpmbuild/SPECS
+    cp data/fedoauth.spec ~/rpmbuild/SPECS
     cd ..
     tar zcf fedoauth-$version.tar.gz fedoauth-$version
     gpg --detach --armor --sign fedoauth-$version.tar.gz

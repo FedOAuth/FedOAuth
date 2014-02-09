@@ -1,0 +1,126 @@
+# Translations template for FedOAuth.
+# Copyright (C) 2014 Patrick Uiterwijk
+# This file is distributed under the same license as the FedOAuth project.
+# 
+# Translators:
+# Kris Thomsen <lakristho@gmail.com>, 2013
+msgid ""
+msgstr ""
+"Project-Id-Version: FedOAuth\n"
+"Report-Msgid-Bugs-To: puiterwijk@gmail.com\n"
+"POT-Creation-Date: 2014-02-07 23:27+0100\n"
+"PO-Revision-Date: 2014-02-07 22:31+0000\n"
+"Last-Translator: Patrick Uiterwijk <puiterwijk@fedoraproject.org>\n"
+"Language-Team: Danish (http://www.transifex.com/projects/p/fedora/language/da/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
+"Language: da\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: fedoauth/views.py:40
+msgid "You have been logged out"
+msgstr "Du er blevet logget ud"
+
+#: fedoauth/views_openid.py:177
+msgid "None provided"
+msgstr ""
+
+#: fedoauth/auth/fas.py:176
+msgid "Incorrect username or password"
+msgstr "Forkert  brugernavn eller adgangskode"
+
+#: fedoauth/auth/fas.py:184
+#, python-format
+msgid "This service is limited to the following users: %(users)s"
+msgstr "Denne tjeneste er begrænset til følgende brugere: %(users)s"
+
+#: fedoauth/templates/auth_fas_login.html:2
+#: fedoauth/templates/auth_fas_login.html:17
+msgid "Login"
+msgstr ""
+
+#: fedoauth/templates/auth_fas_login.html:4
+#, python-format
+msgid ""
+"%(trust_root)s is asking to authenticate using the Fedora Account System"
+msgstr ""
+
+#: fedoauth/templates/auth_fas_login.html:7
+msgid "Login with your FAS credentials"
+msgstr ""
+
+#: fedoauth/templates/auth_fas_login.html:11
+msgid "FAS Username"
+msgstr ""
+
+#: fedoauth/templates/auth_fas_login.html:14
+msgid "Password"
+msgstr "Adgangskode"
+
+#: fedoauth/templates/index.html:2
+msgid "Home"
+msgstr ""
+
+#: fedoauth/templates/index.html:4
+msgid "This is the Federated Open Authentication provider homepage."
+msgstr ""
+
+#: fedoauth/templates/index.html:7
+msgid ""
+"You will be redirected to this application whenever another application "
+"requires you to authenticate."
+msgstr ""
+
+#: fedoauth/templates/openid_user.html:2
+msgid "Userpage"
+msgstr ""
+
+#: fedoauth/templates/openid_user.html:4
+#, python-format
+msgid "This is the OpenID page for %(username)s."
+msgstr ""
+
+#: fedoauth/templates/openid_user.html:7
+msgid "This page is primarily used internally"
+msgstr ""
+
+#: fedoauth/templates/openid_user_ask_trust_root.html:2
+msgid "Approval"
+msgstr ""
+
+#: fedoauth/templates/openid_user_ask_trust_root.html:4
+#, python-format
+msgid ""
+"%(trust_root)s is asking to authenticate via OpenID using the Fedora Account"
+" System"
+msgstr ""
+
+#: fedoauth/templates/openid_user_ask_trust_root.html:8
+msgid "Review the authorization details"
+msgstr ""
+
+#: fedoauth/templates/openid_user_ask_trust_root.html:20
+msgid "Privacy Policy"
+msgstr ""
+
+#: fedoauth/templates/openid_user_ask_trust_root.html:31
+msgid "Group"
+msgstr "Gruppe"
+
+#: fedoauth/templates/openid_user_ask_trust_root.html:37
+msgid "FPCA Completed"
+msgstr ""
+
+#: fedoauth/templates/openid_user_ask_trust_root.html:38
+msgid "True"
+msgstr ""
+
+#: fedoauth/templates/openid_user_ask_trust_root.html:44
+msgid "Approve"
+msgstr ""
+
+#: fedoauth/templates/openid_user_ask_trust_root.html:47
+msgid "Reject"
+msgstr ""

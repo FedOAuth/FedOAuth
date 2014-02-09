@@ -52,7 +52,7 @@ try:
     key_e = e
     key_n = n
 except Exception as e:
-    print 'Unable to read the private key for Persona: %s' % e
+    log_error('Unable to read the private key for Persona: %s' % e)
 
 
 # These things only make sense if we were able to get a key

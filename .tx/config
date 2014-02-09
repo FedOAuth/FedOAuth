@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[fas-openid.english]
+[fedoauth.english]
 file_filter = fedoauth/translations/<lang>.po
 host = https://fedora.transifex.com
 source_file = fedoauth/translations/en.pot

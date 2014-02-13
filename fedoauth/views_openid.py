@@ -189,7 +189,13 @@ def view_openid_api_v1_wrapper():
 
 def view_openid_api_v1():
     values = request.form
-    openid_request = get_server().decodeRequest(values)
+    try:
+        openid_request = get_server().decodeRequest(values)
+    except:
+        return { 'success': False
+               , 'status': 400
+               , 'message': 'Invalid request'
+               }
     if not openid_request:
         return { 'success': False
                , 'status': 400

@@ -189,6 +189,7 @@ def view_openid_api_v1_wrapper():
 
 def view_openid_api_v1():
     values = request.form
+    openid_request = None
     try:
         openid_request = get_server().decodeRequest(values)
     except:

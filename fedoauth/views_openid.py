@@ -182,7 +182,7 @@ def user_ask_trust_root(openid_request):
         csrf=get_session()['csrf_id'])
 
 
-@app.route('/api/v1/', method=['POST'])
+@app.route('/api/v1/', methods=['POST'])
 def view_openid_api_v1_wrapper():
     return json.dumps(view_openid_api_v1())
 

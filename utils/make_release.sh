@@ -72,4 +72,5 @@ git archive --format=tar --prefix=fedoauth-$version/ HEAD | gzip > release/fedoa
 )
 cp ~/rpmbuild/SRPMS/fedoauth-$version*.src.rpm release/
 ls -l release/fedoauth-$version*
+scp release/fedoauth-$version* puiterwijk@fedorapeople.org:public_html/FedOAuth/
 echo Please build the RPM and publish it

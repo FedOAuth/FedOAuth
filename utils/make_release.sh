@@ -47,7 +47,7 @@ git branch make-release
 git checkout make-release
 tx pull -a
 git add fedoauth/translations
-git commit -m "Updated translations"
+git commit -m "Updated translations" || true
 git tag -s v$version -m "Release v$version"
 git checkout master
 git branch -D make-release

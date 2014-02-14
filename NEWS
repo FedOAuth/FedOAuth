@@ -1,3 +1,11 @@
+Release ?.?.? [] (????-??-??)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixes:
+- Only accept POST method for API [Pierre-Yves Chibon]
+- Send 400 when no OpenID request is sent in API [Patrick Uiterwijk]
+
+
 Release 2.0.1 [Aluminium] (2014-02-09)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

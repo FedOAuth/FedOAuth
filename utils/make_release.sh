@@ -68,7 +68,7 @@ git archive --format=tar --prefix=fedoauth-$version/ HEAD | gzip > release/fedoa
 )
 (
     cd ~/rpmbuild/SPECS
-    rpmbuild -ba fedoauth.spec >/dev/null
+    rpmbuild -bs fedoauth.spec >/dev/null
 )
 cp ~/rpmbuild/SRPMS/fedoauth-$version*.src.rpm release/
 ls -l release/fedoauth-$version*

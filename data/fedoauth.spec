@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        2.0.1
+Version:        2.0.2
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -140,6 +140,11 @@ exit 0
 
 
 %changelog
+* Fri Feb 14 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.2-1
+- Fixes not accepting POST for the OpenID API
+- Fixes 500 when sending invalid request to OpenID API
+- Make it possible to configure Persona identity issuer for delegation
+
 * Sun Feb 09 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.1-1
 - Fixes not sending the username in SReg
 

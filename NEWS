@@ -1,5 +1,5 @@
-Release ?.?.? [] (????-??-??)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Release 2.0.2 [Arsenic] (2014-02-14)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 New:
 - Make it possible to configure the Persona identity issuer used in case of delegation [Patrick Uiterwijk]

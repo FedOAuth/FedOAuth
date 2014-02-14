@@ -49,9 +49,14 @@ logger.addHandler(handler)
 
 
 def log_create_message(message, info):
-    if not 'log_id' in get_session():
-        get_session()['log_id'] = uuid().hex
-        get_session().save()
+    logid = None
+    try:
+        if not 'log_id' in get_session():
+            get_session()['log_id'] = uuid().hex
+            get_session().save()
+        logid = get_session()['log_id']
+    except:
+        logid = 'NO_REQUEST'
     other = ''
     for key, value in info.iteritems():
         other = '%(other)s, %(key)s=%(value)s' % {
@@ -60,7 +65,7 @@ def log_create_message(message, info):
             'value': value}
     return '%(message)s: sessionid=%(sessionid)s%(other)s' % {
         'message': message,
-        'sessionid': get_session()['log_id'],
+        'sessionid': logid,
         'other': other}
 
 

@@ -25,6 +25,9 @@ FAS_AVAILABLE_TO = []
 # PERSONA CONFIGURATION
 # This is the domain for which we are willing to sign
 PERSONA_DOMAIN = 'localhost'
+# Issuer is most often equal to PERSONA_DOMAIN, except when using delegation.
+# In case of delegation, enter the domain of the IDENTITY PROVIDER here, and the domain of the EMAIL ADDRESSES in PERSONA_DOMAIN
+PERSONA_ISSUER = 'localhost'
 PERSONA_PRIVATE_KEY_PATH = 'persona.key'
 PERSONA_PRIVATE_KEY_PASSPHRASE = 'test123'
 

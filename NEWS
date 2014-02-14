@@ -1,6 +1,9 @@
 Release ?.?.? [] (????-??-??)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+New:
+- Make it possible to configure the Persona identity issuer used in case of delegation [Patrick Uiterwijk]
+
 Fixes:
 - Only accept POST method for API [Pierre-Yves Chibon]
 - Send 400 when no OpenID request is sent in API [Patrick Uiterwijk]

@@ -91,7 +91,7 @@ if key and key_len and digest_size and key_e and key_n:
         claim['iat'] = 1000 * int(time.time() - 10)
         claim['exp'] = 1000 * int(time.time() + \
                                     min(certDuration, 24 * 60 * 60))
-        claim['iss'] = app.config['PERSONA_DOMAIN']
+        claim['iss'] = app.config['PERSONA_ISSUER']
         claim['public-key'] = json.loads(publicKey)
         claim['principal'] = {'email': email}
         claim_json = claim

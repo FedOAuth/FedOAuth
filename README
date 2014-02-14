@@ -36,6 +36,8 @@ If you host FedOAuth on id.example.com, you can get username@example.com to veri
 
 Please note that this file must be served over HTTPS.
 
+Also, when using this (called delegation), CAREFULLY read the comment on the PERSONA_ISSUER configuration key.
+
 
 Problems
 --------

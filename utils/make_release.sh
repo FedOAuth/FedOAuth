@@ -51,7 +51,6 @@ git commit -m "Updated translations" || true
 git tag -s v$version -m "Release v$version"
 git checkout master
 git branch -D make-release
-git push origin v$version
 git archive --format=tar --prefix=fedoauth-$version/ HEAD | gzip > release/fedoauth-$version.tar.gz
 (
     cd release
@@ -62,15 +61,15 @@ git archive --format=tar --prefix=fedoauth-$version/ HEAD | gzip > release/fedoa
     cd ..
     tar zcf fedoauth-$version.tar.gz fedoauth-$version
     gpg --detach --armor --sign fedoauth-$version.tar.gz
-    #scp fedoauth-$version.tar.gz{,.asc} fedorahosted.org:/srv/web/releases/f/a/fedoauth/
     cp fedoauth-$version.tar.gz ~/rpmbuild/SOURCES
     rm -rf fedoauth-$version
 )
 (
     cd ~/rpmbuild/SPECS
-    rpmbuild -bs fedoauth.spec >/dev/null
+    rpmbuild -bs fedoauth.spec
 )
 cp ~/rpmbuild/SRPMS/fedoauth-$version*.src.rpm release/
 ls -l release/fedoauth-$version*
+git push origin v$version
 scp release/fedoauth-$version* puiterwijk@fedorapeople.org:public_html/FedOAuth/
 echo Please build the RPM and publish it

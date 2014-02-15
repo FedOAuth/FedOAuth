@@ -117,7 +117,7 @@ class Auth_FAS(Auth_Base):
         if not 'username' in request.form or not 'password' in  request.form:
             return Response('No user or pw', status=400)
         if get_auth_module().logged_in():
-            return Response('Already logged in', status=409)
+            return Response('Already logged in', status=200)
         username = request.form['username']
         password = request.form['password']
         if (not app.config['FAS_AVAILABLE_FILTER']) or \

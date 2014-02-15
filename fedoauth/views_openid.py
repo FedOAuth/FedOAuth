@@ -128,10 +128,10 @@ def addPape(request, response):
 
 def addTeams(request, response, groups):
     teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
-    if teams_req.requestedTeams.contains('_FAS_ALL_GROUPS_') and \
+    if teams_req.requested.contains('_FAS_ALL_GROUPS_') and \
             app.config['FAS_HANDLE_GROUPS_MAGIC_VALUE']:
         # We will send all groups the user is a member of
-        request.requestedTeams = groups
+        request.requested = groups
     teams_resp = teams.TeamsResponse.extractResponse(teams_req, groups)
     if not response is None and teams_req.requested != []:
         response.addExtension(teams_resp)

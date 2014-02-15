@@ -128,12 +128,14 @@ def addPape(request, response):
 
 def addTeams(request, response, groups):
     teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
-    if teams_req.requested == []:
-        # If they don't want any groups, we won't force them upon them
-        return
+    if request.requestedTeams.contains('_FAS_ALL_GROUPS_') and \
+            app.config['FAS_HANDLE_GROUPS_MAGIC_VALUE']:
+        # We will send all groups the user is a member of
+        request.requestedTeams = groups
     teams_resp = teams.TeamsResponse.extractResponse(teams_req, groups)
-    response.addExtension(teams_resp)
-    return teams_resp.teams
+    if not response is None and teams_req.requested != []:
+        response.addExtension(teams_resp)
+    return teams_resp
 
 
 def addCLAs(request, response, cla_uris):
@@ -162,10 +164,7 @@ def user_ask_trust_root(openid_request):
     sreg_data = get_auth_module().get_sreg()
     sreg_req = sreg.SRegRequest.fromOpenIDRequest(openid_request)
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, sreg_data)
-    teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
-    teams_resp = teams.TeamsResponse.extractResponse(
-        teams_req,
-        filter_cla_groups(get_auth_module().get_groups()))
+    teams_resp = addTeams(openid_request, None, filter_cla_groups(get_auth_module().get_groups()))
     clas_req = cla.CLARequest.fromOpenIDRequest(openid_request)
     clas_resp = cla.CLAResponse.extractResponse(
         clas_req,
@@ -294,7 +293,7 @@ def view_openid_main():
                 'trust_root': openid_request.trust_root,
                 'security_level': auth_level,
                 'message': 'The user succesfully claimed the identity'})
-            log_debug('Info', {'teams': teams_info})
+            log_debug('Info', {'teams': teams_info.teams})
             return openid_respond(openid_response)
         elif authed == AUTH_TRUST_ROOT_ASK:
             # User needs to confirm trust root

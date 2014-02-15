@@ -21,6 +21,8 @@ FAS_CHECK_CERT = True
 # Enable a filter to make this only available to a specific list of users
 FAS_AVAILABLE_FILTER = False
 FAS_AVAILABLE_TO = []
+# Set this to True to always send all groups when the _FAS_ALL_GROUPS_ group is requested
+FAS_HANDLE_GROUPS_MAGIC_VALUE = False
 
 # PERSONA CONFIGURATION
 # This is the domain for which we are willing to sign

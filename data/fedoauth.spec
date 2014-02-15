@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        2.0.2
+Version:        2.0.3
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -140,6 +140,9 @@ exit 0
 
 
 %changelog
+* Sat Feb 15 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.3-1
+- Add the magic value back for all groups
+
 * Fri Feb 14 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.2-1
 - Fixes not accepting POST for the OpenID API
 - Fixes 500 when sending invalid request to OpenID API

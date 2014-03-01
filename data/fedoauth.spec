@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        2.0.6
+Version:        2.0.4
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 

@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        2.0.3
+Version:        2.0.4
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -140,6 +140,10 @@ exit 0
 
 
 %changelog
+* Sat Mar 01 2014 Patrick Uiterwijk <puiterwijk@gmail.com> 2.0.4-1
+- Does not delete session when it is still valid [Patrick Uiterwijk]
+- Fixes an incorrect contains [Patrick Uiterwijk]
+
 * Sat Feb 15 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.3-1
 - Add the magic value back for all groups
 

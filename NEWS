@@ -1,3 +1,11 @@
+Release 2.0.4 [Actinium] (2014-03-01)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixes:
+- Does not delete session when it is still valid [Patrick Uiterwijk]
+- Fixes an incorrect contains [Patrick Uiterwijk]
+
+
 Release 2.0.3 [Astatine] (2014-02-14)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

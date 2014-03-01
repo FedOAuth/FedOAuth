@@ -217,12 +217,7 @@ def view_openid_api_v1():
     sreg_resp = sreg.SRegResponse.extractResponse(sreg_req, auth_result)
     openid_response.addExtension(sreg_resp)
     # Teams
-    teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
-    if teams_req.requested != []:
-        groups = filter_cla_groups(auth_result['groups'])
-        teams_resp = teams.TeamsResponse.extractResponse(teams_req,
-                                                         groups)
-        openid_response.addExtension(teams_resp)
+    addTeams(openid_request, openid_response, filter_cla_groups(auth_result['groups']))
     # CLA
     cla_req = cla.CLARequest.fromOpenIDRequest(openid_request)
     if cla_req.requested != []:

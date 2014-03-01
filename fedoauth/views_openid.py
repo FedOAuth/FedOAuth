@@ -192,21 +192,21 @@ def view_openid_api_v1():
     try:
         openid_request = get_server().decodeRequest(values)
     except:
-        return { 'success': False
-               , 'status': 400
-               , 'message': 'Invalid request'
-               }
+        return {'success': False,
+                'status': 400,
+                'message': 'Invalid request'
+                }
     if not openid_request:
-        return { 'success': False
-               , 'status': 400
-               , 'message': 'Invalid request'
-               }
+        return {'success': False,
+                'status': 400,
+                'message': 'Invalid request'
+                }
     auth_result = get_auth_module().api_authenticate(values)
     if not auth_result:
-        return { 'success': False
-               , 'status': 403
-               , 'message': 'Authentication failed'
-               }
+        return {'success': False,
+                'status': 403,
+                'message': 'Authentication failed'
+                }
     openid_response = openid_request.answer(
         True,
         identity=get_claimed_id(auth_result['username']),
@@ -237,12 +237,13 @@ def view_openid_api_v1():
         auth_levels={pape.LEVELS_NIST: 2})
     openid_response.addExtension(pape_resp)
     # Return
-    response_strings = openid_response.encodeToKVForm().split('\n')
+    response_strings = get_server().signatory.sign(openid_response). \
+        encodeToKVForm().split('\n')
     response = {}
     for resp in response_strings:
         if resp != '':
             resp = resp.split(':', 1)
-            response[resp[0]] = resp[1]
+            response['openid.%s' % resp[0]] = resp[1]
     return {'success': True,
             'response': response}
 
@@ -278,12 +279,12 @@ def view_openid_main():
                 ),
                 claimed_id=get_claimed_id(get_auth_module().get_username())
             )
-            sreg_info = addSReg(openid_request, openid_response)
+            addSReg(openid_request, openid_response)
             teams_info = addTeams(
                 openid_request,
                 openid_response,
                 filter_cla_groups(get_auth_module().get_groups()))
-            cla_info = addCLAs(
+            addCLAs(
                 openid_request,
                 openid_response,
                 get_cla_uris(get_auth_module().get_groups()))
@@ -376,7 +377,7 @@ def view_openid_id(username):
         username=username,
         claimed_id=get_claimed_id(username),
         yadis_url=complete_url_for('view_openid_yadis_id',
-        username=username)
+                                   username=username)
     ),
     200,
     {'X-XRDS-Location':

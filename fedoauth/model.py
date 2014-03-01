@@ -33,7 +33,7 @@ class DBSessionMiddleware(SessionInterface):
         return DBSession.open_session(app, request)
 
     def save_session(self, app, session, response):
-        if session:
+        if not session is None:
             session.save_session(app, response)
         else:
             session.delete_session(app, response)

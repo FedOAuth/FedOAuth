@@ -1,3 +1,10 @@
+Release 2.0.6 (2014-03-01)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixes:
+- Now actually signs the OpenID API response [Patrick Uiterwijk]
+
+
 Release 2.0.5 (2014-03-01)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 

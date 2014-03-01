@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        2.0.5
+Version:        2.0.6
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -140,6 +140,9 @@ exit 0
 
 
 %changelog
+* Sat Mar 01 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.6-1
+- Now actually signs the OpenID API response [Patrick Uiterwijk]
+
 * Sat Mar 01 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.5-1
 - Make the remote_addr check for sessions confiruable [Patrick Uiterwijk]
 

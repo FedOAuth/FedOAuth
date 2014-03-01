@@ -1,23 +1,12 @@
-Release 2.0.6 (2014-03-01)
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Fixes:
-- Now actually signs the OpenID API response [Patrick Uiterwijk]
-
-
-Release 2.0.5 (2014-03-01)
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Fixes:
-- Make the remote_addr check for sessions confiruable [Patrick Uiterwijk]
-
-
 Release 2.0.4 [Actinium] (2014-03-01)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Fixes:
 - Does not delete session when it is still valid [Patrick Uiterwijk]
 - Fixes an incorrect contains [Patrick Uiterwijk]
+- Now actually signs the OpenID API response [Patrick Uiterwijk]
+- Send nickname with OpenID API [Patrick Uiterwijk]
+- Make the remote_addr check for sessions confiruable [Patrick Uiterwijk]
 
 
 Release 2.0.3 [Astatine] (2014-02-14)

@@ -140,15 +140,12 @@ exit 0
 
 
 %changelog
-* Sat Mar 01 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.6-1
-- Now actually signs the OpenID API response [Patrick Uiterwijk]
-
-* Sat Mar 01 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.5-1
-- Make the remote_addr check for sessions confiruable [Patrick Uiterwijk]
-
 * Sat Mar 01 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.4-1
 - Does not delete session when it is still valid [Patrick Uiterwijk]
 - Fixes an incorrect contains [Patrick Uiterwijk]
+- Now actually signs the OpenID API response [Patrick Uiterwijk]
+- Send nickname with OpenID API [Patrick Uiterwijk]
+- Make the remote_addr check for sessions confiruable [Patrick Uiterwijk]
 
 * Sat Feb 15 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.3-1
 - Add the magic value back for all groups

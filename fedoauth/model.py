@@ -91,8 +91,12 @@ class DBSession(db.Model, SessionMixin, DictMixin):
         sessionid = request.cookies.get('sessionid')
 
         if sessionid:
-            retrieved = DBSession.query.filter_by(sessionid=sessionid,
-                                                  remote_addr=request.remote_addr).first()
+            retrieved = None
+            if app.config['COOKIE_CHECK_REMOTE_ADDR']:
+                retrieved = DBSession.query.filter_by(sessionid=sessionid,
+                                                      remote_addr=request.remote_addr).first()
+            else:
+                retrieved = DBSession.query.filter_by(sessionid=sessionid).first()
             if not retrieved is None:
                 return retrieved
 

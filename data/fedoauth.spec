@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        2.0.4
+Version:        2.0.5
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -140,7 +140,10 @@ exit 0
 
 
 %changelog
-* Sat Mar 01 2014 Patrick Uiterwijk <puiterwijk@gmail.com> 2.0.4-1
+* Sat Mar 01 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.5-1
+- Make the remote_addr check for sessions confiruable [Patrick Uiterwijk]
+
+* Sat Mar 01 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.4-1
 - Does not delete session when it is still valid [Patrick Uiterwijk]
 - Fixes an incorrect contains [Patrick Uiterwijk]
 

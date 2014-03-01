@@ -1,3 +1,10 @@
+Release 2.0.5 (2014-03-01)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixes:
+- Make the remote_addr check for sessions confiruable [Patrick Uiterwijk]
+
+
 Release 2.0.4 [Actinium] (2014-03-01)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

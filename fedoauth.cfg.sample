@@ -10,6 +10,9 @@ SQLALCHEMY_DATABASE_URI='sqlite:///fedoauth.sqlite'
 WEBSITE_ROOT = 'http://localhost:5000'
 COOKIE_DOMAIN = 'localhost'
 COOKIE_SECURE = False
+# Whether or not to check the address of the remote computer on retrieving the session
+# MAKE SURE TO DISABLE THIS if you have reverse proxies and not send the remote_addr headers on
+COOKIE_CHECK_REMOTE_ADDR = True
 
 # Modules to use
 AUTH_MODULE='fedoauth.auth.fas.Auth_FAS'

@@ -128,7 +128,7 @@ def addPape(request, response):
 
 def addTeams(request, response, groups):
     teams_req = teams.TeamsRequest.fromOpenIDRequest(request)
-    if teams_req.requested.contains('_FAS_ALL_GROUPS_') and \
+    if '_FAS_ALL_GROUPS_' in teams_req.requested and \
             app.config['FAS_HANDLE_GROUPS_MAGIC_VALUE']:
         # We will send all groups the user is a member of
         teams_req.requested = groups

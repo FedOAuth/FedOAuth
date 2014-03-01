@@ -96,12 +96,13 @@ class Auth_FAS(Auth_Base):
             return False
         user['groups'] = [x['name'] for x in user['approved_memberships']]
         user['last_auth_time'] = time()
-        return { 'username': user['username']
-               , 'email': user['email']
-               , 'fullname': user['human_name']
-               , 'timezone': user['timezone']
-               , 'groups': user['groups']
-               }
+        return {'username': user['username'],
+                'nickname': user['username'],
+                'email': user['email'],
+                'fullname': user['human_name'],
+                'timezone': user['timezone'],
+                'groups': user['groups']
+                }
 
     def used_multi_factor(self):
         return False

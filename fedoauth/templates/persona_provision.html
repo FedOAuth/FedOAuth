@@ -5,6 +5,8 @@
         <script type="text/javascript">
             var xmlhttp = new XMLHttpRequest();
 
+            var loggedin = {{ loggedin|lower }};
+
             xmlhttp.onreadystatechange=function()
             {
                 if(xmlhttp.readyState==4)
@@ -13,6 +15,10 @@
                     {
                         navigator.id.registerCertificate(xmlhttp.responseText);
                     }
+                    else if((xmlhttp.status == 401) || (xmlhttp.status == 403))
+                    {
+                        navigator.id.raiseProvisioningFailure('Error in provisioning!');
+                    }
                     else
                     {
                         alert("Response code: " + xmlhttp.status);
@@ -20,8 +26,6 @@
                     }
                 }
             }
-
-            var current_email = '{{user_email}}';
 
             function generateServerSide(email, publicKey, certDuration, callback)
             {
@@ -35,12 +39,12 @@
             function startProvisioning()
             {
                 navigator.id.beginProvisioning(function(email, certDuration) {
-                    if (email == current_email) {
+                    if (loggedin) {
                         navigator.id.genKeyPair(function(publicKey) {
                             generateServerSide(email, publicKey, certDuration);
                         });
                     } else {
-                        navigator.id.raiseProvisioningFailure('user is not authenticated as target user');
+                        navigator.id.raiseProvisioningFailure('user is not authenticated');
                     }
                 });
             }

@@ -1,2 +1,1 @@
-recursive-include fedoauth/templates *
 recursive-include fedoauth/translations *

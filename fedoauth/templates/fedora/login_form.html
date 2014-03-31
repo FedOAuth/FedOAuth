@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}{% trans %}Login{% endtrans %}{% endblock %}
+{% block toptext %}
+{% trans %}{{ login_target }} is asking to authenticate using the Fedora Account System{% endtrans %}
+{% endblock %}
+{% block body %}
+    {% trans %}Login with your FAS credentials{% endtrans %}
+    {% if error %}<p>{{error}}</p>{% endif %}
+    <div>
+        <form method="post" {% block form_options %}{% endblock %} action="{{ form_url }}">
+            <input type="hidden" name="transaction" value="{{ transaction}}"/>
+            <p class="form_item">
+                <input id="username" name="username" placeholder="{% trans %}FAS Username{% endtrans %}" autofocus value="{{ username }}" {% if forced_username %}disabled="disabled" readonly="readonly"{% endif %}/>
+            </p>
+            <p class="form_item">
+                <input id="password" name="password" type="password" placeholder="{% trans %}Password{% endtrans %}" />
+            </p>
+            <p class="form_item">
+                <input type="submit" id="loginbutton" value="{% trans %}Login{% endtrans %}">
+                <input type="submit" name="cancel" value="{% trans %}Cancel{% endtrans %}">
+            </p>
+        </form>
+    </div>
+{% endblock %}

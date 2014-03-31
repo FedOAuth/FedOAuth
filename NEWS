@@ -1,3 +1,18 @@
+Release 3.0.0 (2014-06-15)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+General:
+- Rewrite [Patrick Uiterwijk]
+
+New:
+- Modular architecture [Patrick Uiterwijk]
+- Multi-domain Persona [Patrick Uiterwijk]
+- Multi-tab operation [Patrick Uiterwijk]
+
+Fixes:
+- Issues with session cookies [Patrick Uiterwijk]
+
+
 Release 2.0.4 [Actinium] (2014-03-01)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

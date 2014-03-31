@@ -1,5 +1,5 @@
 #-*- coding: UTF-8 -*-
-# Copyright (C) 2014 Patrick Uiterwijk <puiterwijk@gmail.com>
+# Copyright (C) 2014 Patrick Uiterwijk <patrick@puiterwijk.org>
 #
 # This file is part of FedOAuth.
 #

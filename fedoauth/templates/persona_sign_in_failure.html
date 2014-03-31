@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Persona Signed In</title>
+
+        <script src="https://login.persona.org/authentication_api.js"></script>
+        <script type="text/javascript">
+            function cancelAuth()
+            {
+                navigator.id.raiseAuthenticationFailure('User cancelled signon');
+            }
+        </script>
+    </head>
+    <body onLoad="cancelAuth();">
+        <h1>Persona signin cancelled</h1>
+        <h2>You should have been redirected back (or be in the progress of being redirected back)</h2>
+    </body>
+</html>

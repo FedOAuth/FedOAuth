@@ -1,5 +1,5 @@
 #!/usr/bin/bash -ex
-# Copyright (C) 2014 Patrick Uiterwijk <puiterwijk@gmail.com>
+# Copyright (C) 2014 Patrick Uiterwijk <patrick@puiterwijk.org>
 #
 # This file is part of FedOAuth.
 #
@@ -21,6 +21,16 @@ then
     exit 1
 fi
 version=`cat data/fedoauth.spec | grep "Version:" | sed 's/Version:[ ]*//'`
+version_setup=`cat setup.py | grep "version=" | sed 's/[ ]*version=//' | sed "s/'//g" | sed "s/,//"`
+version_news=`cat NEWS | grep Release | head -1 | sed "s/Release //" | sed "s/ (.*)//"`
+if [ ! "$version" == "$version_setup" -o ! "$version" == "$version_news" ];
+then
+    echo "Versions do not match!"
+    echo "Spec version: $version"
+    echo "Setup version: $version_setup"
+    echo "News version: $version_news"
+    exit 1
+fi
 if [ -n "`git diff | head -10`" ]
 then
     echo >&2 "error: tree is not clean - changes would be lost. aborted"
@@ -32,44 +42,24 @@ then
     git log master ^origin/master
     exit 1
 fi
-if [ -f release/fedoauth-$version.tar.gz  ]
-then
-    echo >&2 "ERROR: release already exists. Aborted"
-    exit 1
-elif [ ! -z "`git tag -l v$version`"  ]
+if [ ! -z "`git tag -l v$version`"  ]
 then
     echo >&2 "ERROR: release tag already exists. Aborted."
     exit 1
-else
-    mkdir -p release
 fi
-git branch make-release
-git checkout make-release
-tx pull -a || true
-git add fedoauth/translations
-git commit -m "Updated translations" || true
-git tag -s v$version -m "Release v$version"
-git checkout master
-git branch -D make-release
-git archive --format=tar --prefix=fedoauth-$version/ HEAD | gzip > release/fedoauth-$version.tar.gz
+git tag -s v3.0.0 -m "Release $version"
+mkdir -p dist
+git archive --format=tar --prefix=FedOAuth-$version/ HEAD | gzip > dist/FedOAuth-$version.tar.gz
 (
-    cd release
-    tar zxf fedoauth-$version.tar.gz
-    cd fedoauth-$version
-    sed -i "s/@VERSION@/$version/" setup.py
-    cp data/fedoauth.spec ~/rpmbuild/SPECS
-    cd ..
-    tar zcf fedoauth-$version.tar.gz fedoauth-$version
-    gpg --detach --armor --sign fedoauth-$version.tar.gz
-    cp fedoauth-$version.tar.gz ~/rpmbuild/SOURCES
-    rm -rf fedoauth-$version
+    cd dist
+    gpg --detach --armor --sign FedOAuth-$version.tar.gz
+    cp FedOAuth-$version.tar.gz ~/rpmbuild/SOURCES
 )
+cp data/fedoauth.spec ~/rpmbuild/SPECS
 (
     cd ~/rpmbuild/SPECS
-    rpmbuild -bs fedoauth.spec
+    rpmbuild -ba fedoauth.spec
 )
-cp ~/rpmbuild/SRPMS/fedoauth-$version*.src.rpm release/
-ls -l release/fedoauth-$version*
-git push origin v$version
-scp release/fedoauth-$version* puiterwijk@fedorapeople.org:public_html/FedOAuth/
-echo Please build the RPM and publish it
+cp ~/rpmbuild/SRPMS/fedoauth-$version*.src.rpm dist/
+ls -l dist/FedOAuth-$version* dist/fedoauth-$version*
+echo Please push the tag and build and publish the RPM and sources

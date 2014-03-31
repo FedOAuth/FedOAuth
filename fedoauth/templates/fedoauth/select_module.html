@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}{% trans %}Select module{% endtrans %}{% endblock %}
+{% block toptext %}
+{% trans %}Please select the authentication backend to use.{% endtrans %}
+{% endblock %}
+{% block body %}
+
+{% for module in modules %}
+    <a href="{{ module['url'] }}">
+        <img src="{{ module['image'] }}" alt="{{ module['text'] }}" />
+    </a>
+    <br />
+{% endfor %}
+
+<a href="{{ cancel_url|safe }}">Cancel<a>
+{% endblock %}

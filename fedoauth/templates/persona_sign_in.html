@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Persona Signed In</title>
+
+        <script src="https://login.persona.org/authentication_api.js"></script>
+        <script type="text/javascript">
+            function startAuth()
+            {
+                navigator.id.beginAuthentication(function(email) {
+                    navigator.id.completeAuthentication();
+                });
+            }
+        </script>
+    </head>
+    <body onLoad="startAuth();">
+        <h1>Persona signin successfull</h1>
+        <h2>You should have been redirected back (or be in the progress of being redirected back)</h2>
+    </body>
+</html>

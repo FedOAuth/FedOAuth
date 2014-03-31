@@ -5,17 +5,17 @@
             <meta http-equiv="X-XRDS-Location" content="{{yadis_url}}">
         {% endif %}
 
-        <link rel="shortcut icon" type="image/vnd.microsoft.icon"
-            href="//fedoraproject.org/static/images/favicon.ico"/>
-
-        <link rel="openid.server" href="{{config['WEBSITE_ROOT']}}">
-        <link rel="openid2.provider" href="{{config['WEBSITE_ROOT']}}">
-        {% if claimed_id is defined %}
-            <link rel="openid.delegate" href="{{claimed_id}}">
-            <link rel="openid2.local_id" href="{{claimed_id}}">
+        {% if config['AUTH_PROVIDER_CONFIGURATION']['fedoauth.provider.openid']['enabled'] %}
+            <link rel="openid.server" href="{{config['GLOBAL']['url_root']}}/openid/">
+            <link rel="openid2.provider" href="{{config['GLOBAL']['url_root']}}/openid/">
+            {% if claimed_id is defined %}
+                <link rel="openid.delegate" href="{{claimed_id}}">
+                <link rel="openid2.local_id" href="{{claimed_id}}">
+            {% endif %}
         {% endif %}
+
         <title>FedOAuth - {% block title %}{% endblock %}</title>
-        <link rel="stylesheet" href="/static/fedora.css">
+        <link rel="stylesheet" href="{{ static_content_root }}/fedoauth/fedoauth.css">
 
         {% block javascript %}
         {% endblock %}
@@ -23,7 +23,7 @@
     <body {% block body_options %}{% endblock %}>
         <div class="header_bg">
             <div class="body header">
-                <img id="logo" alt="logo" src="/static/fedora-authn-logo-white.png"/>
+                <img id="logo" alt="logo" src="{{ static_content_root }}/fedoauth/fedoauth-authn-logo-white.png"/>
             </div>
         </div>
         <div class="body main">

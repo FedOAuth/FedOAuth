@@ -2,45 +2,95 @@
 
 # GENERAL CONFIGURATION
 ### url to the database server:
-SQLALCHEMY_DATABASE_URI='sqlite:///fedoauth.sqlite'
-#SQLALCHEMY_DATABASE_URI='mysql://user:pass@host/db_name'
-#SQLALCHEMY_DATABASE_URI='postgresql://user:pass@host/db_name'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///fedoauth.sqlite'
+#SQLALCHEMY_DATABASE_URI = 'mysql://user:pass@host/db_name'
+#SQLALCHEMY_DATABASE_URI = 'postgresql://user:pass@host/db_name'
 
-# This is the OpenID endpoint url, at which the server is available
-WEBSITE_ROOT = 'http://localhost:5000'
-COOKIE_DOMAIN = 'localhost'
-COOKIE_SECURE = False
-# Whether or not to check the address of the remote computer on retrieving the session
-# MAKE SURE TO DISABLE THIS if you have reverse proxies and not send the remote_addr headers on
-COOKIE_CHECK_REMOTE_ADDR = True
 
-# Modules to use
-AUTH_MODULE='fedoauth.auth.fas.Auth_FAS'
+GLOBAL = {'url_root': 'http://localhost:5000',
+          # Please insert a random key here
+          # This is used for signing the persistent transactions and reauth
+          # Please make sure to use a long, random, string of letters, numbers
+          #  and other characters.
+          # Feel free to change this key often for key renewal: the worst
+          #  that can happen is that a user needs to relogin.
+          # That's not too bad a compromise for more security, is it?
+          'secret_key': 'setme',
+          # IF NOTHING ELSE, CONFIGURE THE SECRET KEY!!!!!
+          #
+          # Set this to the URL under which the /static/ dir is available
+          'static_content_root': 'http://localhost:5000/static',
+          # Only set reverse_proxied to True if you are using a reverse proxy that sets the standard
+          #  reverse proxy headers (FORWARDED_FOR, X_SCHEME)
+          'reverse_proxied': False,
+          # Only set this to False if you cannot use TLS for access to your FedOAuth instance
+          'cookies_secure': True,
+          # How long transactions are valid in minutes
+          'transactions_timeout': 5,
+          # The directory where you stored your template
+          'template_dir': './fedoauth/templates/fedoauth/',
+          # This is the path to fedoauth.log.cfg
+          'logging_config_location': 'fedoauth.log.cfg',
+          # Enable this to enable /test/ which shows all user info
+          # This is primarily used for debugging the user info
+          'enable_test_endpoint': False
+         }
 
-# FAS PROVIDER CONFIGURATION
-FAS_BASE_URL = 'https://admin.fedoraproject.org/accounts/'
-FAS_USER_AGENT = 'FAS-OpenID'
-FAS_CHECK_CERT = True
-# Enable a filter to make this only available to a specific list of users
-FAS_AVAILABLE_FILTER = False
-FAS_AVAILABLE_TO = []
-# Set this to True to always send all groups when the _FAS_ALL_GROUPS_ group is requested
-FAS_HANDLE_GROUPS_MAGIC_VALUE = False
 
-# PERSONA CONFIGURATION
-# This is the domain for which we are willing to sign
-PERSONA_DOMAIN = 'localhost'
-# Issuer is most often equal to PERSONA_DOMAIN, except when using delegation.
-# In case of delegation, enter the domain of the IDENTITY PROVIDER here, and the domain of the EMAIL ADDRESSES in PERSONA_DOMAIN
-PERSONA_ISSUER = 'localhost'
-PERSONA_PRIVATE_KEY_PATH = 'persona.key'
-PERSONA_PRIVATE_KEY_PASSPHRASE = 'test123'
+AUTH_MODULE_CONFIGURATION = {
+    # This module allows only for a single user
+    # It is an easy way to get started
+    'fedoauth.auth.dummy.Auth_Dummy': {'enabled': False,
+                                       'listed': False,
+                                       'select_image': '/static/general/logo.svg',
+                                       'reauth_timeout': 5,
+                                       'username': 'foo',
+                                       'password': 'bar',
+                                       'email_auth_domains': ['fedoauth.org'],
+                                       'nickname': 'The Dummy',
+                                       'email': 'dummy@fedoauth.org',
+                                       'fullname': 'Dummy User',
+                                       'firstname': 'Dummy',
+                                       'lastname': 'User',
+                                       'dob': '1970-01-01',
+                                       'gender': 'M',
+                                       'postalcode': '12345',
+                                       'country': 'US',
+                                       'language': 'EN',
+                                       'timezone': 'US/Eastern'
+                                      },
+    # This module authenticates against the Fedora Account System
+    # (https://admin.fedoraproject.org/accounts/)
+    'fedoauth.auth.fas.Auth_FAS': {'enabled': False,
+                                   'listed': False,
+                                   'select_image': '/static/fedora/fedora-authn-logo-white.png',
+                                   'reauth_timeout': 5,
+                                   'email_auth_domains': ['fedoraproject.org'],
+                                   'base_url': 'https://admin.fedoraproject.org/accounts/',
+                                   'user_agent': 'FedOAuth',
+                                   'check_cert': True
+                                  }
+}
 
-# OPENID CONFIGURATION
-# This is the OpenID url provided to users. Add %(username)s where the username should be entered
-OPENID_IDENTITY_URL = 'http://localhost:5000/id/%(username)s/'
-# A list of trust roots for which the user will not need to confirm again
-OPENID_TRUSTED_ROOTS = []
-OPENID_NON_TRUSTED_ROOTS = []
-### The maximum time after which the user must re-authenticate for OpenID in minutes (use 0 for no limit)
-OPENID_MAX_AUTH_TIME = 15
+
+AUTH_PROVIDER_CONFIGURATION = {
+    'fedoauth.provider.persona': {'enabled': False,
+                                  # These are the domains we are willing to sign for
+                                  # Please make sure your auth provider is willing to sign for the domain
+                                  'domains': ['localhost'],
+                                  # Create this private key by executing: openssl genrsa -des3 -out persona.key 2048
+                                  'private_key': {'path': 'persona.key',
+                                                  'passphrase': 'test123'}
+                                 },
+    'fedoauth.provider.openid': {'enabled': False,
+                                 # If you change this from <urlroot>/openid/id/%(username)s/ you will need to create an alias in your httpd config
+                                 'identity_url_pattern': 'http://localhost:5000/openid/id/%(username)s/',
+                                 # trusted_roots are always trusted and never asked to the user
+                                 'trusted_roots': [],
+                                 # non_trusted_roots are always non-trusted, and never asked to the user
+                                 'non_trusted_roots': [],
+                                 # This value is mostly used in the Fedora Infrastructure
+                                 # When this is True, an OpenID Relying Party can ask for all groups by asking for _FAS_ALL_GROUPS_
+                                 'handle_magic_groups_value': False
+                                }
+}

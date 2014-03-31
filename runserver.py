@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (C) 2014 Patrick Uiterwijk <puiterwijk@gmail.com>
+# Copyright (C) 2014 Patrick Uiterwijk <patrick@puiterwijk.org>
 #
 # This file is part of FedOAuth.
 #
@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with FedOAuth.  If not, see <http://www.gnu.org/licenses/>.
 
-## These two lines are needed to run on EL6
+# These two lines are needed to run on EL6
 __requires__ = ['SQLAlchemy >= 0.7', 'jinja2 >= 2.4']
 import pkg_resources
 

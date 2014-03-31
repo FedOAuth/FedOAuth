@@ -9,7 +9,6 @@
     <div>
         <form method="post" action="{{action}}">
             <input type="hidden" name="form_filled" value="true" />
-            <input type="hidden" name="csrf_value" value="{{csrf}}" />
             <p class="form_item">
                 <table class="details">
                     <tr>
@@ -20,24 +19,22 @@
                         <td>{% trans %}Privacy Policy{% endtrans %}</td>
                         <td>{{sreg_policy_url}}</td>
                     </tr>
-                    {% for field_name in sreg_data %}
+                    {% for entry in data %}
                         <tr>
-                            <td>{{field_name}}</td>
-                            <td>{{sreg_data[field_name]}}</td>
+                            <td>{{entry['text']}}</td>
+                            <td>{{entry['value']}}</td>
                         </tr>
                     {% endfor %}
-                    {% for team in teams_provided %}
-                        <tr>
-                            <td>{% trans %}Group{% endtrans %}</td>
-                            <td>{{team}}</td>
-                        </tr>
-                    {% endfor %}
-                    {% if cla_done %}
-                        <tr>
-                            <td>{% trans %}FPCA Completed{% endtrans %}</td>
-                            <td>{% trans %}True{% endtrans %}</td>
-                        </tr>
-                    {% endif %}
+
+                    <tr>
+                        <td>{% trans %}Remember approval for{% endtrans %}</td>
+                        <td><select name="rememberForDays">
+                                <option value="0">0 days</option>
+                                <option value="3">3 days</option>
+                                <option value="7">7 days</option>
+                            </select>
+                        </td>
+                    </tr>
                 </table>
             </p>
             <p class="form_item">

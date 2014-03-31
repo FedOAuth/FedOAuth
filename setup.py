@@ -1,4 +1,4 @@
-# Copyright (C) 2014 Patrick Uiterwijk <puiterwijk@gmail.com>
+# Copyright (C) 2014 Patrick Uiterwijk <patrick@puiterwijk.org>
 #
 # This file is part of FedOAuth.
 #
@@ -18,14 +18,20 @@
 from setuptools import setup, find_packages
 
 setup(name='FedOAuth',
-      version='@VERSION@',
+      version='3.0.0',
+      description='Federated Open Authentication provider',
       author='Patrick Uiterwijk',
-      author_email='puiterwijk@gmail.com',
+      author_email='patrick@puiterwijk.org',
+      url='https://github.com/FedOAuth/FedOAuth',
+      license='GPLv3+',
       packages=find_packages(),
       zip_safe=False,
       include_package_data=True,
-      install_requires=['Flask', 'SQLAlchemy>=0.7',
-                        'python-openid', 'flask-sqlalchemy',
-                        'flask-babel', 'Jinja2',
-                        'python-openid-teams',
-                        'python-openid-cla', "M2Crypto"])
+      install_requires=['Flask', 'flask-sqlalchemy',
+                        'SQLAlchemy>=0.7', 'flask-babel',
+                        'enum', 'itsdangerous'],
+      extra_require={'fas': ['python-fedora'],
+                     'openid': ['python-openid',
+                                'python-openid-teams',
+                                'python-openid-cla'],
+                     'persona': ['M2Crypto']})

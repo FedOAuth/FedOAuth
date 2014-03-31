@@ -1,11 +1,11 @@
 Name:           fedoauth
-Version:        2.0.4
+Version:        3.0.0
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
 License:        GPLv3+
-URL:            https://github.com/fedora-infra/%{name}
-Source0:        https://fedorahosted.org/releases/f/a/%{name}/%{name}-%{version}.tar.gz
+URL:            https://github.com/FedOAuth/FedOAuth
+Source0:        https://github.com/FedOAuth/FedOAuth/releases/download/%{version}/FedOAuth-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -26,20 +26,18 @@ BuildRequires:  python-openid
 BuildRequires:  python-openid-teams
 BuildRequires:  python-openid-cla
 BuildRequires:  m2crypto
+BuildRequires:  python-enum
+BuildRequires:  python-itsdangerous
 %if 0%{?rhel}
 Requires:       python-sqlalchemy0.7
 %else
 Requires:       python-sqlalchemy
 %endif
 Requires:       python-flask
-Requires:       python-fedora
-Requires:       python-fedora-flask
 Requires:       python-flask-babel <= 0.8
 Requires:       python-flask-sqlalchemy
-Requires:       python-openid
-Requires:       python-openid-teams
-Requires:       python-openid-cla
-Requires:       m2crypto
+Requires:       python-enum
+Requires:       python-itsdangerous
 Requires:       mod_wsgi
 Requires:       httpd
 Requires(pre):  shadow-utils
@@ -48,12 +46,22 @@ Requires(pre):  shadow-utils
 Federated Open Authentication is an authentication provider for multiple federated authentication
 systems, which can be used with any authentication backend by writing a simple module.
 
-Currently implemented:
+Currently shipped:
 - OpenID
 - Persona
 
+%package template-fedoauth
+Summary: General template for FedOAuth
+Requires: %{name} = %{version}-%{release}
+License: GPLv3+
+BuildArch: noarch
+
+%description template-fedoauth
+Provides the general template files
+
+
 %package template-fedora
-Summary: Provides the Fedora template files
+Summary: Fedora template for FedOAuth
 Requires: %{name} = %{version}-%{release}
 License: GPLv3+
 BuildArch: noarch
@@ -61,18 +69,55 @@ BuildArch: noarch
 %description template-fedora
 Provides the Fedora template files
 
+
 %package backend-fedora
-Summary: Provides the Fedora authentication backend
+Summary: Fedora Account System authentication backend for FedOAuth
+Requires: %{name} = %{version}-%{release}
+License: GPLv3+
+BuildArch: noarch
+Requires: python-fedora
+Requires: python-fedora-flask
+
+%description backend-fedora
+Provides the Fedora Account System authentication backend
+
+
+%package backend-dummy
+Summary: Dummy authentication backend for FedOAuth
 Requires: %{name} = %{version}-%{release}
 License: GPLv3+
 BuildArch: noarch
 
-%description backend-fedora
-Provides the Fedora authentication backend
+%description backend-dummy
+Provides the Dummy authentication backend
+
+
+%package provider-openid
+Summary: OpenID provider for FedOAuth
+Requires: %{name} = %{version}-%{release}
+License: GPLv3+
+BuildArch: noarch
+Requires: python-openid
+Requires: python-openid-teams
+Requires: python-openid-cla
+
+%description provider-openid
+Provides the OpenID provider frontend
+
+
+%package provider-persona
+Summary: Persona provider for FedOAuth
+Requires: %{name} = %{version}-%{release}
+License: GPLv3+
+BuildArch: noarch
+Requires: m2crypto
+
+%description provider-persona
+Provides the Persona provider frontend
 
 
 %prep
-%setup -q
+%setup -q -n FedOAuth-%{version}
 
 
 %build
@@ -85,9 +130,14 @@ Provides the Fedora authentication backend
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/httpd/conf.d
 %{__mkdir_p} %{buildroot}%{_datadir}/%{name}
 %{__mkdir_p} %{buildroot}%{_datadir}/%{name}/static
+%{__mkdir_p} %{buildroot}%{python_sitelib}/%{name}/templates
+%{__mkdir_p} %{buildroot}%{_datadir}/%{name}/templates
 
 %{__install} -m 644 data/%{name}.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
-%{__install} -m 644 fedoauth/static/* %{buildroot}%{_datadir}/%{name}/static
+%{__cp} -rp fedoauth/static/* %{buildroot}%{_datadir}/%{name}/static
+%{__cp} -p fedoauth/templates/*.{html,xrds} %{buildroot}%{python_sitelib}/%{name}/templates
+rm -rf fedoauth/templates/*.{html,xrds}
+%{__cp} -rp fedoauth/templates/* %{buildroot}%{_datadir}/%{name}/templates
 %{__install} -m 644 %{name}.cfg.sample %{buildroot}%{_sysconfdir}/%{name}/%{name}.cfg
 %{__install} -m 644 createdb.py %{buildroot}%{_datadir}/%{name}/createdb.py
 %{__install} -m 644 data/%{name}.wsgi %{buildroot}%{_datadir}/%{name}/%{name}.wsgi
@@ -104,42 +154,46 @@ exit 0
 %files
 %doc AUTHORS COPYING README NEWS
 %dir %{python_sitelib}/%{name}
-%{python_sitelib}/%{name}/__init__.py*
-%{python_sitelib}/%{name}/model.py*
-%{python_sitelib}/%{name}/proxied.py*
-%{python_sitelib}/%{name}/utils.py*
-%{python_sitelib}/%{name}/views.py*
-%{python_sitelib}/%{name}/views_openid.py*
-%{python_sitelib}/%{name}/views_persona.py*
-%{python_sitelib}/%{name}/translations
+%{python_sitelib}/%{name}/*.py*
+%dir %{python_sitelib}/%{name}/auth
 %{python_sitelib}/%{name}/auth/__init__.py*
+%dir %{python_sitelib}/%{name}/provider
+%{python_sitelib}/%{name}/provider/__init__.py*
 %{python_sitelib}/%{name}/auth/base.py*
-%{python_sitelib}/%{name}/templates/openid_user.html
-%{python_sitelib}/%{name}/templates/openid_yadis.xrds
-%{python_sitelib}/%{name}/templates/openid_yadis_user.xrds
-%{python_sitelib}/%{name}/templates/persona_provision.html
-%{python_sitelib}/%{name}/templates/persona_signin.html
+%{python_sitelib}/%{name}/templates/*.html
+%{python_sitelib}/%{name}/templates/*.xrds
+%{python_sitelib}/%{name}/translations
 %{python_sitelib}/*.egg-info
 %{_datadir}/%{name}
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}.cfg
 %{_sysconfdir}/httpd/conf.d/%{name}.conf
 
-
 %files template-fedora
-%{_datadir}/%{name}/static/fedora-authn-logo-white.png
-%{_datadir}/%{name}/static/fedora.css
-%{_datadir}/%{name}/static/repeater.png
-%{python_sitelib}/%{name}/templates/index.html
-%{python_sitelib}/%{name}/templates/layout.html
-%{python_sitelib}/%{name}/templates/openid_user_ask_trust_root.html
+%{_datadir}/%{name}/static/fedora
+%{_datadir}/%{name}/templates/fedora
+
+%files template-fedoauth
+%{_datadir}/%{name}/static/fedoauth
+%{_datadir}/%{name}/templates/fedoauth
 
 %files backend-fedora
 %{python_sitelib}/%{name}/auth/fas.py*
-%{python_sitelib}/%{name}/templates/auth_fas_login.html
+
+%files backend-dummy
+%{python_sitelib}/%{name}/auth/dummy.py*
+
+%files provider-openid
+%{python_sitelib}/%{name}/provider/openid.py*
+
+%files provider-persona
+%{python_sitelib}/%{name}/provider/persona.py*
 
 
 %changelog
+* Sun Jun 15 2014 Patrick Uiterwijk <patrick@puiterwijk.org> - 3.0.0-1
+- Rewrite [Patrick Uiterwijk]
+
 * Sat Mar 01 2014 Patrick Uiterwijk <puiterwijk@gmail.com> - 2.0.4-1
 - Does not delete session when it is still valid [Patrick Uiterwijk]
 - Fixes an incorrect contains [Patrick Uiterwijk]

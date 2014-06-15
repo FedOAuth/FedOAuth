@@ -45,8 +45,8 @@ class _NotLoggedinError(Exception):
 @APP.errorhandler(_NotLoggedinError)
 def _handle_notloggedin(_):
     """ Internal """
-    return redirect(url_for('view_authenticate',
-                            transaction=request.transaction_id))
+    return redirect(complete_url_for('view_authenticate',
+                                     transaction=request.transaction_id))
 
 
 def require_login(login_target,

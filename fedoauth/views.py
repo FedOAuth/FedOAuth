@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with FedOAuth.  If not, see <http://www.gnu.org/licenses/>.
 from logging import getLogger
-from flask import request, redirect, url_for, render_template
+from flask import request, redirect, render_template
 import json
 
 from fedoauth import APP, get_auth_module_by_name, get_listed_auth_modules
@@ -86,32 +86,32 @@ def view_authenticate_module(module):
             not 'login_target' in request.transaction:
         logger.warning('Invalid request without success or failure urls or login target in the transaction')
         logger.debug('Transaction: %s', request.transaction)
-        return redirect(url_for('view_main'))
+        return redirect(complete_url_for('view_main'))
 
-    url_success = url_for(request.transaction['success_forward'],
-                          transaction=request.transaction_id)
+    url_success = complete_url_for(request.transaction['success_forward'],
+                                   transaction=request.transaction_id)
 
     email_auth_domain = None
     if 'email_auth_domain' in request.transaction:
         email_auth_domain = request.transaction['email_auth_domain']
     if not module in get_listed_auth_modules(email_auth_domain):
         logger.warning('Selected module %s was unlistable', module)
-        return redirect(url_for('view_authenticate', transaction=request.transaction_id))
+        return redirect(complete_url_for('view_authenticate', transaction=request.transaction_id))
 
     auth_module = get_auth_module_by_name(module)
     if not auth_module:
         logger.warning('Selected module %s, but no longer available', module)
-        return redirect(url_for('view_authenticate', transaction=request.transaction_id))
+        return redirect(complete_url_for('view_authenticate', transaction=request.transaction_id))
     result = auth_module.authenticate(request.transaction['login_target'],
-                                      url_for('view_authenticate_module',
-                                              module=module),
+                                      complete_url_for('view_authenticate_module',
+                                                       module=module),
                                       requested_attributes=request.transaction['requested_attributes'])
     if result == True:
         logger.debug('Was already logged on')
         return redirect(url_success)
     elif result == False:
         logger.debug('Authentication module cancelled')
-        return redirect(url_for('view_authenticate', transaction=request.transaction_id, cancelmodule=True))
+        return redirect(complete_url_for('view_authenticate', transaction=request.transaction_id, cancelmodule=True))
     else:
         # Otherwise it's an flask result
         return result
@@ -119,7 +119,7 @@ def view_authenticate_module(module):
 
 @APP.route('/authenticate/')
 def view_authenticate():
-    own_url = url_for('view_authenticate', transaction=request.transaction_id)
+    own_url = complete_url_for('view_authenticate', transaction=request.transaction_id)
     email_auth_domain = None
     if 'email_auth_domain' in request.transaction:
         email_auth_domain = request.transaction['email_auth_domain']
@@ -128,10 +128,10 @@ def view_authenticate():
     if not 'success_forward' in request.transaction or not 'failure_forward' in request.transaction or not 'login_target' in request.transaction:
         logger.warning('Invalid request without success or failure urls or login target in the transaction')
         logger.debug('Transaction: %s', request.transaction)
-        return redirect(url_for('view_main'))
+        return redirect(complete_url_for('view_main'))
 
-    url_success = url_for(request.transaction['success_forward'], transaction=request.transaction_id)
-    url_failure = url_for(request.transaction['failure_forward'], transaction=request.transaction_id)
+    url_success = complete_url_for(request.transaction['success_forward'], transaction=request.transaction_id)
+    url_failure = complete_url_for(request.transaction['failure_forward'], transaction=request.transaction_id)
 
     if request.auth_module:
         if request.transaction['already_authenticated']:
@@ -147,7 +147,7 @@ def view_authenticate():
             return redirect(url_failure)
 
         logger.debug('Automatically selecting module %s', listed_auth_modules[0])
-        return redirect(url_for('view_authenticate_module', module=listed_auth_modules[0], transaction=request.transaction_id))
+        return redirect(complete_url_for('view_authenticate_module', module=listed_auth_modules[0], transaction=request.transaction_id))
     elif len(listed_auth_modules) == 0:
         if 'cancel' in request.args:
             logger.debug('Authentication cancelled')
@@ -164,13 +164,13 @@ def view_authenticate():
             # Show selection form.
             modules = []
             for module in listed_auth_modules:
-                url = url_for('view_authenticate_module',
-                              module=module,
-                              transaction=request.transaction_id)
+                url = complete_url_for('view_authenticate_module',
+                                       module=module,
+                                       transaction=request.transaction_id)
                 modules.append(get_auth_module_by_name(module).get_select_info(url))
 
             return render_template('select_module.html',
                                    modules=modules,
-                                   cancel_url=url_for('view_authenticate',
-                                                      transaction=request.transaction_id,
-                                                      cancel=True)), 200
+                                   cancel_url=complete_url_for('view_authenticate',
+                                                               transaction=request.transaction_id,
+                                                               cancel=True)), 200

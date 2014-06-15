@@ -21,7 +21,7 @@ from __future__ import absolute_import
 import json
 import logging
 
-from flask import request, redirect, url_for, \
+from flask import request, redirect, \
     render_template, Response
 from openid.extensions import sreg
 from openid.extensions import ax
@@ -315,7 +315,7 @@ def view_openid_main_failure():
         return openid_respond(openid_error)
 
     if openid_request is None:
-        return redirect(url_for('view_main'))
+        return redirect(complete_url_for('view_main'))
 
     logger.debug('User cancelled signin')
 
@@ -339,7 +339,7 @@ def view_openid_main():
         return openid_respond(openid_error)
 
     if openid_request is None:
-        return redirect(url_for('view_main', err='no-transaction'))
+        return redirect(complete_url_for('view_main', err='no-transaction'))
 
     # Handle request
     if openid_request.mode == 'checkid_setup':
@@ -449,8 +449,8 @@ def openid_checkid(openid_request):
 
         return render_template(
             'openid_user_ask_trust_root.html',
-            action=url_for('view_openid_main',
-                           transaction=request.transaction_id),
+            action=complete_url_for('view_openid_main',
+                                    transaction=request.transaction_id),
             trust_root=openid_request.trust_root,
             sreg_policy_url=sreg_req.policy_url or _('None provided'),
             data=data)

@@ -31,7 +31,10 @@ from openid import oidutil
 from openid.server import server
 import openid_teams.teams as teams
 import openid_cla.cla as cla
-from flaskext.babel import gettext as _
+try:
+    from flaskext.babel import gettext as _
+except ImportError, ie:
+    from flask.ext.babel import gettext as _
 
 from fedoauth import APP, get_auth_module_by_name
 from fedoauth.model import OpenIDStore, Remembered

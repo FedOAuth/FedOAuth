@@ -25,7 +25,10 @@ import pkg_resources
 import flask
 import jinja2
 from flask.ext.sqlalchemy import SQLAlchemy
-from flaskext.babel import Babel
+try:
+    from flaskext.babel import Babel
+except ImportError, e:
+    from flask.ext.babel import Babel
 
 import logging
 import logging.config
@@ -214,6 +217,7 @@ my_loader = jinja2.ChoiceLoader([
     jinja2.FileSystemLoader('%s' % APP.config['GLOBAL']['template_dir'])])
 APP.jinja_loader = my_loader
 
+APP.jinja_env.globals['url_root'] = APP.config['GLOBAL']['url_root']
 APP.jinja_env.globals['static_content_root'] = APP.config['GLOBAL']['static_content_root']
 
 app_version = 'Development version'

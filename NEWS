@@ -4,6 +4,7 @@ Release 3.0.1 (2014-06-??)
 Fixes:
 - Uses complete_url_for so no http -> https issues arise [Patrick Uiterwijk]
 - Reworded "Remember for 0 days" to "Remember for never" [Kevin Fenzi]
+- Work with newer flask.babel packages as well [Patrick Uiterwijk]
 
 
 Release 3.0.0 (2014-06-15)

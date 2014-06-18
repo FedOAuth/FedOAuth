@@ -122,9 +122,12 @@ class TransactionRequest(flask.Request):
     def set_cookie(self, name, value, **kwargs):
         @utils.after_this_request
         def set_cookie(response):
-            response.set_cookie(name,
-                                value,
-                                **kwargs)
+            try:
+                response.set_cookie(name,
+                                    value,
+                                    **kwargs)
+            except:
+                logger.error('Unable to write cookie %s=%s', name, value)
 
     # Persistent transactions are used when the transaction should be retained
     # in a cookie for a VERY short amount of time (30 seconds).

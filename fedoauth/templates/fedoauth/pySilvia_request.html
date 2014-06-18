@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block title %}{% trans %}pySilvia request{% endtrans %}{% endblock %}
+{% block toptext %}
+{% trans %}Please click the continue button.{% endtrans %}
+{% endblock %}
+{% block body %}
+<form action="{{ pysilvia_url }}" method="POST">
+    <input type="hidden" name="request" value="{{ request }}">
+    <input type="submit" value="Start">
+</form>
+{% endblock %}

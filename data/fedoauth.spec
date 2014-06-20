@@ -193,7 +193,7 @@ exit 0
 %files backend-dummy
 %{python_sitelib}/%{name}/auth/dummy.py*
 
-%files backend-dummy
+%files backend-pySilvia
 %{python_sitelib}/%{name}/auth/pySilvia.py*
 
 %files provider-openid

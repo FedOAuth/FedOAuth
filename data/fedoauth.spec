@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        3.0.0
+Version:        3.0.1
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -15,7 +15,7 @@ BuildRequires:  python-devel
 BuildRequires:  python-flask
 BuildRequires:  python-fedora
 BuildRequires:  python-fedora-flask
-BuildRequires:  python-flask-babel <= 0.8
+BuildRequires:  python-flask-babel
 %if 0%{?rhel}
 BuildRequires:  python-sqlalchemy0.7
 %else
@@ -34,7 +34,7 @@ Requires:       python-sqlalchemy0.7
 Requires:       python-sqlalchemy
 %endif
 Requires:       python-flask
-Requires:       python-flask-babel <= 0.8
+Requires:       python-flask-babel
 Requires:       python-flask-sqlalchemy
 Requires:       python-enum
 Requires:       python-itsdangerous
@@ -90,6 +90,16 @@ BuildArch: noarch
 
 %description backend-dummy
 Provides the Dummy authentication backend
+
+
+%package backend-pySilvia
+Summary: pySilvia authentication backend for FedOAuth
+Requires: %{name} = %{version}-%{release}
+License: GPLv3+
+BuildArch: noarch
+
+%description backend-pySilvia
+Provides the pySilvia authentication backend
 
 
 %package provider-openid
@@ -183,6 +193,9 @@ exit 0
 %files backend-dummy
 %{python_sitelib}/%{name}/auth/dummy.py*
 
+%files backend-dummy
+%{python_sitelib}/%{name}/auth/pySilvia.py*
+
 %files provider-openid
 %{python_sitelib}/%{name}/provider/openid.py*
 
@@ -191,6 +204,12 @@ exit 0
 
 
 %changelog
+* Fri Jun 20 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.1-1
+- Added pySilvia [Patrick Uiterwijk]
+- Uses complete_url_for so no http -> https issues arise [Patrick Uiterwijk]
+- Reworded "Remember for 0 days" to "Remember for never" [Kevin Fenzi]
+- Work with newer flask.babel packages as well [Patrick Uiterwijk]
+
 * Sun Jun 15 2014 Patrick Uiterwijk <patrick@puiterwijk.org> - 3.0.0-1
 - Rewrite [Patrick Uiterwijk]
 

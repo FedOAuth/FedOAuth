@@ -18,7 +18,7 @@
 from setuptools import setup, find_packages
 
 setup(name='FedOAuth',
-      version='3.0.0',
+      version='3.0.1',
       description='Federated Open Authentication provider',
       author='Patrick Uiterwijk',
       author_email='patrick@puiterwijk.org',

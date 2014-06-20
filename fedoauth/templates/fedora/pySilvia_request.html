@@ -4,8 +4,13 @@
 {% trans %}Please click the continue button.{% endtrans %}
 {% endblock %}
 {% block body %}
-<form action="{{ pysilvia_url }}" method="POST">
+<form id="startForm" action="{{ pysilvia_url }}" method="POST">
     <input type="hidden" name="request" value="{{ request }}">
     <input type="submit" value="Start">
 </form>
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+    document.getElementById('startForm').submit();
+</script>
 {% endblock %}

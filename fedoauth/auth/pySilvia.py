@@ -73,9 +73,12 @@ class Auth_pySilvia(Auth_Base):
             result = self.signer.loads(result)
 
             user = {}
+            needed_credentials = self.config['required_credentials']
             for credential in result['credentials']:
                 if result['credentials'][credential]['status'] == 'OK':
                     if result['credentials'][credential]['expiry'] >= time.time():
+                        if credential in needed_credentials:
+                            needed_credentials.remove(credential)
                         user[credential] = result['credentials'][credential]['attributes']
                     else:
                         # Attribute no longer valid
@@ -83,6 +86,9 @@ class Auth_pySilvia(Auth_Base):
                 else:
                     # Attribute status != OK
                     logger.info('Credential not status=OK: %s', result['credentials'][credential])
+
+            if len(needed_credentials) > 0:
+                return False
 
             self.save_success(user)
             return True

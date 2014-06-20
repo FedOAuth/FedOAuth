@@ -47,12 +47,10 @@ then
     echo >&2 "ERROR: release tag already exists. Aborted."
     exit 1
 fi
-git tag -s v$version -m "Release $version"
 mkdir -p dist
 git archive --format=tar --prefix=FedOAuth-$version/ HEAD | gzip > dist/FedOAuth-$version.tar.gz
 (
     cd dist
-    gpg --detach --armor --sign FedOAuth-$version.tar.gz
     cp FedOAuth-$version.tar.gz ~/rpmbuild/SOURCES
 )
 cp data/fedoauth.spec ~/rpmbuild/SPECS
@@ -61,5 +59,7 @@ cp data/fedoauth.spec ~/rpmbuild/SPECS
     rpmbuild -ba fedoauth.spec
 )
 cp ~/rpmbuild/SRPMS/fedoauth-$version*.src.rpm dist/
+git tag -s v$version -m "Release $version"
+gpg --detach --armor --sign dist/FedOAuth-$version.tar.gz
 ls -l dist/FedOAuth-$version* dist/fedoauth-$version*
 echo Please push the tag and build and publish the RPM and sources

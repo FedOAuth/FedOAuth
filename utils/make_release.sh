@@ -47,7 +47,7 @@ then
     echo >&2 "ERROR: release tag already exists. Aborted."
     exit 1
 fi
-git tag -s v3.0.0 -m "Release $version"
+git tag -s v$version -m "Release $version"
 mkdir -p dist
 git archive --format=tar --prefix=FedOAuth-$version/ HEAD | gzip > dist/FedOAuth-$version.tar.gz
 (

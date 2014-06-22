@@ -70,30 +70,30 @@ AUTH_MODULE_CONFIGURATION = {
                                    'user_agent': 'FedOAuth',
                                    'check_cert': True
                                   },
-    'fedoauth.auth.pySilvia.Auth_pySilvia': {'enabled': False,
-                                             'listed': False,
-                                             'reauth_timeout': 5,
-                                             'email_auth_domains': ['fedoauth.org'],
-                                             'pysilvia_url': 'https://silvia.fedoauth.org/',
-                                             'shared_secret': '',
-                                             'known_credentials':
-                                                {
-                                                    'rootAll': {'issuer-spec-path': 'Surfnet/Issues/root/description.xml',
-                                                                'verifier-spec-path': 'Surfnet/Verifies/rootAll/description.xml',
-                                                                'publickey-path': 'Surfnet/ipk.xml'},
-                                                },
-                                             'always_retrieve': ['rootAll'],
-                                             'required_credentials': ['rootAll'],
-                                             # With username and attributes:
-                                             #  either a "path" into credentials with <credential>/<attribute>
-                                             #  or a static value.
-                                             #  (Leave an attribute out to leave unmapped)
-                                             'username_mapping': 'rootAll/userID',
-                                             'attribute_mapping':
-                                                {
-                                                    'nickname': 'rootAll/userID'
-                                                },
-                                            }
+    'fedoauth.auth.webSilvia.Auth_webSilvia': {'enabled': False,
+                                              'listed': False,
+                                              'reauth_timeout': 5,
+                                              'email_auth_domains': ['fedoauth.org'],
+                                              'websilvia_url': 'https://silvia.fedoauth.org/',
+                                              'shared_secret': '',
+                                              'known_credentials':
+                                                 {
+                                                     'rootAll': {'issuer-spec-path': 'Surfnet/Issues/root/description.xml',
+                                                                 'verifier-spec-path': 'Surfnet/Verifies/rootAll/description.xml',
+                                                                 'publickey-path': 'Surfnet/ipk.xml'},
+                                                 },
+                                              'always_retrieve': ['rootAll'],
+                                              'required_credentials': ['rootAll'],
+                                              # With username and attributes:
+                                              #  either a "path" into credentials with <credential>/<attribute>
+                                              #  or a static value.
+                                              #  (Leave an attribute out to leave unmapped)
+                                              'username_mapping': 'rootAll/userID',
+                                              'attribute_mapping':
+                                                 {
+                                                     'nickname': 'rootAll/userID'
+                                                 },
+                                             }
 }
 
 

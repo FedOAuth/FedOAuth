@@ -25,10 +25,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class Auth_pySilvia(Auth_Base):
+class Auth_webSilvia(Auth_Base):
     def __init__(self, config):
         self.signer = TimedSerializer(config['shared_secret'])
-        super(Auth_pySilvia, self).__init__(config)
+        super(Auth_webSilvia, self).__init__(config)
 
     # This functions returns which credentials we need to retrieve
     #  to get all of the requested_attributes
@@ -68,7 +68,7 @@ class Auth_pySilvia(Auth_Base):
     # Anything else will be returned to Flask as view result
     def authenticate(self, login_target, form_url, requested_attributes=[]):
         if request.method == 'POST':
-            # We are returning from pySilvia!
+            # We are returning from webSilvia!
             result = request.form['result']
             result = self.signer.loads(result)
 
@@ -93,16 +93,16 @@ class Auth_pySilvia(Auth_Base):
             self.save_success(user)
             return True
         else:
-            # Build the request for pySilvia
-            pysilvia_request = {'return_url': '%s?transaction=%s' % (form_url, request.transaction_id),
+            # Build the request for webSilvia
+            websilvia_request = {'return_url': '%s?transaction=%s' % (form_url, request.transaction_id),
                                 'token': request.transaction_id,
                                 'nonce': time.time(),
                                 'credentials': self.get_credentials(requested_attributes)}
-            pysilvia_request = self.signer.dumps(pysilvia_request)
+            websilvia_request = self.signer.dumps(websilvia_request)
 
-            return render_template('pySilvia_request.html',
-                                   request=pysilvia_request,
-                                   pysilvia_url=self.config['pysilvia_url'])
+            return render_template('webSilvia.html',
+                                   request=websilvia_request,
+                                   websilvia_url=self.config['websilvia_url'])
 
     def follow_mapping(self, mapping, user):
         if '/' not in mapping:

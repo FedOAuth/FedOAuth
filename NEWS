@@ -2,8 +2,9 @@ Release 3.0.2 (2014-??-??)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 New:
-- Auto-submit the pySilvia request form [Patrick Uiterwijk]
-- Add a list of required_credentials for pySilvia [Patrick Uiterwijk]
+- pySilvia renamed to webSilvia [Patrick Uiterwijk]
+- Auto-submit the webSilvia request form [Patrick Uiterwijk]
+- Add a list of required_credentials for webSilvia [Patrick Uiterwijk]
 
 
 Release 3.0.1 (2014-06-20)

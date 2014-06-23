@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        3.0.1
+Version:        3.0.2
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -92,14 +92,14 @@ BuildArch: noarch
 Provides the Dummy authentication backend
 
 
-%package backend-pySilvia
-Summary: pySilvia authentication backend for FedOAuth
+%package backend-webSilvia
+Summary: webSilvia authentication backend for FedOAuth
 Requires: %{name} = %{version}-%{release}
 License: GPLv3+
 BuildArch: noarch
 
-%description backend-pySilvia
-Provides the pySilvia authentication backend
+%description backend-webSilvia
+Provides the webSilvia authentication backend
 
 
 %package provider-openid
@@ -193,8 +193,8 @@ exit 0
 %files backend-dummy
 %{python_sitelib}/%{name}/auth/dummy.py*
 
-%files backend-pySilvia
-%{python_sitelib}/%{name}/auth/pySilvia.py*
+%files backend-webSilvia
+%{python_sitelib}/%{name}/auth/webSilvia.py*
 
 %files provider-openid
 %{python_sitelib}/%{name}/provider/openid.py*
@@ -204,6 +204,13 @@ exit 0
 
 
 %changelog
+* Mon Jun 23 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.2-1
+- pySilvia renamed to webSilvia [Patrick Uiterwijk]
+- Auto-submit the webSilvia request form [Patrick Uiterwijk]
+- Add a list of required_credentials for webSilvia [Patrick Uiterwijk]
+- Only returns the intermediate API auth step if it's multi-step [Patrick Uiterwijk]
+- Returns the signed OpenID response instead of an exception [Patrick Uiterwijk]
+
 * Fri Jun 20 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.1-1
 - Added pySilvia [Patrick Uiterwijk]
 - Uses complete_url_for so no http -> https issues arise [Patrick Uiterwijk]

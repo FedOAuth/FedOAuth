@@ -8,6 +8,7 @@ New:
 
 Fixes:
 - Only returns the intermediate API auth step if it's multi-step [Patrick Uiterwijk]
+- Returns the signed OpenID response instead of an exception [Patrick Uiterwijk]
 
 
 Release 3.0.1 (2014-06-20)

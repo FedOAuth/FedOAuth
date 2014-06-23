@@ -283,7 +283,7 @@ def view_openid_api_v1():
     openid_response = generate_openid_response(openid_request)
 
     # Sign and return
-    response = get_server().signatory.sign(openid_response).toPostArgs()
+    response = get_server().signatory.sign(openid_response).fields.toPostArgs()
     return {'success': True,
             'response': response}
 

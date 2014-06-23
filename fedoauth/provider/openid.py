@@ -271,7 +271,7 @@ def view_openid_api_v1():
             if isinstance(valid, dict):
                 valid['transaction'] = request.transaction_id
                 valid['success'] = False
-            return valid
+                return valid
         except Exception, ex:
             logger.warning('Authentication with auth module failed: %s', ex)
 

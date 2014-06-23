@@ -6,6 +6,9 @@ New:
 - Auto-submit the webSilvia request form [Patrick Uiterwijk]
 - Add a list of required_credentials for webSilvia [Patrick Uiterwijk]
 
+Fixes:
+- Only returns the intermediate API auth step if it's multi-step [Patrick Uiterwijk]
+
 
 Release 3.0.1 (2014-06-20)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

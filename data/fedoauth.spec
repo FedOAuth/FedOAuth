@@ -15,8 +15,7 @@ BuildRequires:  python-devel
 BuildRequires:  python-flask
 BuildRequires:  python-fedora
 BuildRequires:  python-fedora-flask
-BuildRequires:  python-flask-babel
-%if 0%{?rhel}
+%if 0%{?rhel} <= 6
 BuildRequires:  python-sqlalchemy0.7
 %else
 BuildRequires:  python-sqlalchemy
@@ -34,7 +33,6 @@ Requires:       python-sqlalchemy0.7
 Requires:       python-sqlalchemy
 %endif
 Requires:       python-flask
-Requires:       python-flask-babel
 Requires:       python-flask-sqlalchemy
 Requires:       python-enum
 Requires:       python-itsdangerous

@@ -1,3 +1,10 @@
+Release 3.0.3 (2014-??-??)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+General:
+- Remove translation hooks and dependencies [Patrick Uiterwijk]
+
+
 Release 3.0.2 (2014-06-23)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 

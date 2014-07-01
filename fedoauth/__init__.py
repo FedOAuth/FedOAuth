@@ -25,10 +25,6 @@ import pkg_resources
 import flask
 import jinja2
 from flask.ext.sqlalchemy import SQLAlchemy
-try:
-    from flaskext.babel import Babel
-except ImportError, e:
-    from flask.ext.babel import Babel
 
 import logging
 import logging.config
@@ -61,8 +57,6 @@ logger = logging.getLogger(__name__)
 
 # Set up SQLAlchemy
 db = SQLAlchemy(APP)
-# Set up Babel
-babel = Babel(APP)
 
 import fedoauth.utils as utils
 if APP.config['GLOBAL']['reverse_proxied']:

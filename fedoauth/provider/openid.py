@@ -31,10 +31,6 @@ from openid import oidutil
 from openid.server import server
 import openid_teams.teams as teams
 import openid_cla.cla as cla
-try:
-    from flaskext.babel import gettext as _
-except ImportError, ie:
-    from flask.ext.babel import gettext as _
 
 from fedoauth import APP, get_auth_module_by_name
 from fedoauth.model import OpenIDStore, Remembered
@@ -443,17 +439,17 @@ def openid_checkid(openid_request):
         data.sort()
 
         for team in teams_data:
-            data.append({'text': _('Group'),
+            data.append({'text': 'Group',
                          'value': team})
 
         if clas_data != []:
-            data.append({'text': _('FPCA Completed'),
-                         'value': _('True')})
+            data.append({'text': 'FPCA Completed',
+                         'value': 'True'})
 
         return render_template(
             'openid_user_ask_trust_root.html',
             action=complete_url_for('view_openid_main',
                                     transaction=request.transaction_id),
             trust_root=openid_request.trust_root,
-            sreg_policy_url=sreg_req.policy_url or _('None provided'),
+            sreg_policy_url=sreg_req.policy_url or 'None provided',
             data=data)

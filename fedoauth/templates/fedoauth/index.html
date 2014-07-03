@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
-{% block title %}{% trans %}Home{% endtrans %}{% endblock %}
+{% block title %}Home{% endblock %}
 {% block toptext %}
-{% trans %}This is the Federated Open Authentication provider homepage.{% endtrans %}
+This is the Federated Open Authentication provider homepage.
 {% endblock %}
 {% block body %}
 {% if error %}
     <span class="error">
-        {% trans %}ERROR: {% endtrans %}{{error}} <br /><br />
+        ERROR: {{error}} <br /><br />
     </span>
 {% endif %}
-{% trans %}You will be redirected to this application whenever another application requires you to authenticate.{% endtrans %}
+You will be redirected to this application whenever another application requires you to authenticate.
 {% endblock %}

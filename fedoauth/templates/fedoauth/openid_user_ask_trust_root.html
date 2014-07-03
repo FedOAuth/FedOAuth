@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
-{% block title %}{% trans %}Approval{% endtrans %}{% endblock %}
+{% block title %}Approval{% endblock %}
 {% block toptext %}
-{% trans %}{{trust_root}} is asking to authenticate via OpenID using FedOAuth{% endtrans %}
+{{trust_root}} is asking to authenticate via OpenID using FedOAuth
 {% endblock %}
 {% block body_classes %}final{% endblock %}
 {% block body %}
-    {% trans %}Review the authorization details{% endtrans %}
+    Review the authorization details
     <div>
         <form method="post" action="{{action}}">
             <input type="hidden" name="form_filled" value="true" />
@@ -16,7 +16,7 @@
                         <td>{{trust_root}}</td>
                     </tr>
                     <tr>
-                        <td>{% trans %}Privacy Policy{% endtrans %}</td>
+                        <td>Privacy Policy</td>
                         <td>{{sreg_policy_url}}</td>
                     </tr>
                     {% for entry in data %}
@@ -27,7 +27,7 @@
                     {% endfor %}
 
                     <tr>
-                        <td>{% trans %}Remember approval for{% endtrans %}</td>
+                        <td>Remember approval for</td>
                         <td><select name="rememberForDays">
                                 <option value="0">never</option>
                                 <option value="3">3 days</option>
@@ -38,8 +38,8 @@
                 </table>
             </p>
             <p class="form_item">
-                <input type="submit" name="decided_deny" value="{% trans %}Reject{% endtrans %}">
-                <input type="submit" name="decided_allow" value="{% trans %}Approve{% endtrans %}">
+                <input type="submit" name="decided_deny" value="Reject">
+                <input type="submit" name="decided_allow" value="Approve">
             </p>
         </form>
     </div>

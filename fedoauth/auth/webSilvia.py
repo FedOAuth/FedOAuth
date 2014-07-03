@@ -74,12 +74,12 @@ class Auth_webSilvia(Auth_Base):
 
             user = {}
             needed_credentials = self.config['required_credentials']
-            for credential in result['credentials']:
-                if result['credentials'][credential]['status'] == 'OK':
-                    if result['credentials'][credential]['expiry'] >= time.time():
+            for credential in result['verified']:
+                if result['verified'][credential]['status'] == 'OK':
+                    if result['verified'][credential]['expiry'] >= time.time():
                         if credential in needed_credentials:
                             needed_credentials.remove(credential)
-                        user[credential] = result['credentials'][credential]['attributes']
+                        user[credential] = result['verified'][credential]['attributes']
                     else:
                         # Attribute no longer valid
                         logger.info('Credential expired: %s', result['credentials'][credential])

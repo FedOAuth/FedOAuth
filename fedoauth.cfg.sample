@@ -75,6 +75,7 @@ AUTH_MODULE_CONFIGURATION = {
                                               'reauth_timeout': 5,
                                               'email_auth_domains': ['fedoauth.org'],
                                               'websilvia_url': 'https://silvia.fedoauth.org/',
+                                              'requestor_id': 'fedoauth',
                                               'shared_secret': '',
                                               'known_credentials':
                                                  {

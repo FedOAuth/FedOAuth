@@ -5,6 +5,7 @@
 {% endblock %}
 {% block body %}
 <form id="startForm" action="{{ pysilvia_url }}" method="POST">
+    <input type="hidden" name="requestor" value="{{ requestor_id }}">
     <input type="hidden" name="request" value="{{ request }}">
     <input type="submit" value="Start">
 </form>

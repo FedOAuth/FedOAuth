@@ -94,14 +94,17 @@ class Auth_webSilvia(Auth_Base):
             return True
         else:
             # Build the request for webSilvia
-            websilvia_request = {'return_url': '%s?transaction=%s' % (form_url, request.transaction_id),
-                                'token': request.transaction_id,
-                                'nonce': time.time(),
-                                'credentials': self.get_credentials(requested_attributes)}
+            websilvia_request = {'protocol': 'request-1',
+                                 'return_url': '%s?transaction=%s' % (form_url, request.transaction_id),
+                                 'token': request.transaction_id,
+                                 'nonce': time.time(),
+                                 'to_verify': self.get_credentials(requested_attributes),
+                                 'to_issue': {}}
             websilvia_request = self.signer.dumps(websilvia_request)
 
             return render_template('webSilvia.html',
                                    request=websilvia_request,
+                                   requestor_id=self.config['requestor_id'],
                                    websilvia_url=self.config['websilvia_url'])
 
     def follow_mapping(self, mapping, user):

@@ -224,6 +224,11 @@ APP.jinja_loader = my_loader
 
 APP.jinja_env.globals['url_root'] = APP.config['GLOBAL']['url_root']
 APP.jinja_env.globals['static_content_root'] = APP.config['GLOBAL']['static_content_root']
+try:
+    APP.jinja_env.globals['version'] = pkg_resources.get_distribution('fedoauth').version
+except:
+    APP.jinja_env.globals['version'] = 'Unknown. Development?'
+
 
 app_version = 'Development version'
 try:

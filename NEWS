@@ -5,6 +5,9 @@ General:
 - Remove translation hooks and dependencies [Patrick Uiterwijk]
 - Update webSilvia to protocol version request-1 [Patrick Uiterwijk]
 
+New:
+- Add the FedOAuth version in the generator meta tag [Patrick Uiterwijk]
+
 Fixes:
 - Add some more logging to the transaction stealing protection [Patrick Uiterwijk]
 - Make it possible to use an unlisted auth module by specifying the URL directly [Patrick Uiterwijk]

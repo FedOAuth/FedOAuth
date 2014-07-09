@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        3.0.2
+Version:        3.0.3
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -202,6 +202,14 @@ exit 0
 
 
 %changelog
+* Wed Jul 09 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.3-1
+- Remove translation hooks and dependencies [Patrick Uiterwijk]
+- Update webSilvia to protocol version request-1 [Patrick Uiterwijk]
+- Add the FedOAuth version in the generator meta tag [Patrick Uiterwijk]
+- Make it possible for the FAS module to give the users' email alias [Patrick Uiterwijk]
+- Add some more logging to the transaction stealing protection [Patrick Uiterwijk]
+- Make it possible to use an unlisted auth module by specifying the URL directly [Patrick Uiterwijk]
+
 * Mon Jun 23 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.2-1
 - pySilvia renamed to webSilvia [Patrick Uiterwijk]
 - Auto-submit the webSilvia request form [Patrick Uiterwijk]

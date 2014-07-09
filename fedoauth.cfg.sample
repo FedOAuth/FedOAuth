@@ -66,6 +66,7 @@ AUTH_MODULE_CONFIGURATION = {
                                    'select_image': '/static/fedora/fedora-authn-logo-white.png',
                                    'reauth_timeout': 5,
                                    'email_auth_domains': ['fedoraproject.org'],
+                                   'email_alias_when_cla': True,
                                    'base_url': 'https://admin.fedoraproject.org/accounts/',
                                    'user_agent': 'FedOAuth',
                                    'check_cert': True

@@ -7,6 +7,7 @@ General:
 
 New:
 - Add the FedOAuth version in the generator meta tag [Patrick Uiterwijk]
+- Make it possible for the FAS module to give the users' email alias [Patrick Uiterwijk]
 
 Fixes:
 - Add some more logging to the transaction stealing protection [Patrick Uiterwijk]

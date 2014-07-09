@@ -69,7 +69,13 @@ class Auth_FAS(Auth_UsernamePasswordBase):
         if attribute == StandardAttributes.nickname:
             return self._user['username']
         elif attribute == StandardAttributes.email:
-            return self._user['email']
+            if ((len(self.get_clas()) > 0) and
+                    (self.config['email_alias_when_cla'])):
+                # In case CLA is signed, we have an email alias
+                return '%s@fedoraproject.org' % self._user['username']
+            else:
+                # In case we have 0 CLA groups (no CLA), give the FAS email
+                return self._user['email']
         elif attribute == StandardAttributes.fullname:
             return self._user['human_name']
         elif attribute == StandardAttributes.timezone:

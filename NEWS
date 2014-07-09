@@ -7,6 +7,7 @@ General:
 
 Fixes:
 - Add some more logging to the transaction stealing protection [Patrick Uiterwijk]
+- Make it possible to use an unlisted auth module by specifying the URL directly [Patrick Uiterwijk]
 
 
 Release 3.0.2 (2014-06-23)

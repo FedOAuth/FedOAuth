@@ -94,9 +94,6 @@ def view_authenticate_module(module):
     email_auth_domain = None
     if 'email_auth_domain' in request.transaction:
         email_auth_domain = request.transaction['email_auth_domain']
-    if not module in get_listed_auth_modules(email_auth_domain):
-        logger.warning('Selected module %s was unlistable', module)
-        return redirect(complete_url_for('view_authenticate', transaction=request.transaction_id))
 
     auth_module = get_auth_module_by_name(module)
     if not auth_module:

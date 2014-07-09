@@ -170,7 +170,6 @@ exit 0
 %{python_sitelib}/%{name}/auth/base.py*
 %{python_sitelib}/%{name}/templates/*.html
 %{python_sitelib}/%{name}/templates/*.xrds
-%{python_sitelib}/%{name}/translations
 %{python_sitelib}/*.egg-info
 %{_datadir}/%{name}
 %dir %{_sysconfdir}/%{name}

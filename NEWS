@@ -3,6 +3,7 @@ Release 3.1.0 (2014-08-??)
 
 New:
 - Use a general template directory for non-specific templates [Patrick Uiterwijk]
+- Add SAML Identity Provider [Patrick Uiterwijk]
 
 Fixes:
 - OpenID now provides requested_attributes [Patrick Uiterwijk]

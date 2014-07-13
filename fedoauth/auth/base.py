@@ -78,13 +78,19 @@ class Auth_Base(object):
                 'image': self.config['select_image'],
                 'url': url}
 
+    def force_logout(self):
+        if ('%s_auth_ses' % self.full_name) in request.cookies:
+            request.set_cookie('%s_auth_ses' % self.full_name,
+                               None,
+                               expires=0)
+
     def logged_in(self):
         if ('%s_loggedin' % self.full_name) in request.transaction and \
                 request.transaction['%s_loggedin' % self.full_name] is True:
             return True
 
         # Check if the user still has an active auth session
-        if ('%s_auth_ses' % self.full_name) in request.cookies:
+        if ('%s_auth_ses' % self.full_name) in request.cookies and not request.no_preauth:
             # Seems so, let's check if it is still valid
             # We don't really care about the reauth_timeout when the cookie
             #  was set. All that matters is the setting as of this request

@@ -82,6 +82,7 @@ class TransactionRequest(flask.Request):
     _transaction = None
     _new_transaction = False
     _signer = None
+    _force_no_preauth = False
 
     def __getattr__(self, name):
         if name == 'transaction':
@@ -95,6 +96,8 @@ class TransactionRequest(flask.Request):
             return self._get_auth_module()
         elif name == 'signer':
             return self._get_signer()
+        elif name == 'no_preauth':
+            return self._force_no_preauth
         else:
             return super(flask.Request, self).__getattribute__(name)
 
@@ -104,6 +107,10 @@ class TransactionRequest(flask.Request):
             #  needing to think about expiry of the signatures
             self._signer = TimestampSigner(APP.config['GLOBAL']['secret_key'])
         return self._signer
+
+    def force_no_preauth(self):
+        logger.debug('Preauth will be ignored for this request')
+        self._force_no_preauth = True
 
     def save_transaction(self):
         if self._transaction:
@@ -270,6 +277,10 @@ def get_listed_auth_modules(email_domain=None):
                 get_auth_module_by_name(module).allows_email_auth_domain(email_domain):
             toreturn.append(module)
     return toreturn
+
+def get_loaded_auth_modules():
+    global loaded_auth_modules
+    return loaded_auth_modules
 
 # Initialize all the modules specified in AUTH_MODULES_ENABLED
 for auth_module_name in APP.config['AUTH_MODULE_CONFIGURATION']:

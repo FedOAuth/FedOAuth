@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="simple-SP">
+  <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:X509Data>
+          <ds:X509Certificate>MIIDVzCCAj+gAwIBAgIJAIeRQoRLbgnzMA0GCSqGSIb3DQEBBQUAMEIxCzAJBgNVBAYTAlhYMRUwEwYDVQQHDAxEZWZhdWx0IENpdHkxHDAaBgNVBAoME0RlZmF1bHQgQ29tcGFueSBMdGQwHhcNMTQwNzEzMTcxMDA4WhcNMjQwNzEyMTcxMDA4WjBCMQswCQYDVQQGEwJYWDEVMBMGA1UEBwwMRGVmYXVsdCBDaXR5MRwwGgYDVQQKDBNEZWZhdWx0IENvbXBhbnkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsNXrtttiG/elkpcTYIF9CfjcHVfZJ34gjsjIQXwHo4XqL8IgL75rERjZicTYpFdCCVpiWz8meYB4wXB8QNc9QmmNXLQ3dsdIgEVBMfeHFPyc/N1K+g17rXAiBG9OMQeihWF9W9BfUD+YD4iBiGq2Xksi4F+HcCudEuS58AKpsVS6aY3mBWrUvE4BKHCI+gp/eu9aAUbLM8UAiueIlpyNhbaifkfoxc+gx2VIvQ/sHk2dnlaHS5AEFMhW5W65VkrDnpgFiChAQmH+bQQfn5dImx7UwUtBulwylDwfDu+yDH6mVQv5t/Gj/pVHBibeyrIEpu80J2nIE5EByULYczhZ1QIDAQABo1AwTjAdBgNVHQ4EFgQUnXXqfyKxMchpRAqnHF0xQWFMr3kwHwYDVR0jBBgwFoAUnXXqfyKxMchpRAqnHF0xQWFMr3kwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOCAQEAbhz/7/L8t2KwVagfRdDz4q6EK4ppS021D2pvq6NlteJkysncMOjl+wqQd3B0R3LYXNjOb+1FCx7KuoRNrSgCk+OhGnA4aoU2oFShVa3+9xxTZFhbSPKzu5pvcnEQGZxqNQ8GLiGyEvdH9VZaDE+HsPRniEfunMG5ezH3b7+L6QTIMAevzHgUVPAUWjtbKXOz4xk5YntgcvDXoJxsJeLgU3utj42yUKPbEt5eZHXYeaROMuwRMbU2n8TqxAezssvoavXVwXU4elS41n6fhVvOXH9w8CIm0RXiRQucWHe8bwGtV3L5o7dhdpLCqiPyqSIF1Yw/RzqUscodPaEgJ6DPuw==</ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:KeyDescriptor use="encryption">
+      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:X509Data>
+          <ds:X509Certificate>MIIDVzCCAj+gAwIBAgIJAIeRQoRLbgnzMA0GCSqGSIb3DQEBBQUAMEIxCzAJBgNVBAYTAlhYMRUwEwYDVQQHDAxEZWZhdWx0IENpdHkxHDAaBgNVBAoME0RlZmF1bHQgQ29tcGFueSBMdGQwHhcNMTQwNzEzMTcxMDA4WhcNMjQwNzEyMTcxMDA4WjBCMQswCQYDVQQGEwJYWDEVMBMGA1UEBwwMRGVmYXVsdCBDaXR5MRwwGgYDVQQKDBNEZWZhdWx0IENvbXBhbnkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsNXrtttiG/elkpcTYIF9CfjcHVfZJ34gjsjIQXwHo4XqL8IgL75rERjZicTYpFdCCVpiWz8meYB4wXB8QNc9QmmNXLQ3dsdIgEVBMfeHFPyc/N1K+g17rXAiBG9OMQeihWF9W9BfUD+YD4iBiGq2Xksi4F+HcCudEuS58AKpsVS6aY3mBWrUvE4BKHCI+gp/eu9aAUbLM8UAiueIlpyNhbaifkfoxc+gx2VIvQ/sHk2dnlaHS5AEFMhW5W65VkrDnpgFiChAQmH+bQQfn5dImx7UwUtBulwylDwfDu+yDH6mVQv5t/Gj/pVHBibeyrIEpu80J2nIE5EByULYczhZ1QIDAQABo1AwTjAdBgNVHQ4EFgQUnXXqfyKxMchpRAqnHF0xQWFMr3kwHwYDVR0jBBgwFoAUnXXqfyKxMchpRAqnHF0xQWFMr3kwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOCAQEAbhz/7/L8t2KwVagfRdDz4q6EK4ppS021D2pvq6NlteJkysncMOjl+wqQd3B0R3LYXNjOb+1FCx7KuoRNrSgCk+OhGnA4aoU2oFShVa3+9xxTZFhbSPKzu5pvcnEQGZxqNQ8GLiGyEvdH9VZaDE+HsPRniEfunMG5ezH3b7+L6QTIMAevzHgUVPAUWjtbKXOz4xk5YntgcvDXoJxsJeLgU3utj42yUKPbEt5eZHXYeaROMuwRMbU2n8TqxAezssvoavXVwXU4elS41n6fhVvOXH9w8CIm0RXiRQucWHe8bwGtV3L5o7dhdpLCqiPyqSIF1Yw/RzqUscodPaEgJ6DPuw==</ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="http://saml-consumer.fedoauth.org/module.php/saml/sp/saml2-logout.php/default-sp"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="http://saml-consumer.fedoauth.org/module.php/saml/sp/saml2-acs.php/default-sp" index="0"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:browser-post" Location="http://saml-consumer.fedoauth.org/module.php/saml/sp/saml1-acs.php/default-sp" index="1"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="http://saml-consumer.fedoauth.org/module.php/saml/sp/saml2-acs.php/default-sp" index="2"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:artifact-01" Location="http://saml-consumer.fedoauth.org/module.php/saml/sp/saml1-acs.php/default-sp/artifact" index="3"/>
+  </md:SPSSODescriptor>
+  <md:ContactPerson contactType="technical">
+    <md:GivenName>Patrick</md:GivenName>
+    <md:SurName>Uiterwijk</md:SurName>
+    <md:EmailAddress>patrick@fedoauth.org</md:EmailAddress>
+  </md:ContactPerson>
+</md:EntityDescriptor>
+

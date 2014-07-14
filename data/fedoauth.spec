@@ -148,6 +148,7 @@ rm -rf fedoauth/templates/*.{html,xrds}
 %{__cp} -rp fedoauth/templates/* %{buildroot}%{_datadir}/%{name}/templates
 %{__install} -m 644 %{name}.cfg.sample %{buildroot}%{_sysconfdir}/%{name}/%{name}.cfg
 %{__install} -m 644 createdb.py %{buildroot}%{_datadir}/%{name}/createdb.py
+%{__install} -m 644 cleanup.py %{buildroot}%{_datadir}/%{name}/cleanup.py
 %{__install} -m 644 data/%{name}.wsgi %{buildroot}%{_datadir}/%{name}/%{name}.wsgi
 
 rm -f %{buildroot}%{_datadir}/%{name}/static/logo.svg

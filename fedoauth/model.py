@@ -106,6 +106,10 @@ class Remembered(db.Model):
                                    data,
                                    *key)
 
+    @staticmethod
+    def cleanup():
+        return Remembered.query.filter(Remembered.expiry < datetime.now()).delete()
+
 
 class OpenIDAssociation(db.Model):
     server_url = db.Column(db.String(512), nullable=False, primary_key=True)

@@ -1,3 +1,10 @@
+Release 3.0.4 (2014-??-??)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+New:
+- Added a cleanup script to clear expired Remembered entries [Patrick Uiterwijk]
+
+
 Release 3.0.3 (2014-07-09)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 

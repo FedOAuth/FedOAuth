@@ -211,7 +211,7 @@ class Auth_Base(object):
                 pass
         return values
 
-    def get_groups(self, **filterargs):
+    def get_groups(self):
         raise NotImplementedError()
 
     def get_clas(self):

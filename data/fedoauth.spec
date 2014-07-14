@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        3.0.3
+Version:        3.0.4
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -202,6 +202,9 @@ exit 0
 
 
 %changelog
+* Mon Jul 14 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.4-1
+- Added a cleanup script to clear expired Remembered entries [Patrick Uiterwijk]
+
 * Wed Jul 09 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.3-1
 - Remove translation hooks and dependencies [Patrick Uiterwijk]
 - Update webSilvia to protocol version request-1 [Patrick Uiterwijk]

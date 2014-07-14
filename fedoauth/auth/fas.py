@@ -89,13 +89,16 @@ class Auth_FAS(Auth_UsernamePasswordBase):
         raise UnknownAttributeError
 
     def get_groups(self):
-        groups = self._user['groups']
-        return [group for group in groups if group not in CLA_GROUPS.keys()]
+        return [group['name']
+                for group
+                in self._user['approved_memberships']
+                if group['group_type'] not in ['cla', 'shell']]
 
     def get_clas(self):
-        groups = self._user['groups']
-        return [CLA_GROUPS[group]
-                for group in groups if group in CLA_GROUPS.keys()]
+        return [CLA_GROUPS[group['name']]
+                for group
+                in self._user['approved_memberships']
+                if group['group_type'] == 'cla']
 
     def used_multi_factor(self):
         return False

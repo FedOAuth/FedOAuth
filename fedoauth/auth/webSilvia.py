@@ -135,7 +135,7 @@ class Auth_webSilvia(Auth_Base):
         else:
             raise UnknownAttributeError()
 
-    def get_groups(self):
+    def get_groups(self, **filterargs):
         return []
 
     def get_clas(self):

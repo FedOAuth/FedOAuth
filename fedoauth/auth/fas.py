@@ -88,11 +88,12 @@ class Auth_FAS(Auth_UsernamePasswordBase):
             return self._user['ssh_key']
         raise UnknownAttributeError
 
-    def get_groups(self):
+    def get_groups(self, **filterargs):
         return [group['name']
                 for group
                 in self._user['approved_memberships']
-                if group['group_type'] not in ['cla', 'shell']]
+                if group['group_type'] not in
+                filterargs.get('excluded_groups', ['cla', 'shell'])]
 
     def get_clas(self):
         return [CLA_GROUPS[group['name']]

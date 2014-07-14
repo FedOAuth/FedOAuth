@@ -159,7 +159,11 @@ def addTeams(openid_request, openid_response):
     teams_req = teams.TeamsRequest.fromOpenIDRequest(openid_request)
     if teams_req.requested == []:
         return []
-    groups = request.auth_module.get_groups()
+    filterargs = {}
+    if '_FAS_SHELL_GROUPS_' in teams_req.requested and \
+            config['handle_magic_groups_value']:
+        filterargs['excluded_groups'] = ['cla']
+    groups = request.auth_module.get_groups(**filterargs)
     if '_FAS_ALL_GROUPS_' in teams_req.requested and \
             config['handle_magic_groups_value']:
         # We will send all groups the user is a member of

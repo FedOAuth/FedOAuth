@@ -44,7 +44,7 @@ class Auth_Dummy(Auth_UsernamePasswordBase):
             return self.config[attribute]
         raise UnknownAttributeError
 
-    def get_groups(self):
+    def get_groups(self, **filterargs):
         return []
 
     def get_clas(self):

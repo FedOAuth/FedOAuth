@@ -2,7 +2,7 @@ Release 3.0.5 (2014-??-??)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 New:
-- No longer sending shell groups for the FAS provider [Patrick Uiterwijk]
+- No longer sending shell groups for the FAS provider by default [Patrick Uiterwijk]
 
 
 Release 3.0.4 (2014-07-14)

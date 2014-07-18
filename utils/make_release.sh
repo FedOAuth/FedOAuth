@@ -76,5 +76,5 @@ git tag -s v$version -m "Release $version"
 gpg --detach --armor --sign dist/FedOAuth-$version.tar.gz
 
 # Echo the files to upload
-ls -l dist/FedOAuth-$version* dist/fedoauth-$version*
-echo Please push the tag and build and publish the RPM and sources
+ls -l dist/FedOAuth-$version.tar.gz{,.asc} dist/fedoauth-$version-*.*.src.rpm
+echo Please call utils/publish_release.sh to publish

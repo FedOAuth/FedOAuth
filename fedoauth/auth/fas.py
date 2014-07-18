@@ -69,10 +69,9 @@ class Auth_FAS(Auth_UsernamePasswordBase):
         if attribute == StandardAttributes.nickname:
             return self._user['username']
         elif attribute == StandardAttributes.email:
-            if ((len(self.get_clas()) > 0) and
-                    (len(self.get_groups()) > 0) and
+            if (self.get_is_cla_plus_one() and
                     (self.config['email_alias_when_cla'])):
-                # In case CLA is signed and we have more groups, we have an email alias
+                # In case of CLA+1, we have an email alias
                 return '%s@fedoraproject.org' % self._user['username']
             else:
                 # In case we have 0 CLA groups (no CLA), give the FAS email
@@ -88,6 +87,10 @@ class Auth_FAS(Auth_UsernamePasswordBase):
         elif attribute == StandardAttributes.ssh_key:
             return self._user['ssh_key']
         raise UnknownAttributeError
+
+    def get_is_cla_plus_one(self):
+        return ((len(self.get_clas()) > 0) and
+                (len(self.get_groups()) > 0))
 
     def get_groups(self):
         groups = self._user['groups']

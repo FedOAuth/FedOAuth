@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -xe
 # Copyright (C) 2014 Patrick Uiterwijk <patrick@puiterwijk.org>
 #
 # This file is part of FedOAuth.

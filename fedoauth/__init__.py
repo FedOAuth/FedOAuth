@@ -28,6 +28,9 @@ import jinja2
 import logging
 import logging.config
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+
 import sys
 from itsdangerous import TimestampSigner
 
@@ -57,12 +60,13 @@ logger = logging.getLogger(__name__)
 # Set up SQLAlchemy
 # DEPRECATED: the global SQLALCHEMY_DATABASE_URI is deprecated, but should stay supported during the 3.0.X series
 db_url = None
-if 'database_url' in APP.config['GLOBAL']
-    db_url = APP.config['database_url']
+db_debug = APP.config['GLOBAL'].get('database_debug', False)
+if 'database_url' in APP.config['GLOBAL']:
+    db_url = APP.config['GLOBAL']['database_url']
 else:
     db_url = APP.config['SQLALCHEMY_DATABASE_URI']
-engine = create_engine(db_url, echo=False, pool_recycle=3600)
-db = scoped_session(sessionmaker(bind=engine))
+dbengine = create_engine(db_url, echo=db_debug, pool_recycle=3600)
+dbsession = scoped_session(sessionmaker(bind=dbengine))
 
 import fedoauth.utils as utils
 if APP.config['GLOBAL']['reverse_proxied']:
@@ -103,8 +107,8 @@ class TransactionRequest(flask.Request):
 
     def save_transaction(self):
         if self._transaction:
-            db.session.add(self._transaction)
-            db.session.commit()
+            dbsession.add(self._transaction)
+            dbsession.commit()
 
     def delete_transaction(self):
         if self._transaction:
@@ -192,8 +196,8 @@ class TransactionRequest(flask.Request):
         if not self._transaction:
             self._new_transaction = True
             self._transaction = model.Transaction()
-            db.session.add(self._transaction)
-            db.session.commit()
+            dbsession.add(self._transaction)
+            dbsession.commit()
 
             logger.debug('Created new transaction')
 

@@ -20,6 +20,6 @@
 __requires__ = ['SQLAlchemy >= 0.7', 'jinja2 >= 2.4']
 import pkg_resources
 
-from fedoauth import db
+from fedoauth.model import BASE
 
-db.create_all()
+BASE.metadata.create_all()

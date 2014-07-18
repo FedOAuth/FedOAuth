@@ -20,8 +20,14 @@
 __requires__ = ['SQLAlchemy >= 0.7', 'jinja2 >= 2.4']
 import pkg_resources
 
-from fedoauth.model import Remembered
+import time
+
+from fedoauth.model import Remembered, OpenIDAssociation
 
 print 'Starting cleanup'
-cleared = Remembered.cleanup()
-print 'Entries cleared from database: %s' % cleared
+cleared_remembered = Remembered.cleanup()
+cleared_openid = OpenIDAssociation.query.filter(
+                    (OpenIDAssociation.issued + OpenIDAssociation.lifetime) <
+                    time.time()).delete()
+
+print 'Entries cleared from database: %s remembered, %s openid associations' % (cleared_remembered, cleared_openid)

@@ -17,6 +17,8 @@
 from flask import url_for, request, redirect, g
 from urlparse import urljoin
 from sqlalchemy.ext.mutable import Mutable
+from sqlalchemy import orm
+from sqlalchemy.orm.exc import UnmappedClassError
 import logging
 
 from fedoauth import APP
@@ -93,6 +95,19 @@ def _per_request_callbacks(response):
         if new_response is not None:
             response = new_response
     return response
+
+
+class _QueryProperty(object):
+    def __init__(self, dbses):
+        self.dbses = dbses
+
+    def __get__(self, obj, type):
+        try:
+            mapper = orm.class_mapper(type)
+            if mapper:
+                return orm.Query(mapper, session=self.dbses())
+        except UnmappedClassError:
+            return None
 
 
 class BackportedMutableDict(Mutable, dict):

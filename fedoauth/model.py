@@ -14,7 +14,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with FedOAuth.  If not, see <http://www.gnu.org/licenses/>.
-from fedoauth import db
+from fedoauth import dbengine, dbsession
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.types import PickleType
 try:
     from sqlalchemy.ext.mutable import MutableDict
@@ -28,14 +29,28 @@ from datetime import timedelta, datetime
 import time
 import logging
 
+from sqlalchemy import (
+    Column,
+    String,
+    DateTime,
+    Text,
+    LargeBinary,
+    Integer,
+)
+
+from fedoauth.utils import _QueryProperty
+
 
 logger = logging.getLogger(__name__)
+BASE = declarative_base(bind=dbengine)
+BASE.query = _QueryProperty(dbsession)
 
 
-class Transaction(db.Model):
-    key = db.Column(db.String(32), nullable=False, primary_key=True)
-    startmoment = db.Column(db.DateTime(timezone=False), nullable=False)
-    values = db.Column(MutableDict.as_mutable(PickleType), nullable=False)
+class Transaction(BASE):
+    __tablename__ = 'transaction'
+    key = Column(String(32), nullable=False, primary_key=True)
+    startmoment = Column(DateTime(timezone=False), nullable=False)
+    values = Column(MutableDict.as_mutable(PickleType), nullable=False)
 
     def __init__(self):
         self.key = uuid4().hex
@@ -47,12 +62,13 @@ class Transaction(db.Model):
         return 'Transaction %s' % self.key
 
 
-class Remembered(db.Model):
+class Remembered(BASE):
+    __tablename__ = 'remembered'
     # The primary key will differ per type of remembered data
-    type = db.Column(db.String(32), nullable=False, primary_key=True)
-    key = db.Column(db.String(512), nullable=False, primary_key=True)
-    expiry = db.Column(db.DateTime, nullable=True)
-    data = db.Column(db.Text, nullable=True)
+    type = Column(String(32), nullable=False, primary_key=True)
+    key = Column(String(512), nullable=False, primary_key=True)
+    expiry = Column(DateTime, nullable=True)
+    data = Column(Text, nullable=True)
 
     def __init__(self, type, key, expiry, data):
         self.type = type
@@ -65,8 +81,8 @@ class Remembered(db.Model):
                      expiry)
 
     def save(self):
-        db.session.add(self)
-        db.session.commit()
+        dbsession.add(self)
+        dbsession.commit()
 
     @staticmethod
     def getremembered(type, *key):
@@ -111,13 +127,14 @@ class Remembered(db.Model):
         return Remembered.query.filter(Remembered.expiry < datetime.now()).delete()
 
 
-class OpenIDAssociation(db.Model):
-    server_url = db.Column(db.String(512), nullable=False, primary_key=True)
-    handle = db.Column(db.String(128), nullable=False, primary_key=True)
-    secret = db.Column(db.LargeBinary(128), nullable=False)
-    issued = db.Column(db.Integer, nullable=False)
-    lifetime = db.Column(db.Integer, nullable=False)
-    assoc_type = db.Column(db.String(64), nullable=False)
+class OpenIDAssociation(BASE):
+    __tablename__ = 'openid_association'
+    server_url = Column(String(512), nullable=False, primary_key=True)
+    handle = Column(String(128), nullable=False, primary_key=True)
+    secret = Column(LargeBinary(128), nullable=False)
+    issued = Column(Integer, nullable=False)
+    lifetime = Column(Integer, nullable=False)
+    assoc_type = Column(String(64), nullable=False)
 
     def __init__(self, server_url, association):
         self.server_url = server_url
@@ -128,10 +145,11 @@ class OpenIDAssociation(db.Model):
         self.assoc_type = association.assoc_type
 
 
-class OpenIDNonce(db.Model):
-    server_url = db.Column(db.String(512), nullable=False, primary_key=True)
-    salt = db.Column(db.String(40), nullable=False, primary_key=True)
-    timestamp = db.Column(db.Integer, nullable=False, primary_key=True)
+class OpenIDNonce(BASE):
+    __tablename__ = 'openid_nonce'
+    server_url = Column(String(512), nullable=False, primary_key=True)
+    salt = Column(String(40), nullable=False, primary_key=True)
+    timestamp = Column(Integer, nullable=False, primary_key=True)
 
     def __init__(self, server_url, salt, timestamp):
         self.server_url = server_url
@@ -142,8 +160,8 @@ class OpenIDNonce(db.Model):
 class OpenIDStore(OpenIDStore):
     def storeAssociation(self, server_url, association):
         assoc = OpenIDAssociation(server_url, association)
-        db.session.add(assoc)
-        db.session.commit()
+        dbsession.add(assoc)
+        dbsession.commit()
 
     def getAssociation(self, lookup_server_url, lookup_handle=None):
         if lookup_handle is None:
@@ -159,8 +177,8 @@ class OpenIDStore(OpenIDStore):
         if not assoc:
             return None
         if (assoc.issued + assoc.lifetime) < time.time():
-            db.session.delete(assoc)
-            db.session.commit()
+            dbsession.delete(assoc)
+            dbsession.commit()
             return None
         return openid_assoc(assoc.handle, assoc.secret, assoc.issued,
                             assoc.lifetime, assoc.assoc_type)
@@ -183,8 +201,8 @@ class OpenIDStore(OpenIDStore):
             nonce = OpenIDNonce(lookup_server_url,
                                 lookup_salt,
                                 lookup_timestamp)
-            db.session.add(nonce)
-            db.session.commit()
+            dbsession.add(nonce)
+            dbsession.commit()
             return True
 
     def cleanupNonces(self):

@@ -1,3 +1,14 @@
+Release 3.0.6 (2014-07-??)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+General:
+- Got rid of the flask-sqlalchemy dependency [Patrick Uiterwijk]
+- The database url now goes in GLOBAL -> database_url [Patrick Uiterwijk]
+
+New:
+- Added a database_debug argument to enable debugging SQL statement [Patrick Uiterwijk]
+
+
 Release 3.0.5 (2014-07-18)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 

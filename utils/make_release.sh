@@ -15,11 +15,15 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with FedOAuth.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Check for sanity of the call
 if [ ! -d ".git" ];
 then
     echo >&2 "Please execute utils/make_release.sh from the root"
     exit 1
 fi
+
+# Check for sanity of the versions
 version=`cat data/fedoauth.spec | grep "Version:" | sed 's/Version:[ ]*//'`
 version_setup=`cat setup.py | grep "version=" | sed 's/[ ]*version=//' | sed "s/'//g" | sed "s/,//"`
 version_news=`cat NEWS | grep Release | head -1 | sed "s/Release //" | sed "s/ (.*)//"`
@@ -31,6 +35,8 @@ then
     echo "News version: $version_news"
     exit 1
 fi
+
+# Check for any non-committed or non-pushed changes
 if [ -n "`git diff | head -10`" ]
 then
     echo >&2 "error: tree is not clean - changes would be lost. aborted"
@@ -42,24 +48,30 @@ then
     git log master ^origin/master
     exit 1
 fi
+
+# Check if this release already exists
 if [ ! -z "`git tag -l v$version`"  ]
 then
     echo >&2 "ERROR: release tag already exists. Aborted."
     exit 1
 fi
+
+# Create the destination directory if it does not yet exist
 mkdir -p dist
+
+# Archive the build
 git archive --format=tar --prefix=FedOAuth-$version/ HEAD | gzip > dist/FedOAuth-$version.tar.gz
-(
-    cd dist
-    cp FedOAuth-$version.tar.gz ~/rpmbuild/SOURCES
-)
-cp data/fedoauth.spec ~/rpmbuild/SPECS
-(
-    cd ~/rpmbuild/SPECS
-    rpmbuild -ba fedoauth.spec
-)
-cp ~/rpmbuild/SRPMS/fedoauth-$version*.src.rpm dist/
+
+# Build (S)RPM as smoketest The produced RPM is not meant for redistribution
+mock --resultdir=./dist/ --buildsrpm --spec data/fedoauth.spec --sources dist/ -r fedora-rawhide-x86_64
+mock --rebuild dist/fedoauth-$version.*.src.rpm -r fedora-rawhide-x86_64
+
+# Tag the actual release
 git tag -s v$version -m "Release $version"
+
+# Sign the release
 gpg --detach --armor --sign dist/FedOAuth-$version.tar.gz
+
+# Echo the files to upload
 ls -l dist/FedOAuth-$version* dist/fedoauth-$version*
 echo Please push the tag and build and publish the RPM and sources

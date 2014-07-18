@@ -64,7 +64,7 @@ git archive --format=tar --prefix=FedOAuth-$version/ HEAD | gzip > dist/FedOAuth
 
 # Build (S)RPM as smoketest The produced RPM is not meant for redistribution
 mock --resultdir=./dist/ --buildsrpm --spec data/fedoauth.spec --sources dist/ -r fedora-rawhide-x86_64
-mock --rebuild dist/fedoauth-$version.*.src.rpm -r fedora-rawhide-x86_64
+mock --rebuild dist/fedoauth-$version-*.*.src.rpm -r fedora-rawhide-x86_64
 
 # Tag the actual release
 git tag -s v$version -m "Release $version"

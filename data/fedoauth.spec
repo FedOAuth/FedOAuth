@@ -10,7 +10,6 @@ Source0:        https://github.com/FedOAuth/FedOAuth/releases/download/%{version
 BuildArch:      noarch
 
 BuildRequires:  python-setuptools
-BuildRequires:  python-setuptools-devel
 BuildRequires:  python-devel
 BuildRequires:  python-flask
 BuildRequires:  python-fedora

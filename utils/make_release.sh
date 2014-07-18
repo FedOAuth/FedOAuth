@@ -56,6 +56,9 @@ then
     exit 1
 fi
 
+# Do some smoketests here
+python -m py_compile `find -name "*.py"`
+
 # Create the destination directory if it does not yet exist
 mkdir -p dist
 

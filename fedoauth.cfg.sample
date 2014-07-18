@@ -1,12 +1,5 @@
 # Beware that the quotes around the values are mandatory
 
-# GENERAL CONFIGURATION
-### url to the database server:
-SQLALCHEMY_DATABASE_URI = 'sqlite:///fedoauth.sqlite'
-#SQLALCHEMY_DATABASE_URI = 'mysql://user:pass@host/db_name'
-#SQLALCHEMY_DATABASE_URI = 'postgresql://user:pass@host/db_name'
-
-
 GLOBAL = {'url_root': 'http://localhost:5000',
           # Please insert a random key here
           # This is used for signing the persistent transactions and reauth
@@ -17,6 +10,11 @@ GLOBAL = {'url_root': 'http://localhost:5000',
           # That's not too bad a compromise for more security, is it?
           'secret_key': 'setme',
           # IF NOTHING ELSE, CONFIGURE THE SECRET KEY!!!!!
+          #
+          # URL to the database server
+          'database_url': 'sqlite:///fedoauth.sqlite',
+          #'database_url': postgresql://user:pass@host/db_name',
+          #'database_url': 'mysql://user:pass@host/db_name',
           #
           # Set this to the URL under which the /static/ dir is available
           'static_content_root': 'http://localhost:5000/static',

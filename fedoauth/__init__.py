@@ -24,7 +24,6 @@ import pkg_resources
 # Imports
 import flask
 import jinja2
-from flask.ext.sqlalchemy import SQLAlchemy
 
 import logging
 import logging.config
@@ -56,7 +55,14 @@ logger = logging.getLogger(__name__)
 
 
 # Set up SQLAlchemy
-db = SQLAlchemy(APP)
+# DEPRECATED: the global SQLALCHEMY_DATABASE_URI is deprecated, but should stay supported during the 3.0.X series
+db_url = None
+if 'database_url' in APP.config['GLOBAL']
+    db_url = APP.config['database_url']
+else:
+    db_url = APP.config['SQLALCHEMY_DATABASE_URI']
+engine = create_engine(db_url, echo=False, pool_recycle=3600)
+db = scoped_session(sessionmaker(bind=engine))
 
 import fedoauth.utils as utils
 if APP.config['GLOBAL']['reverse_proxied']:

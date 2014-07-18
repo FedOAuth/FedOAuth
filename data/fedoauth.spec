@@ -19,7 +19,6 @@ BuildRequires:  python-sqlalchemy0.7
 %else
 BuildRequires:  python-sqlalchemy
 %endif
-BuildRequires:  python-flask-sqlalchemy
 BuildRequires:  python-openid
 BuildRequires:  python-openid-teams
 BuildRequires:  python-openid-cla
@@ -32,7 +31,6 @@ Requires:       python-sqlalchemy0.7
 Requires:       python-sqlalchemy
 %endif
 Requires:       python-flask
-Requires:       python-flask-sqlalchemy
 Requires:       python-enum
 Requires:       python-itsdangerous
 Requires:       mod_wsgi

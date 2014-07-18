@@ -202,7 +202,7 @@ exit 0
 
 
 %changelog
-* Fry Jul 18 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.5-1
+* Fri Jul 18 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.5-1
 - Only give email alias with FAS module in case of CLA+1 instead of CLA [Pierre-Yves Chibon]
 
 * Mon Jul 14 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.4-1

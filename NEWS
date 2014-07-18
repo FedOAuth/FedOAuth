@@ -1,3 +1,10 @@
+Release 3.0.5 [2014-07-18)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixes:
+- Only give email alias with FAS module in case of CLA+1 instead of CLA [Pierre-Yves Chibon]
+
+
 Release 3.0.4 (2014-07-14)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 

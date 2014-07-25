@@ -9,3 +9,4 @@ python-openid-cla
 M2Crypto
 enum
 itsdangerous
+python-ldap

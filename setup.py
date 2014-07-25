@@ -34,4 +34,5 @@ setup(name='FedOAuth',
                      'openid': ['python-openid',
                                 'python-openid-teams',
                                 'python-openid-cla'],
-                     'persona': ['M2Crypto']})
+                     'persona': ['M2Crypto'],
+                     'ldap': ['python-ldap']})

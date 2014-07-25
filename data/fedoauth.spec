@@ -87,6 +87,17 @@ BuildArch: noarch
 Provides the Dummy authentication backend
 
 
+%package backend-ldap
+Summary: LDAP authentication backend for FedOAuth
+Requires: %{name} = %{version}-%{release}
+License: GPLv3+
+BuildArch: noarch
+Requires: python-ldap
+
+%description backend-ldap
+Provides the LDAP authentication backend
+
+
 %package backend-webSilvia
 Summary: webSilvia authentication backend for FedOAuth
 Requires: %{name} = %{version}-%{release}
@@ -187,6 +198,9 @@ exit 0
 
 %files backend-dummy
 %{python_sitelib}/%{name}/auth/dummy.py*
+
+%files backend-ldap
+%{python_sitelib}/%{name}/auth/ldap.py*
 
 %files backend-webSilvia
 %{python_sitelib}/%{name}/auth/webSilvia.py*

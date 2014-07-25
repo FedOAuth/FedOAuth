@@ -50,6 +50,8 @@ class Auth_LDAP(Auth_UsernamePasswordBase):
         else:
             result = result[0][1]
             result['groups'] = [group[1]['cn'][0] for group in groups]
+            for to_ignore in self.config['to_ignore']:
+                result[to_ignore] = None
             return result
 
     def get_username(self):

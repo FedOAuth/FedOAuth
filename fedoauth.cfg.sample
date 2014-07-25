@@ -119,6 +119,7 @@ AUTH_MODULE_CONFIGURATION = {
                                                            'lastname': 'sn',
                                                            'ssh_key': 'ipaSshPubKey'
                                                           },
+                                     'to_ignore': ['krbExtraData'],
                                     },
 }
 

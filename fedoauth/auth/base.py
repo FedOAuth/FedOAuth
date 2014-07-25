@@ -171,6 +171,7 @@ class Auth_Base(object):
         request.transaction['%s_user' % self.full_name] = user
         request.transaction['%s_last_login' % self.full_name] = datetime.now()
         if remember:
+            logger.debug('Remembering the following: %s' % user)
             logger.debug('Remembering the following: %s' % json.dumps(user))
             # We should remember the auth in a Remembered object and a reauth
             #  cookie

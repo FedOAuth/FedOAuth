@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        3.0.6
+Version:        3.0.7
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -199,6 +199,9 @@ exit 0
 
 
 %changelog
+* Fri Jul 25 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.7-1
+- Adds LDAP authentication module [Patrick Uiterwijk]
+
 * Fri Jul 18 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.6-1
 - Got rid of the flask-sqlalchemy dependency [Patrick Uiterwijk]
 - The database url now goes in GLOBAL -> database_url [Patrick Uiterwijk]

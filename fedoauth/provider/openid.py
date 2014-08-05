@@ -237,12 +237,14 @@ def view_openid_api_v1():
     openid_request = None
     try:
         openid_request = get_server().decodeRequest(values)
-    except:
+    except Exception, ex:
+        logger.info('Invalid OpenID API request. Error: %s', ex)
         return {'success': False,
                 'status': 400,
                 'message': 'Invalid request'
                 }
     if not openid_request:
+        logger.info('Invalid OpenID API Request. Not parsed')
         return {'success': False,
                 'status': 400,
                 'message': 'Invalid request'
@@ -252,12 +254,14 @@ def view_openid_api_v1():
     # (Kerberos etc...)
     if not request.auth_module:
         if 'auth_module' not in values:
+            logger.info('Invalid OpenID API Request. No Auth Module')
             return {'success': False,
                     'status': 400,
                     'message': 'No auth module selected'
                     }
         auth_module = get_auth_module_by_name(values['auth_module'])
         if not auth_module:
+            logger.info('Invalid OpenID API Request. Invalid Auth Module')
             return {'success': False,
                     'status': 400,
                     'message': 'Unknown authentication module'
@@ -272,6 +276,7 @@ def view_openid_api_v1():
             logger.warning('Authentication with auth module failed: %s', ex)
 
     if not request.auth_module:
+        logger.info('OpenID API Request failed. Not authenticated')
         return {'success': False,
                 'status': 403,
                 'message': 'Authentication failed'

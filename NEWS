@@ -1,3 +1,10 @@
+Release 3.0.8 (2014-08-??)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+General:
+- Add missing debug info for OpenID API [Patrick Uiterwijk]
+
+
 Release 3.0.7 (2014-07-25)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 

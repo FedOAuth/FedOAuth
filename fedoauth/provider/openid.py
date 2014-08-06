@@ -326,6 +326,21 @@ def view_openid_main_failure():
     return openid_respond(openid_request.answer(False))
 
 
+def get_required_attributes(openid_request):
+    requested = [SREG_ATTRIBUTES]
+
+    ax_req = ax.FetchRequest.fromOpenIDRequest(openid_request)
+
+    if ax_req is not None:
+        for type_uri, attribute in ax_req.requested_attributes.iteritems():
+            if type_uri in AX_WELLKNOWN.keys():
+                requested.append(AX_WELLKNOWN[type_uri])
+            else:
+                requested.append(type_uri)
+
+    return requested
+
+
 @APP.route('/openid/', methods=['GET', 'POST'])
 def view_openid_main():
     values = None
@@ -355,7 +370,8 @@ def view_openid_main():
 
         require_login(openid_request.trust_root,
                       'view_openid_main',
-                      'view_openid_main_failure')
+                      'view_openid_main_failure',
+                      requested_attributes=get_required_attributes(openid_request))
 
         response = openid_checkid(openid_request)
         if response is True:

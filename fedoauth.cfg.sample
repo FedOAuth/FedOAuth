@@ -25,6 +25,8 @@ GLOBAL = {'url_root': 'http://localhost:5000',
           'cookies_secure': True,
           # How long transactions are valid in minutes
           'transactions_timeout': 5,
+          # The directory of the global template directory
+          'global_template_dir': './fedoauth/templates/global/',
           # The directory where you stored your template
           'template_dir': './fedoauth/templates/fedoauth/',
           # This is the path to fedoauth.log.cfg
@@ -121,6 +123,12 @@ AUTH_MODULE_CONFIGURATION = {
                                                           },
                                      'to_ignore': ['krbExtraData'],
                                     },
+}
+
+
+AUTH_FLOW_CONFIGURATION = {
+    'low': {
+           }
 }
 
 

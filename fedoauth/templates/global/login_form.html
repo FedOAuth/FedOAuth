@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 {% block title %}Login{% endblock %}
 {% block toptext %}
-{{ login_target }} is asking to authenticate using the Fedora Account System
+{{ login_target }} is asking to authenticate using FedOAuth
 {% endblock %}
 {% block body %}
-    Login with your FAS credentials
+    Login with your credentials
     {% if error %}<p>{{error}}</p>{% endif %}
     <div>
         <form method="post" {% block form_options %}{% endblock %} action="{{ form_url }}">
             <input type="hidden" name="transaction" value="{{ transaction}}"/>
             <p class="form_item">
-                <input id="username" name="username" placeholder="FAS Username" autofocus value="{{ username }}" {% if forced_username %}disabled="disabled" readonly="readonly"{% endif %}/>
+                <input id="username" name="username" placeholder="Username" autofocus value="{{ username }}" {% if forced_username %}disabled="disabled" readonly="readonly"{% endif %}/>
             </p>
             <p class="form_item">
                 <input id="password" name="password" type="password" placeholder="Password" />

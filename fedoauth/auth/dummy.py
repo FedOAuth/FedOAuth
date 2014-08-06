@@ -22,6 +22,10 @@ logger = logging.getLogger(__name__)
 
 
 class Auth_Dummy(Auth_UsernamePasswordBase):
+    @property
+    def display_name(self):
+        return 'Dummy'
+
     def check_user_pass(self, username, password):
         # Yes, this is vulnerable to a timing attack and more
         # but this is a dummy module meant as example

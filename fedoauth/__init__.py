@@ -227,10 +227,12 @@ APP.request_class = TransactionRequest
 # First we test the core templates directory
 #  (contains stuff that users won't see)
 # Then we use the configured template directory
-my_loader = jinja2.ChoiceLoader([
-    APP.jinja_loader,
-    jinja2.FileSystemLoader('%s' % APP.config['GLOBAL']['template_dir'])])
-APP.jinja_loader = my_loader
+templ_loaders = []
+templ_loaders.append(APP.jinja_loader)
+templ_loaders.append(jinja2.FileSystemLoader('%s' % APP.config['GLOBAL']['template_dir']))
+templ_loaders.append(jinja2.FileSystemLoader('%s' % APP.config['GLOBAL']['global_template_dir']))
+
+APP.jinja_loader = jinja2.ChoiceLoader(templ_loaders)
 
 APP.jinja_env.globals['url_root'] = APP.config['GLOBAL']['url_root']
 APP.jinja_env.globals['static_content_root'] = APP.config['GLOBAL']['static_content_root']

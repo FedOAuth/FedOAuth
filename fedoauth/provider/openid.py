@@ -202,8 +202,8 @@ def view_openid_id(username):
 @APP.route('/openid/yadis/<username>.xrds')
 def view_openid_yadis_id(username):
     return no_cache(Response(render_template('openid_yadis_user.xrds',
-                    claimed_id=get_claimed_id(username)),
-                    mimetype='application/xrds+xml'))
+                                             claimed_id=get_claimed_id(username)),
+                             mimetype='application/xrds+xml'))
 
 
 @APP.route('/openid/yadis.xrds')

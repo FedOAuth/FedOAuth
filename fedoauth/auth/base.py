@@ -14,6 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with FedOAuth.  If not, see <http://www.gnu.org/licenses/>.
+from abc import ABCMeta, abstractmethod
 from enum import Enum
 from datetime import datetime, timedelta
 import json
@@ -54,6 +55,8 @@ class NotRequestedAttributeError(KeyError):
 
 
 class Auth_Base(object):
+    __metaclass__ = ABCMeta
+
     def __init__(self, config):
         self.config = config
 
@@ -153,16 +156,18 @@ class Auth_Base(object):
     # Return True when authentication was successful
     # Return False when authentication was cancelled
     # Anything else will be returned to Flask as view result
+    @abstractmethod
     def authenticate(self, login_target, form_url, requested_attributes=[]):
-        raise NotImplementedError()
+        pass
 
     # This function is used for authentication to the API
     # This can return True or False, in which case default errors (or success)
     #  will be sent
     # It can also return a dict that will be extended with the transaction id
     #  so it is possible to implement multi-stage authentication
+    @abstractmethod
     def authenticate_api(self, values):
-        raise NotImplementedError()
+        pass
 
     # Can be used to easily save success results to the transaction
     def save_success(self, user, remember=True):
@@ -190,13 +195,15 @@ class Auth_Base(object):
         logger.debug('Login complete')
         request.save_transaction()
 
+    @abstractmethod
     def get_username(self):
-        raise NotImplementedError()
+        pass
 
     # Return UnauthorizedError if not logged in
     # Return UnknownAttributeError if unknown attribute
+    @abstractmethod
     def get_attribute(self, attribute):
-        raise NotImplementedError()
+        pass
 
     # Accepts a list of attributes to retrieve
     # Return a dict with all valid attributes and their values
@@ -212,23 +219,28 @@ class Auth_Base(object):
                 pass
         return values
 
+    @abstractmethod
     def get_groups(self):
-        raise NotImplementedError()
+        pass
 
+    @abstractmethod
     def get_clas(self):
-        raise NotImplementedError()
+        pass
 
     def last_loggedin(self):
         return request.transaction['%s_last_login' % self.full_name]
 
+    @abstractmethod
     def used_multi_factor(self):
-        raise NotImplementedError()
+        pass
 
+    @abstractmethod
     def used_multi_factor_physical(self):
-        raise NotImplementedError()
+        pass
 
+    @abstractmethod
     def used_phishing_resistant(self):
-        raise NotImplementedError()
+        pass
 
 
 class Auth_UsernamePasswordBase(Auth_Base):
@@ -295,8 +307,9 @@ class Auth_UsernamePasswordBase(Auth_Base):
 
     # The function that returns whether or not a username/password was valid
     # This should also set the current user info in request.transaction
+    @abstractmethod
     def check_user_pass(self, username, password):
-        raise NotImplementedError()
+        pass
 
     def used_multi_factor(self):
         return False

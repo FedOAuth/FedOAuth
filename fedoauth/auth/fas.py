@@ -100,12 +100,3 @@ class Auth_FAS(Auth_UsernamePasswordBase):
         groups = self._user['groups']
         return [CLA_GROUPS[group]
                 for group in groups if group in CLA_GROUPS.keys()]
-
-    def used_multi_factor(self):
-        return False
-
-    def used_multi_factor_physical(self):
-        return False
-
-    def used_phishing_resistant(self):
-        return False

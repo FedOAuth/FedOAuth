@@ -49,12 +49,3 @@ class Auth_Dummy(Auth_UsernamePasswordBase):
 
     def get_clas(self):
         return []
-
-    def used_multi_factor(self):
-        return False
-
-    def used_multi_factor_physical(self):
-        return False
-
-    def used_phishing_resistant(self):
-        return False

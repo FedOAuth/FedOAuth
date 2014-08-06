@@ -127,8 +127,28 @@ AUTH_MODULE_CONFIGURATION = {
 
 
 AUTH_FLOW_CONFIGURATION = {
-    'low': {
-           }
+    'basic': {'modules': [
+                          {'class': 'fedoauth.auth.dummy.Auth_Dummy',
+                           'attribute_key': 'dummy'
+                          },
+                         ],
+              'attribute_mapping': {'nickname': 'dummy/nickname',
+                                   },
+              'attribute_default': 'dummy',
+             },
+    'dummy-silvia': {'modules': [
+                                 {'class': 'fedoauth.auth.dummy.Auth_Dummy',
+                                  'attribute_key': 'dummy'
+                                 },
+                                 {'class': 'fedoauth.auth.webSilvia.Auth_webSilvia',
+                                  'attribute_key': 'silvia'
+                                 },
+                                ],
+              'attribute_mapping': {'nickname': 'dummy/nickname',
+                                    'fullname': 'silvia/fullname',
+                                   },
+              'attribute_default': 'dummy',
+             },
 }
 
 

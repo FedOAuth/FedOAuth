@@ -1,4 +1,9 @@
 #!/usr/bin/python
+# Since this is always the first query executed in a new
+#  request, this is the one that always get the mess thrown
+#  in its face. Let's just make sure that any previous
+#  requests can not break this one.
+
 #-*- coding: UTF-8 -*-
 # Copyright (C) 2014 Patrick Uiterwijk <patrick@puiterwijk.org>
 #
@@ -30,6 +35,7 @@ import logging.config
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.exc import InvalidRequestError
 
 import sys
 from itsdangerous import TimestampSigner
@@ -182,7 +188,16 @@ class TransactionRequest(flask.Request):
                         response.set_cookie('persistent_transaction', expires=0)
                     logger.warning('Error getting persistent transaction: %s',
                                    ex)
-            transaction = model.Transaction.query.filter_by(key=trid).first()
+            try:
+                transaction = model.Transaction.query.filter_by(key=trid).first()
+            except InvalidRequestError:
+                # This happens sometimes if the last request hit an error
+                # Since this is always the first query executed in a new
+                #  request, this is the one that always get the mess thrown
+                #  in its face. Let's just make sure that any previous
+                #  requests can not break this one.
+                dbsession.rollback()
+                transaction = model.Transaction.query.filter_by(key=trid).first()
             logger.debug('Attempt to get current transaction: %s' %
                          transaction)
             if transaction:

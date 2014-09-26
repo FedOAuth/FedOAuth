@@ -6,6 +6,7 @@ New:
 
 Fixes:
 - OpenID now provides requested_attributes [Patrick Uiterwijk]
+- Fixed an error where an SQLAlchemy error would break all further requests [Patrick Uiterwijk]
 
 General:
 - Add missing debug info for OpenID API [Patrick Uiterwijk]

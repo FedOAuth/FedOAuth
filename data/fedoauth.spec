@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        3.0.7
+Version:        3.1.0
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -213,6 +213,13 @@ exit 0
 
 
 %changelog
+* Fri Sep 26 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.1.0-1
+- Use a general template directory for non-specific templates [Patrick Uiterwijk]
+- OpenID now provides requested_attributes [Patrick Uiterwijk]
+- Fixed an error where an SQLAlchemy error would break all further requests [Patrick Uiterwijk]
+- Add missing debug info for OpenID API [Patrick Uiterwijk]
+- Rework the Auth_Base class to use AbstractBaseClass [Ralph Bean, Patrick Uiterwijk]
+
 * Fri Jul 25 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.0.7-1
 - Adds LDAP authentication module [Patrick Uiterwijk]
 

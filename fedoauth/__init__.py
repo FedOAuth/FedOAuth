@@ -207,7 +207,7 @@ class TransactionRequest(flask.Request):
                 if trans_verify == transaction.values['check']:
                     self._transaction = transaction
                 else:
-                    logger.error('Transaction stealing attempted! Transaction values: %s, Cookies: %s', transaction.values, flask.request.cookies)
+                    logger.info('Transaction stealing attempted! Transaction values: %s, Cookies: %s', transaction.values, flask.request.cookies)
         if not self._transaction:
             self._new_transaction = True
             self._transaction = model.Transaction()

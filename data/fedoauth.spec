@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        3.1.0
+Version:        3.1.1
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -213,6 +213,9 @@ exit 0
 
 
 %changelog
+* Sun Sep 28 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.1.1-1
+- Corrected the logging priority of some messages [Patrick Uiterwijk]
+
 * Fri Sep 26 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.1.0-1
 - Use a general template directory for non-specific templates [Patrick Uiterwijk]
 - OpenID now provides requested_attributes [Patrick Uiterwijk]

@@ -84,7 +84,7 @@ def view_authenticate_module(module):
     if not 'success_forward' in request.transaction or \
             not 'failure_forward' in request.transaction or \
             not 'login_target' in request.transaction:
-        logger.warning('Invalid request without success or failure urls or login target in the transaction')
+        logger.info('Invalid request without success or failure urls or login target in the transaction')
         logger.debug('Transaction: %s', request.transaction)
         return redirect(complete_url_for('view_main'))
 
@@ -123,7 +123,7 @@ def view_authenticate():
     listed_auth_modules = get_listed_auth_modules(email_auth_domain)
 
     if not 'success_forward' in request.transaction or not 'failure_forward' in request.transaction or not 'login_target' in request.transaction:
-        logger.warning('Invalid request without success or failure urls or login target in the transaction')
+        logger.info('Invalid request without success or failure urls or login target in the transaction')
         logger.debug('Transaction: %s', request.transaction)
         return redirect(complete_url_for('view_main'))
 

@@ -67,10 +67,7 @@ logger = logging.getLogger(__name__)
 # DEPRECATED: the global SQLALCHEMY_DATABASE_URI is deprecated, but should stay supported during the 3.0.X series
 db_url = None
 db_debug = APP.config['GLOBAL'].get('database_debug', False)
-if 'database_url' in APP.config['GLOBAL']:
-    db_url = APP.config['GLOBAL']['database_url']
-else:
-    db_url = APP.config['SQLALCHEMY_DATABASE_URI']
+db_url = APP.config['GLOBAL']['database_url']
 dbengine = create_engine(db_url, echo=db_debug, pool_recycle=3600)
 dbsession = scoped_session(sessionmaker(bind=dbengine))
 

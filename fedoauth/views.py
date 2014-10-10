@@ -131,7 +131,8 @@ def view_authenticate():
     url_failure = complete_url_for(request.transaction['failure_forward'], transaction=request.transaction_id)
 
     if request.auth_module:
-        if request.transaction['already_authenticated']:
+        if 'aready_authenticated' in request.transaction and \
+                request.transaction['already_authenticated']:
             return 'ERROR: You are already authenticated, but still forwarded to authentication system'
         request.transaction['already_authenticated'] = True
         request.save_transaction()

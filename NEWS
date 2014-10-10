@@ -1,3 +1,14 @@
+Release 3.1.2 (2014-10-10)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixes:
+- Do not crash when forwarded to auth while logged in [Patrick Uiterwijk]
+
+Deprecated:
+- Deprecated support for the SQLALCHEMY_DATABASE_URI config value [Patrick Uiterwijk]
+  Please use GLOBAL->database from now on
+
+
 Release 3.1.1 (2014-09-28)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 

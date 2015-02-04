@@ -1,5 +1,5 @@
 Name:           fedoauth
-Version:        3.1.2
+Version:        3.1.3
 Release:        1%{?dist}
 Summary:        Federated Open Authentication provider
 
@@ -213,7 +213,10 @@ exit 0
 
 
 %changelog
-* Fri Oct 10 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 2.1.3-1
+* Wed Feb 04 2015 Patrick Uiterwijk <puiterwijk@redhat.com> - 3.1.3-1
+- Fix for CVE-2015-0256: ses_auth cookie was not marked as secure [Patrick Uiterwijk]
+
+* Fri Oct 10 2014 Patrick Uiterwijk <puiterwijk@redhat.com> - 2.1.2-1
 - Do not crash when forwarded to auth while logged in [Patrick Uiterwijk]
 - Deprecated support for the SQLALCHEMY_DATABASE_URI config value [Patrick Uiterwijk]
   Please use GLOBAL->database from now on

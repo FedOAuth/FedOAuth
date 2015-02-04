@@ -22,6 +22,7 @@ from uuid import uuid4
 from flask import request, render_template
 import logging
 
+from fedoauth import APP
 from fedoauth.model import Remembered
 
 
@@ -189,7 +190,8 @@ class Auth_Base(object):
                                 self.full_name,
                                 authsesid)
             request.set_cookie('%s_auth_ses' % self.full_name,
-                               signed_authsesid)
+                               signed_authsesid,
+                               secure=APP.config['GLOBAL']['cookies_secure'])
             logger.debug('Cookie set')
 
         logger.debug('Login complete')

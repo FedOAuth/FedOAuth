@@ -42,12 +42,6 @@ then
     echo >&2 "error: tree is not clean - changes would be lost. aborted"
     exit 1
 fi
-if [ -n "`git log master ^origin/master`" ]
-then
-    echo >&2 "ERROR: unpushed changes - git push first"
-    git log master ^origin/master
-    exit 1
-fi
 
 # Check if this release already exists
 if [ ! -z "`git tag -l v$version`"  ]
